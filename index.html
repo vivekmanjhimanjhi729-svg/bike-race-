@@ -20,11 +20,6 @@
 
     body {
       background-color: #030206;
-      background-image: 
-        radial-gradient(circle at 50% 20%, rgba(38, 12, 12, 0.4) 0%, rgba(3, 2, 6, 1) 85%),
-        linear-gradient(rgba(217, 119, 6, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(217, 119, 6, 0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 30px 30px, 30px 30px;
       color: #e2d9cc;
       font-family: 'Rajdhani', sans-serif;
       min-height: 100vh;
@@ -34,20 +29,35 @@
       justify-content: center;
       padding: 10px;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fixed Haunted Haveli Background Canvas */
+    #haunted-bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .game-cabinet {
       position: relative;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #0d0a11;
-      border: 3px solid #3b2a1d;
+      background: rgba(13, 10, 17, 0.94);
+      backdrop-filter: blur(4px);
+      border: 3px solid #4a3424;
       border-radius: 12px;
       box-shadow: 
         0 0 0 2px #19120b,
-        0 0 40px rgba(180, 83, 9, 0.15),
-        0 20px 50px rgba(0, 0, 0, 0.95);
+        0 0 50px rgba(180, 83, 9, 0.22),
+        0 0 80px rgba(136, 19, 55, 0.25),
+        0 25px 60px rgba(0, 0, 0, 0.95);
       padding: 12px 14px 14px;
       max-width: 100%;
     }
@@ -87,6 +97,16 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .hud-player-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid #d97706;
+      object-fit: cover;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+      flex-shrink: 0;
     }
 
     .diya-icon {
@@ -392,6 +412,533 @@
     .action-btn:active {
       transform: translateY(2px);
       box-shadow: 0 0 10px rgba(245, 158, 11, 0.3), 0 1px 0 #451a03;
+    }
+
+    /* --- HAUNTED START SCREEN OVERHAUL --- */
+    #start-screen {
+      background: 
+        radial-gradient(circle at 50% 16%, rgba(185, 28, 28, 0.42) 0%, rgba(28, 8, 16, 0.96) 42%, rgba(2, 1, 5, 0.99) 88%);
+      border: 2px solid #991b1b;
+      box-shadow: 
+        inset 0 0 100px rgba(185, 28, 28, 0.45),
+        inset 0 0 160px rgba(0, 0, 0, 0.95),
+        0 0 60px rgba(220, 38, 38, 0.4);
+      justify-content: flex-start;
+      padding: 10px 16px 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      animation: haveli-ambient-flicker 6s infinite ease-in-out;
+    }
+
+    @keyframes haveli-ambient-flicker {
+      0%, 100% { box-shadow: inset 0 0 100px rgba(185, 28, 28, 0.45), inset 0 0 160px rgba(0, 0, 0, 0.95), 0 0 50px rgba(220, 38, 38, 0.35); }
+      48% { box-shadow: inset 0 0 120px rgba(220, 38, 38, 0.55), inset 0 0 160px rgba(0, 0, 0, 0.95), 0 0 70px rgba(239, 68, 68, 0.5); }
+      50% { box-shadow: inset 0 0 60px rgba(136, 19, 55, 0.3), inset 0 0 170px rgba(0, 0, 0, 0.98), 0 0 30px rgba(185, 28, 28, 0.2); }
+      52% { box-shadow: inset 0 0 130px rgba(220, 38, 38, 0.6), inset 0 0 160px rgba(0, 0, 0, 0.95), 0 0 80px rgba(239, 68, 68, 0.6); }
+      75% { box-shadow: inset 0 0 95px rgba(185, 28, 28, 0.4), inset 0 0 160px rgba(0, 0, 0, 0.95), 0 0 45px rgba(220, 38, 38, 0.3); }
+    }
+
+    /* Dripping blood border effect at top of start screen */
+    .blood-drips-banner {
+      width: 100%;
+      height: 16px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2px;
+      pointer-events: none;
+    }
+
+    .blood-drips-banner svg {
+      width: 100%;
+      max-width: 680px;
+      height: 16px;
+      fill: #991b1b;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+    }
+
+    /* Start Screen Animated Haunted Canvas */
+    .start-haunted-canvas {
+      width: 100%;
+      max-width: 580px;
+      height: 74px;
+      border-radius: 6px;
+      background: radial-gradient(ellipse at center, rgba(69, 10, 10, 0.5) 0%, rgba(10, 4, 8, 0.8) 70%, transparent 100%);
+      border-bottom: 1px solid rgba(185, 28, 28, 0.5);
+      margin-bottom: 4px;
+      image-rendering: pixelated;
+    }
+
+    /* Cursed Talisman Sanskrit Banner */
+    .tantrik-warning-seal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(30, 7, 10, 0.85);
+      border: 1px solid #b91c1c;
+      padding: 3px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #fca5a5;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px rgba(185, 28, 28, 0.5);
+      margin-bottom: 4px;
+    }
+
+    .tantrik-warning-seal .rune-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #ef4444;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #ef4444;
+      animation: rune-pulse 1s infinite alternate;
+    }
+
+    @keyframes rune-pulse {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.3); }
+    }
+
+    #start-screen .devanagari-title {
+      font-family: 'Yatra One', cursive;
+      font-size: 24px;
+      color: #f87171;
+      letter-spacing: 3px;
+      text-shadow: 0 0 18px rgba(239, 68, 68, 0.7), 0 2px 4px #000;
+      margin-bottom: -2px;
+    }
+
+    #start-screen .main-title {
+      font-family: 'Cinzel', serif;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      background: linear-gradient(180deg, #fff 0%, #fca5a5 20%, #ef4444 60%, #7f1d1d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 22px rgba(239, 68, 68, 0.85)) drop-shadow(0 0 45px rgba(127, 29, 29, 0.7)) drop-shadow(0 4px 6px #000);
+      margin-bottom: 4px;
+      animation: cursed-title-pulse 3.5s infinite ease-in-out;
+    }
+
+    @keyframes cursed-title-pulse {
+      0%, 100% { filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.8)) drop-shadow(0 0 35px rgba(127, 29, 29, 0.5)) drop-shadow(0 4px 6px #000); }
+      50% { filter: drop-shadow(0 0 32px rgba(255, 30, 30, 0.95)) drop-shadow(0 0 60px rgba(220, 38, 38, 0.8)) drop-shadow(0 4px 8px #000); }
+    }
+
+    #start-screen .tagline {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #d1c5b8;
+      max-width: 620px;
+      line-height: 1.45;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px #000;
+    }
+
+    #start-screen .tagline strong {
+      color: #f87171;
+    }
+
+    /* Lore Box inside Start Screen */
+    #start-screen .lore-box {
+      background: linear-gradient(180deg, #180d15 0%, #10060c 100%);
+      border: 1px solid #7f1d1d;
+      border-radius: 8px;
+      padding: 10px 14px;
+      max-width: 640px;
+      text-align: left;
+      font-size: 11px;
+      color: #e2d9cc;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      box-shadow: 
+        inset 0 0 25px rgba(0, 0, 0, 0.95),
+        0 0 20px rgba(127, 29, 29, 0.35);
+    }
+
+    #start-screen .lore-box h4 {
+      font-family: 'Cinzel', serif;
+      color: #fca5a5;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    }
+
+    #start-screen .lore-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    #start-screen .lore-card {
+      background: #190c13;
+      border: 1px solid #4c0519;
+      padding: 6px 9px;
+      border-radius: 5px;
+      font-size: 10.5px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    #start-screen .lore-card strong {
+      color: #f87171;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 2px;
+      font-size: 11px;
+    }
+
+    /* Start Button: Cursed Blood Latch */
+    #start-screen #start-game-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+      background: linear-gradient(180deg, #991b1b 0%, #7f1d1d 50%, #450a0a 100%);
+      color: #fef2f2;
+      border: 2px solid #ef4444;
+      border-radius: 6px;
+      padding: 10px 32px;
+      cursor: pointer;
+      box-shadow: 
+        0 0 25px rgba(239, 68, 68, 0.65), 
+        inset 0 1px 0 rgba(254, 202, 202, 0.4),
+        0 5px 0 #280505;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #start-screen #start-game-btn:hover {
+      background: linear-gradient(180deg, #b91c1c 0%, #991b1b 50%, #5b0d0d 100%);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 0 40px rgba(255, 30, 30, 0.85), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 7px 0 #280505;
+      animation: cursed-button-shake 0.3s infinite ease-in-out;
+    }
+
+    @keyframes cursed-button-shake {
+      0%, 100% { transform: translateY(-2px) rotate(0deg); }
+      25% { transform: translateY(-2px) rotate(-0.5deg); }
+      75% { transform: translateY(-2px) rotate(0.5deg); }
+    }
+
+    #start-screen #start-game-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4), 0 1px 0 #280505;
+    }
+
+    .start-controls-hint {
+      font-size: 10.5px;
+      color: #a8998a;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .start-controls-hint .key-tag {
+      border-color: #7f1d1d;
+      color: #fca5a5;
+      background: #180910;
+    }
+
+    /* Real Characters Lineup Showcase in Start Screen */
+    .characters-showcase {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 10px;
+    }
+
+    .character-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #140911;
+      border: 1px solid #5a3825;
+      padding: 6px 8px;
+      border-radius: 6px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .character-card.demon-card {
+      border-color: #881337;
+      background: #19050d;
+    }
+
+    .character-card.hunter-card {
+      border-color: #78350f;
+      background: #170d07;
+    }
+
+    .char-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1.5px solid #d97706;
+      flex-shrink: 0;
+    }
+
+    .demon-card .char-thumb {
+      border-color: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    }
+
+    .hunter-card .char-thumb {
+      border-color: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+
+    .char-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      min-width: 0;
+    }
+
+    .char-role {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #fbbf24;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .char-desc {
+      font-size: 9px;
+      color: #cbd5e1;
+      line-height: 1.25;
+    }
+
+    /* --- CAMERA ANGLE & REAL HUNTING EFFECT STYLES --- */
+    .cam-angle-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: #18111f;
+      border: 1px solid #7c3aed;
+      color: #ddd6fe;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .cam-angle-pill:hover {
+      background: #2e1065;
+      border-color: #a78bfa;
+      box-shadow: 0 0 14px rgba(167, 139, 250, 0.6);
+      transform: translateY(-1px);
+    }
+
+    /* Real Hunting Tunnel Vignette */
+    .hunting-vignette {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      opacity: 0;
+      background: radial-gradient(circle at center, transparent 35%, rgba(185, 28, 28, 0.45) 75%, rgba(127, 29, 29, 0.92) 100%);
+      transition: opacity 0.25s ease;
+      box-shadow: inset 0 0 70px rgba(220, 38, 38, 0.85);
+    }
+    .hunting-vignette.active {
+      opacity: 1;
+      animation: hunt-pulse 0.75s infinite alternate ease-in-out;
+    }
+    @keyframes hunt-pulse {
+      0% { opacity: 0.75; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* Tactical Bodycam Overlay */
+    .bodycam-overlay {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 7;
+      font-family: 'Share Tech Mono', monospace, sans-serif;
+      color: #86efac;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-shadow: 0 0 6px rgba(34, 197, 94, 0.7);
+    }
+    .bodycam-overlay.hidden, .predator-overlay.hidden, .hunting-threat-monitor.hidden {
+      display: none !important;
+    }
+    .bodycam-top, .bodycam-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      letter-spacing: 1px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(134, 239, 172, 0.3);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .rec-circle {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: alert-blink 0.8s infinite;
+    }
+    .bodycam-center-reticle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32px;
+      height: 32px;
+      border: 1px dashed rgba(134, 239, 172, 0.5);
+      border-radius: 50%;
+    }
+
+    /* Predator / Hunter Stalker Cam Overlay */
+    .predator-overlay {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 7;
+      font-family: 'Share Tech Mono', monospace, sans-serif;
+      color: #fbbf24;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(245, 158, 11, 0.04);
+      box-shadow: inset 0 0 80px rgba(180, 83, 9, 0.45);
+      text-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+    }
+    .predator-top, .predator-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      background: rgba(20, 10, 4, 0.85);
+      border: 1px solid #b45309;
+      padding: 5px 12px;
+      border-radius: 4px;
+    }
+    .predator-crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px;
+      height: 52px;
+      border: 1.5px solid rgba(245, 158, 11, 0.7);
+      border-radius: 50%;
+    }
+    .predator-crosshair::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -10px;
+      width: 72px;
+      height: 1px;
+      background: #f59e0b;
+    }
+    .predator-crosshair::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: -10px;
+      width: 1px;
+      height: 72px;
+      background: #f59e0b;
+    }
+
+    /* Real Character Hunting Threat Monitor (Picture-in-Picture) */
+    .hunting-threat-monitor {
+      pointer-events: none;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 9;
+      width: 124px;
+      background: rgba(15, 4, 7, 0.94);
+      border: 2px solid #dc2626;
+      border-radius: 6px;
+      box-shadow: 0 0 22px rgba(220, 38, 38, 0.85), inset 0 0 10px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      animation: threat-cam-flicker 0.2s infinite alternate;
+    }
+    @keyframes threat-cam-flicker {
+      0% { opacity: 0.93; }
+      100% { opacity: 1; }
+    }
+    .threat-cam-header {
+      background: #7f1d1d;
+      color: #fef2f2;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .threat-dot {
+      width: 6px;
+      height: 6px;
+      background: #f87171;
+      border-radius: 50%;
+      animation: alert-blink 0.4s infinite;
+    }
+    .threat-cam-feed {
+      position: relative;
+      width: 100%;
+      height: 84px;
+      background: #000;
+      overflow: hidden;
+    }
+    .threat-cam-feed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(1.2) brightness(0.95) saturate(1.1);
+    }
+    .threat-glitch-layer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(239, 68, 68, 0.2) 50%, rgba(0, 0, 0, 0.4) 50%);
+      background-size: 100% 3px;
+      pointer-events: none;
+    }
+    .threat-distance-bar {
+      background: #1e0508;
+      border-top: 1px solid #991b1b;
+      padding: 3px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fca5a5;
+      text-align: center;
+      letter-spacing: 0.5px;
     }
 
     /* Horror Jumpscare Artwork Canvas in GameOver */
@@ -706,14 +1253,17 @@
   </style>
 </head>
 <body>
+  <!-- Atmospheric Haunted Haveli Dynamic Background Canvas -->
+  <canvas id="haunted-bg-canvas"></canvas>
 
   <div class="game-cabinet">
     <!-- Top HUD Dashboard -->
     <header class="hud-bar">
       <!-- Diya Light Level -->
       <div class="hud-item">
-        <span class="hud-label">Laltain / Diya Oil</span>
+        <span class="hud-label">Explorer / Diya Oil</span>
         <div class="diya-meter-container">
+          <img src="/src/assets/images/player_character_1790770811602.jpg" alt="Explorer" class="hud-player-avatar" referrerPolicy="no-referrer" title="Haveli Explorer">
           <span class="diya-icon">🪔</span>
           <div class="meter-track">
             <div id="diya-meter-fill" class="meter-fill" style="width: 100%;"></div>
@@ -737,6 +1287,15 @@
         <span class="hud-label">Status</span>
         <div id="player-status-pill" class="status-pill">Normal</div>
       </div>
+
+      <!-- Camera Angle Switcher -->
+      <div class="hud-item" style="align-items: center;">
+        <span class="hud-label">Cam Angle [V]</span>
+        <button id="cam-angle-pill" class="cam-angle-pill" title="Click or Press V to change Camera Angle">
+          <span id="cam-angle-icon">🎥</span>
+          <span id="cam-angle-text">DYNAMIC</span>
+        </button>
+      </div>
     </header>
 
     <!-- Canvas Game Viewport (800x600) -->
@@ -745,6 +1304,52 @@
       <div class="vignette-overlay"></div>
       <div class="horror-flash" id="horror-flash"></div>
       
+      <!-- Real Hunting Tunnel Vignette -->
+      <div class="hunting-vignette" id="hunting-vignette"></div>
+
+      <!-- Tactical Bodycam Overlay (Active in Bodycam Angle) -->
+      <div class="bodycam-overlay hidden" id="bodycam-overlay">
+        <div class="bodycam-top">
+          <span class="rec-indicator"><span class="rec-circle"></span> REC [HD]</span>
+          <span id="bodycam-time">23:41:09</span>
+          <span>BAT [||||] 88%</span>
+        </div>
+        <div class="bodycam-center-reticle"></div>
+        <div class="bodycam-bottom">
+          <span>MIC: <span class="audio-bars">▮▮▮▯▯</span></span>
+          <span>LENS: 14mm WIDE · ISO 3200</span>
+          <span>HAVELI EXPEDITION</span>
+        </div>
+      </div>
+
+      <!-- Predator / Hunter Stalker Cam Overlay (Active in Hunter Angle) -->
+      <div class="predator-overlay hidden" id="predator-overlay">
+        <div class="predator-top">
+          <span style="color: #f59e0b;">👁️ SHIKARI PREDATOR HUNT-VISION</span>
+          <span id="predator-target-status">TARGET: INTRUDER TRACKED</span>
+        </div>
+        <div class="predator-crosshair"></div>
+        <div class="predator-bottom">
+          <span id="predator-dist-readout">DIST: 14.2m · SCENT: DETECTED</span>
+          <span>MODE: PREDATORY PURSUIT</span>
+        </div>
+      </div>
+
+      <!-- Real Character Hunting Threat Monitor (Picture-in-Picture) -->
+      <div class="hunting-threat-monitor hidden" id="hunting-threat-monitor">
+        <div class="threat-cam-header">
+          <span class="threat-dot"></span>
+          <span id="threat-source-name">MAYA HUNTING!</span>
+        </div>
+        <div class="threat-cam-feed">
+          <img id="threat-char-img" src="/src/assets/images/maya_jumpscare_face_1790770847561.jpg" alt="Hunting Threat" referrerPolicy="no-referrer">
+          <div class="threat-glitch-layer"></div>
+        </div>
+        <div class="threat-distance-bar">
+          <span id="threat-distance-text">CLOSING IN: 8m!</span>
+        </div>
+      </div>
+
       <!-- Interactive prompt -->
       <div class="prompt-bubble" id="prompt-bubble">[E] or [SPACE] TO HIDE</div>
 
@@ -816,34 +1421,76 @@
 
       <!-- Start Overlay -->
       <div class="overlay-screen" id="start-screen">
-        <div class="devanagari-title">अन्धकार : माया एक पिशाचिनी</div>
+        <!-- Dripping Blood Banner -->
+        <div class="blood-drips-banner">
+          <svg viewBox="0 0 600 20" preserveAspectRatio="none">
+            <path d="M0,0 L600,0 L600,5 Q580,7 570,16 Q565,18 560,7 Q540,5 525,19 Q518,20 512,6 Q490,4 470,18 Q462,19 455,5 Q430,6 410,17 Q405,18 400,5 Q370,4 345,19 Q338,20 330,6 Q305,5 285,18 Q278,19 270,6 Q245,5 220,17 Q212,18 205,5 Q180,5 160,19 Q152,20 145,6 Q120,5 95,17 Q88,18 80,5 Q55,6 35,18 Q28,19 20,5 L0,5 Z" />
+          </svg>
+        </div>
+
+        <!-- Animated Haunted Preview Canvas -->
+        <canvas id="start-haunted-canvas" width="580" height="74" class="start-haunted-canvas"></canvas>
+
+        <!-- Tantrik Curse Seal Warning -->
+        <div class="tantrik-warning-seal">
+          <span class="rune-dot"></span>
+          <span>⚠️ २६० वर्ष पुरानी शापित हवेली · CURSED BHOOTIYA HAVELI ⚠️</span>
+          <span class="rune-dot"></span>
+        </div>
+
+        <div class="devanagari-title">॥ अन्धकार : माया एक पिशाचिनी ॥</div>
         <h1 class="main-title">ANDHAKAAR</h1>
-        <div class="tagline">Maya, the terrifying Pisachini, stalks the haunted shadows while the ruthless Shikari (Hunter) lays bone traps and searches with his lantern!</div>
+        <div class="tagline">“Once you cross the threshold of this 200-year-old Rajput palace, the gates seal in blood. Listen closely for <strong>Maya's ghungroo bells</strong>... if you hear the chime in the dark, she has already found you.”</div>
         
-        <div class="lore-box">
-          <h4>🪔 HAVELI SURVIVAL & HUNTING PROTOCOL:</h4>
-          <div class="lore-grid">
-            <div class="lore-card">
-              <strong>1. The Dual Menace (Maya & The Hunter)</strong>
-              <strong>Maya</strong> teleports and glides in the dark. <strong>The Hunter</strong> sweeps rooms with a flashlight cone and lays bear-traps. Both hunt by sound!
+        <!-- Real Characters Lineup Showcase -->
+        <div class="characters-showcase">
+          <div class="character-card">
+            <img src="/src/assets/images/player_character_1790770811602.jpg" alt="Player Character" class="char-thumb" referrerPolicy="no-referrer">
+            <div class="char-info">
+              <span class="char-role">YOU (EXPLORER)</span>
+              <span class="char-desc">Armed with Brass Diya & Holy Vibhuti</span>
             </div>
-            <div class="lore-card">
-              <strong>2. Granny-Style Noise & Traps</strong>
-              Bumping fragile clay vases shatters them loudly. Stepping into bone traps clamps you in place — mash <span class="key-tag">E</span> to escape!
+          </div>
+          <div class="character-card demon-card">
+            <img src="/src/assets/images/maya_ghost_character_1790770824736.jpg" alt="Maya Chudail" class="char-thumb" referrerPolicy="no-referrer">
+            <div class="char-info">
+              <span class="char-role" style="color: #f87171;">MAYA (PISACHINI)</span>
+              <span class="char-desc">Ghost with inverted feet & blood scream</span>
             </div>
-            <div class="lore-card">
-              <strong>3. Haveli Scrying Cameras (C) & Map (M)</strong>
-              Use ancient enchanted mirrors (<span class="key-tag">C</span>) to spy on enemy patrol routes across rooms. Press <span class="key-tag">M</span> for Blueprint & Tasks.
-            </div>
-            <div class="lore-card">
-              <strong>4. Relic Escape Protocol</strong>
-              Cut chains with Pliers, collect the 3 Sacred Relics (Key, Holy Ash, Sacred Bell), purify the altar, and unlock the Mahadwar!
+          </div>
+          <div class="character-card hunter-card">
+            <img src="/src/assets/images/hunter_shikari_character_1790770836258.jpg" alt="Shikari Hunter" class="char-thumb" referrerPolicy="no-referrer">
+            <div class="char-info">
+              <span class="char-role" style="color: #fbbf24;">THE SHIKARI</span>
+              <span class="char-desc">Stalker with Trishul & Bone Traps</span>
             </div>
           </div>
         </div>
 
-        <button class="action-btn" id="start-game-btn">ENTER THE HAVELI</button>
-        <div style="font-size: 11px; color: #8c7b6d; margin-top: 12px;">Controls: WASD Move · E/Space Interact/Hide · F Stun Maya · C Scrying Cams · M Map</div>
+        <div class="lore-box">
+          <h4>🪔 💀 HAVELI SURVIVAL & TANTRIK ESCAPE PROTOCOL 💀 🪔</h4>
+          <div class="lore-grid">
+            <div class="lore-card">
+              <strong>🩸 1. Maya (The Pisachini / Chudail)</strong>
+              She glides without footsteps, teleports through darkness, and screams ear-piercingly when she catches your scent!
+            </div>
+            <div class="lore-card">
+              <strong>🪓 2. The Cursed Shikari & Traps</strong>
+              The hunter sweeps rooms with a blinding searchlight. He plants bone bear-traps; fragile urns shatter loudly if bumped!
+            </div>
+            <div class="lore-card">
+              <strong>👁️ 3. Scrying Mirror Cams (C) & Map (M)</strong>
+              Peer through 6 ancient enchanted mirrors across courtyards to spy on demon routes. Check Blueprint & Tasks with <span class="key-tag">M</span>.
+            </div>
+            <div class="lore-card">
+              <strong>🔱 4. Sacred Relics & Moksha</strong>
+              Cut chains with Pliers, collect the 3 Sacred Relics (Brass Key, Holy Ash, Sacred Bell), purify the Altar, and escape the Mahadwar!
+            </div>
+          </div>
+        </div>
+
+        <button class="action-btn" id="start-game-btn">🪔 💀 ENTER THE CURSED HAVELI 💀 🪔</button>
+        <div class="start-controls-hint">Controls: <span class="key-tag">WASD</span> Move · <span class="key-tag">E</span>/<span class="key-tag">Space</span> Interact/Hide · <span class="key-tag">F</span> Holy Ash Stun · <span class="key-tag">C</span> Scrying Cams · <span class="key-tag">M</span> Map</div>
       </div>
 
       <!-- Game Over Overlay -->
@@ -877,10 +1524,14 @@
         <span>MOVE:</span> <span class="key-tag">W</span><span class="key-tag">A</span><span class="key-tag">S</span><span class="key-tag">D</span>
         <span style="margin-left: 8px;">HIDE/ACT:</span> <span class="key-tag">E</span>
         <span style="margin-left: 8px;">STUN:</span> <span class="key-tag">F</span>
+        <span style="margin-left: 8px;">ANGLE:</span> <span class="key-tag">V</span>
         <span style="margin-left: 8px;">CAMS:</span> <span class="key-tag">C</span>
         <span style="margin-left: 8px;">MAP:</span> <span class="key-tag">M</span>
       </div>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="footer-btn" id="btn-cycle-angle" title="Cycle Camera Angle (V)">
+          <span id="footer-cam-icon">🎥</span> <span id="footer-cam-text">ANGLE (V)</span>
+        </button>
         <button class="footer-btn" id="btn-toggle-cam" title="Toggle Haveli Scrying Cameras (C)">
           <span>📹</span> <span>CAM VIEW (C)</span>
         </button>
@@ -913,6 +1564,7 @@
           <button class="act-btn" id="m-stun" style="border-color: #38bdf8; color: #bae6fd; flex: 1;">F/STUN</button>
         </div>
         <div style="display: flex; gap: 6px;">
+          <button class="act-btn" id="m-angle" style="border-color: #a855f7; color: #e9d5ff; font-size: 10px; flex: 1;">🎥 ANGLE</button>
           <button class="act-btn" id="m-cam" style="border-color: #10b981; color: #a7f3d0; font-size: 10px; flex: 1;">📹 CAMS</button>
           <button class="act-btn" id="m-map" style="border-color: #f59e0b; color: #fde68a; font-size: 10px; flex: 1;">🗺️ MAP</button>
         </div>
@@ -926,6 +1578,431 @@
      * Pure HTML5 Canvas 2D Indian Horror Survival Engine
      * Procedural vector artwork, dynamic field of view darkness, Web Audio synthesizer
      */
+
+    // --- AMBIENT HAUNTED HAVELI BACKGROUND SCENERY ENGINE ---
+    class HauntedHaveliBackdrop {
+      constructor() {
+        this.canvas = document.getElementById('haunted-bg-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.width = 0;
+        this.height = 0;
+        this.time = 0;
+        this.bats = [];
+        this.fogBands = [];
+        this.embers = [];
+        this.lightningTimer = 0;
+        this.lightningFlash = 0;
+        
+        this.init();
+      }
+
+      init() {
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+
+        // Spawn Bats flying around haveli towers
+        for (let i = 0; i < 9; i++) {
+          this.bats.push({
+            x: Math.random() * (this.width || 800),
+            y: 40 + Math.random() * ((this.height || 600) * 0.45),
+            vx: -1.2 - Math.random() * 2.2,
+            vy: (Math.random() - 0.5) * 0.8,
+            size: 7 + Math.random() * 8,
+            wingSpeed: 0.2 + Math.random() * 0.15,
+            wingPhase: Math.random() * Math.PI * 2
+          });
+        }
+
+        // Spawn Fog layers
+        for (let i = 0; i < 7; i++) {
+          this.fogBands.push({
+            x: Math.random() * (this.width || 800),
+            y: (this.height || 600) * 0.6 + (i * 45),
+            vx: 0.15 + (i % 2 === 0 ? 0.2 : -0.2),
+            radius: 120 + Math.random() * 140,
+            alpha: 0.04 + Math.random() * 0.07
+          });
+        }
+
+        // Ghostly embers / fireflies
+        for (let i = 0; i < 28; i++) {
+          this.embers.push({
+            x: Math.random() * (this.width || 800),
+            y: Math.random() * (this.height || 600),
+            vy: -0.3 - Math.random() * 0.6,
+            vx: (Math.random() - 0.5) * 0.4,
+            size: 1 + Math.random() * 2.5,
+            alpha: Math.random(),
+            pulseSpeed: 0.02 + Math.random() * 0.04,
+            hue: Math.random() < 0.6 ? 35 : 350
+          });
+        }
+
+        this.scheduleLightning();
+        this.loop = this.loop.bind(this);
+        requestAnimationFrame(this.loop);
+      }
+
+      resize() {
+        if (!this.canvas) return;
+        this.width = this.canvas.width = window.innerWidth;
+        this.height = this.canvas.height = window.innerHeight;
+      }
+
+      scheduleLightning() {
+        this.lightningTimer = 350 + Math.random() * 600;
+      }
+
+      loop() {
+        this.time += 0.016;
+        this.update();
+        this.draw();
+        requestAnimationFrame(this.loop);
+      }
+
+      update() {
+        // Bats
+        this.bats.forEach(b => {
+          b.x += b.vx;
+          b.y += Math.sin(this.time * 2 + b.wingPhase) * 0.7;
+          b.wingPhase += b.wingSpeed;
+          if (b.x < -40) {
+            b.x = this.width + 40;
+            b.y = 40 + Math.random() * (this.height * 0.45);
+          }
+        });
+
+        // Fog
+        this.fogBands.forEach(f => {
+          f.x += f.vx;
+          if (f.x > this.width + f.radius) f.x = -f.radius;
+          if (f.x < -f.radius * 2) f.x = this.width + f.radius;
+        });
+
+        // Embers
+        this.embers.forEach(e => {
+          e.y += e.vy;
+          e.x += e.vx + Math.sin(this.time * 2 + e.y * 0.02) * 0.3;
+          e.alpha = (Math.sin(this.time * 3 + e.x) * 0.5 + 0.5) * 0.8;
+          if (e.y < -10) {
+            e.y = this.height + 10;
+            e.x = Math.random() * this.width;
+          }
+        });
+
+        // Lightning
+        this.lightningTimer--;
+        if (this.lightningTimer <= 0) {
+          this.lightningFlash = 1.0;
+          this.scheduleLightning();
+        }
+        if (this.lightningFlash > 0) {
+          this.lightningFlash -= 0.05;
+        }
+      }
+
+      draw() {
+        const ctx = this.ctx;
+        if (!ctx) return;
+        const w = this.width;
+        const h = this.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 1. Ominous Stormy Night Sky
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+        skyGrad.addColorStop(0, '#020106');
+        skyGrad.addColorStop(0.35, '#0a0512');
+        skyGrad.addColorStop(0.7, '#1b091c');
+        skyGrad.addColorStop(1, '#050308');
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // 2. Giant Blood Moon
+        const moonX = w * 0.78;
+        const moonY = h * 0.22;
+        const moonRadius = Math.min(w, h) * 0.12;
+
+        // Moon Blood Halo Glow
+        const haloGrad = ctx.createRadialGradient(moonX, moonY, moonRadius * 0.8, moonX, moonY, moonRadius * 2.8);
+        haloGrad.addColorStop(0, 'rgba(225, 29, 72, 0.45)');
+        haloGrad.addColorStop(0.5, 'rgba(159, 18, 57, 0.2)');
+        haloGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = haloGrad;
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, moonRadius * 2.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Moon Body
+        const moonGrad = ctx.createRadialGradient(moonX - moonRadius * 0.25, moonY - moonRadius * 0.25, moonRadius * 0.2, moonX, moonY, moonRadius);
+        moonGrad.addColorStop(0, '#fecdd3');
+        moonGrad.addColorStop(0.4, '#fb7185');
+        moonGrad.addColorStop(0.85, '#e11d48');
+        moonGrad.addColorStop(1, '#881337');
+        ctx.fillStyle = moonGrad;
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, moonRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Moon Craters
+        ctx.fillStyle = 'rgba(76, 5, 25, 0.35)';
+        ctx.beginPath();
+        ctx.arc(moonX - moonRadius * 0.3, moonY - moonRadius * 0.2, moonRadius * 0.28, 0, Math.PI * 2);
+        ctx.arc(moonX + moonRadius * 0.25, moonY + moonRadius * 0.3, moonRadius * 0.22, 0, Math.PI * 2);
+        ctx.arc(moonX + moonRadius * 0.1, moonY - moonRadius * 0.4, moonRadius * 0.16, 0, Math.PI * 2);
+        ctx.arc(moonX - moonRadius * 0.1, moonY + moonRadius * 0.4, moonRadius * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3. Drifting Storm Clouds passing over moon
+        ctx.fillStyle = 'rgba(15, 7, 20, 0.55)';
+        ctx.beginPath();
+        ctx.ellipse(moonX - 40 + Math.sin(this.time * 0.3) * 30, moonY + 20, moonRadius * 1.5, moonRadius * 0.4, 0.1, 0, Math.PI * 2);
+        ctx.ellipse(moonX + 60, moonY - 15, moonRadius * 1.2, moonRadius * 0.3, -0.08, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 4. Distant Mountain Ridge & Forest Silhouettes
+        ctx.fillStyle = '#08040d';
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.65);
+        for (let x = 0; x <= w; x += 60) {
+          const my = h * 0.65 - Math.sin(x * 0.003) * 50 - Math.cos(x * 0.007) * 30;
+          ctx.lineTo(x, my);
+        }
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        ctx.fill();
+
+        // 5. Grand Haunted Haveli Palace Architecture Skyline
+        this.drawHaveliSkyline(ctx, w, h);
+
+        // 6. Flying Bats
+        this.drawBats(ctx);
+
+        // 7. Ground Mist & Fog
+        this.drawFog(ctx, w, h);
+
+        // 8. Ghostly Embers & Floating Spirits
+        this.drawEmbers(ctx);
+
+        // 9. Lightning Flash Overlay
+        if (this.lightningFlash > 0.02) {
+          ctx.fillStyle = `rgba(192, 219, 254, ${this.lightningFlash * 0.38})`;
+          ctx.fillRect(0, 0, w, h);
+        }
+      }
+
+      drawHaveliSkyline(ctx, w, h) {
+        const base = h * 0.88;
+
+        ctx.fillStyle = '#060309';
+        
+        // Draw Left Wing Towers & Domed Chhatris
+        this.drawHaveliTower(ctx, w * 0.08, base, 110, 240);
+        this.drawHaveliTower(ctx, w * 0.18, base, 80, 180);
+        this.drawJharokhaBalcony(ctx, w * 0.12, base - 140, 60, 45);
+
+        // Draw Right Wing Towers & Palace Bastions
+        this.drawHaveliTower(ctx, w * 0.82, base, 120, 260);
+        this.drawHaveliTower(ctx, w * 0.92, base, 90, 200);
+        this.drawJharokhaBalcony(ctx, w * 0.85, base - 160, 70, 50);
+
+        // Draw Central Palace Facade connecting the wings
+        ctx.fillStyle = '#050208';
+        ctx.fillRect(0, base - 120, w * 0.3, 140);
+        ctx.fillRect(w * 0.7, base - 130, w * 0.3, 150);
+
+        // Spiked Wrought Iron Courtyard Gates & Stone Pillars
+        ctx.strokeStyle = '#150d1a';
+        ctx.lineWidth = 3;
+        for (let gx = 0; gx < w * 0.35; gx += 20) {
+          ctx.beginPath();
+          ctx.moveTo(gx, base - 90);
+          ctx.lineTo(gx, base);
+          ctx.stroke();
+          ctx.fillStyle = '#22152b';
+          ctx.beginPath();
+          ctx.moveTo(gx, base - 100);
+          ctx.lineTo(gx - 4, base - 90);
+          ctx.lineTo(gx + 4, base - 90);
+          ctx.fill();
+        }
+
+        // Gnarled Ancient Banyan Tree
+        this.drawBanyanTree(ctx, w * 0.02, base, 220);
+
+        // Flickering Lanterns in Haveli Windows
+        this.drawHaveliWindows(ctx, w, base);
+      }
+
+      drawHaveliTower(ctx, cx, base, width, height) {
+        const top = base - height;
+
+        ctx.fillStyle = '#060308';
+        ctx.fillRect(cx - width / 2, top + 40, width, height - 40);
+        ctx.fillRect(cx - width / 2 - 8, top + 32, width + 16, 10);
+
+        // Pavilion pillars
+        ctx.fillRect(cx - width * 0.4, top + 8, 5, 24);
+        ctx.fillRect(cx - width * 0.15, top + 8, 4, 24);
+        ctx.fillRect(cx + width * 0.15, top + 8, 4, 24);
+        ctx.fillRect(cx + width * 0.4 - 5, top + 8, 5, 24);
+
+        // Scalloped dome roof
+        ctx.beginPath();
+        ctx.moveTo(cx - width * 0.5, top + 8);
+        ctx.quadraticCurveTo(cx - width * 0.3, top - 18, cx, top - 28);
+        ctx.quadraticCurveTo(cx + width * 0.3, top - 18, cx + width * 0.5, top + 8);
+        ctx.closePath();
+        ctx.fill();
+
+        // Finial spike
+        ctx.strokeStyle = '#2d1b38';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(cx, top - 28);
+        ctx.lineTo(cx, top - 44);
+        ctx.stroke();
+        ctx.fillStyle = '#3f254f';
+        ctx.beginPath();
+        ctx.arc(cx, top - 44, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      drawJharokhaBalcony(ctx, cx, cy, w, h) {
+        ctx.fillStyle = '#08040d';
+        ctx.beginPath();
+        ctx.moveTo(cx - w / 2, cy);
+        ctx.lineTo(cx + w / 2, cy);
+        ctx.lineTo(cx + w / 2 - 6, cy + h);
+        ctx.lineTo(cx - w / 2 + 6, cy + h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#180e22';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.strokeStyle = '#1c1028';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(cx - w / 2 + 6, cy + 8, w - 12, h - 16);
+      }
+
+      drawBanyanTree(ctx, bx, by, height) {
+        ctx.fillStyle = '#050207';
+        ctx.beginPath();
+        ctx.moveTo(bx - 20, by);
+        ctx.quadraticCurveTo(bx + 15, by - height * 0.5, bx + 10, by - height);
+        ctx.quadraticCurveTo(bx + 50, by - height * 0.8, bx + 120, by - height * 1.1);
+        ctx.quadraticCurveTo(bx + 70, by - height * 0.5, bx + 30, by);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = '#050207';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(bx + 10, by - height);
+        ctx.quadraticCurveTo(bx + 80, by - height - 30, bx + 160, by - height - 10);
+        ctx.moveTo(bx + 50, by - height * 0.8);
+        ctx.quadraticCurveTo(bx + 120, by - height * 0.7, bx + 220, by - height * 0.6);
+        ctx.stroke();
+
+        ctx.lineWidth = 2;
+        for (let rx = bx + 40; rx < bx + 200; rx += 25) {
+          ctx.beginPath();
+          ctx.moveTo(rx, by - height * 0.75);
+          ctx.quadraticCurveTo(rx + Math.sin(rx) * 12, by - height * 0.35, rx + Math.cos(rx) * 6, by - 10);
+          ctx.stroke();
+        }
+      }
+
+      drawHaveliWindows(ctx, w, base) {
+        const windowLocations = [
+          { x: w * 0.08, y: base - 160 },
+          { x: w * 0.18, y: base - 120 },
+          { x: w * 0.82, y: base - 180 },
+          { x: w * 0.92, y: base - 140 }
+        ];
+
+        windowLocations.forEach((win, idx) => {
+          const flicker = 0.5 + Math.sin(this.time * 6 + idx * 2.3) * 0.35;
+          const isBloodRed = idx === 2;
+
+          ctx.fillStyle = '#030104';
+          ctx.beginPath();
+          ctx.arc(win.x, win.y - 6, 7, Math.PI, 0);
+          ctx.lineTo(win.x + 7, win.y + 12);
+          ctx.lineTo(win.x - 7, win.y + 12);
+          ctx.closePath();
+          ctx.fill();
+
+          const glowGrad = ctx.createRadialGradient(win.x, win.y + 2, 2, win.x, win.y + 2, 22);
+          const color1 = isBloodRed ? `rgba(239, 68, 68, ${flicker * 0.9})` : `rgba(245, 158, 11, ${flicker * 0.9})`;
+          const color2 = isBloodRed ? `rgba(185, 28, 28, ${flicker * 0.4})` : `rgba(180, 83, 9, ${flicker * 0.4})`;
+          glowGrad.addColorStop(0, color1);
+          glowGrad.addColorStop(0.5, color2);
+          glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = glowGrad;
+          ctx.beginPath();
+          ctx.arc(win.x, win.y + 2, 22, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      drawBats(ctx) {
+        ctx.fillStyle = '#060208';
+        this.bats.forEach(b => {
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          const wingFlap = Math.sin(b.wingPhase) * 12;
+
+          ctx.beginPath();
+          ctx.ellipse(0, 0, b.size * 0.4, b.size * 0.25, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(-b.size * 0.8, -wingFlap, -b.size * 1.6, -wingFlap * 0.5);
+          ctx.quadraticCurveTo(-b.size * 0.9, 0, 0, b.size * 0.3);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(b.size * 0.8, -wingFlap, b.size * 1.6, -wingFlap * 0.5);
+          ctx.quadraticCurveTo(b.size * 0.9, 0, 0, b.size * 0.3);
+          ctx.fill();
+
+          ctx.restore();
+        });
+      }
+
+      drawFog(ctx, w, h) {
+        this.fogBands.forEach(f => {
+          const grad = ctx.createRadialGradient(f.x, f.y, 10, f.x, f.y, f.radius);
+          grad.addColorStop(0, `rgba(50, 24, 55, ${f.alpha * 1.5})`);
+          grad.addColorStop(0.6, `rgba(25, 12, 35, ${f.alpha})`);
+          grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      drawEmbers(ctx) {
+        this.embers.forEach(e => {
+          ctx.fillStyle = e.hue === 35 
+            ? `rgba(251, 191, 36, ${e.alpha})`
+            : `rgba(244, 63, 94, ${e.alpha})`;
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+    }
+
+    // Initialize Haunted Haveli Background
+    const haveliBackdrop = new HauntedHaveliBackdrop();
 
     // --- AUDIO SYNTHESIZER (Pure Web Audio API) ---
     class HaveliAudio {
@@ -1078,23 +2155,104 @@
         });
       }
 
-      // Chudail screech / chase alert
-      playScreech() {
+      // High-frequency, ear-piercing Chudail / Pisachini screech
+      playChudailScreech() {
         if (!this.ctx || this.muted) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(680, now);
-        osc.frequency.exponentialRampToValueAtTime(240, now + 0.55);
+        try {
+          const now = this.ctx.currentTime;
 
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+          // 1. Dual high-frequency piercing screaming oscillators with FM shudder
+          const osc1 = this.ctx.createOscillator();
+          const osc2 = this.ctx.createOscillator();
+          const osc3 = this.ctx.createOscillator(); // Harsh dissonant mid-range body
+          const lfo = this.ctx.createOscillator();   // Rapid terrifying warble/vibrato
+          const lfoGain = this.ctx.createGain();
 
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.65);
+          const gainNode = this.ctx.createGain();
+          const filter = this.ctx.createBiquadFilter();
+
+          // High-frequency peaking resonant filter for ear-piercing sharpness
+          filter.type = 'peaking';
+          filter.frequency.setValueAtTime(3200, now);
+          filter.Q.setValueAtTime(6.0, now);
+          filter.gain.setValueAtTime(14, now);
+
+          // LFO setup for frantic horrific vocal screech tremor (28Hz rapid tremor)
+          lfo.frequency.setValueAtTime(28, now);
+          lfoGain.gain.setValueAtTime(420, now);
+          lfo.connect(lfoGain);
+          lfoGain.connect(osc1.frequency);
+          lfoGain.connect(osc2.frequency);
+
+          // Oscillator 1: Ear-piercing primary shriek starting at 3500Hz gliding to 1600Hz
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(3500, now);
+          osc1.frequency.exponentialRampToValueAtTime(1600, now + 0.85);
+
+          // Oscillator 2: Dissonant microtonal tritone screech (3150Hz gliding to 1350Hz)
+          osc2.type = 'square';
+          osc2.frequency.setValueAtTime(3150, now);
+          osc2.frequency.exponentialRampToValueAtTime(1350, now + 0.85);
+
+          // Oscillator 3: Supernatural howling screech body (960Hz gliding to 260Hz)
+          osc3.type = 'sawtooth';
+          osc3.frequency.setValueAtTime(960, now);
+          osc3.frequency.exponentialRampToValueAtTime(260, now + 0.9);
+
+          // Volume envelope: instant sharp attack, piercing sustain, dramatic decay
+          gainNode.gain.setValueAtTime(0.4, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+
+          osc1.connect(filter);
+          osc2.connect(filter);
+          osc3.connect(filter);
+          filter.connect(gainNode);
+          gainNode.connect(this.ctx.destination);
+
+          lfo.start(now);
+          osc1.start(now);
+          osc2.start(now);
+          osc3.start(now);
+
+          lfo.stop(now + 1.0);
+          osc1.stop(now + 1.0);
+          osc2.stop(now + 1.0);
+          osc3.stop(now + 1.0);
+
+          // 2. High-frequency shrieking noise breath blast
+          const bufferSize = Math.floor(this.ctx.sampleRate * 0.85);
+          const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const output = noiseBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            output[i] = Math.random() * 2 - 1;
+          }
+
+          const whiteNoise = this.ctx.createBufferSource();
+          whiteNoise.buffer = noiseBuffer;
+
+          const noiseFilter = this.ctx.createBiquadFilter();
+          noiseFilter.type = 'bandpass';
+          noiseFilter.frequency.setValueAtTime(3000, now);
+          noiseFilter.Q.setValueAtTime(4.5, now);
+
+          const noiseGain = this.ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.3, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+          whiteNoise.connect(noiseFilter);
+          noiseFilter.connect(noiseGain);
+          noiseGain.connect(this.ctx.destination);
+
+          whiteNoise.start(now);
+          whiteNoise.stop(now + 0.9);
+        } catch (e) {
+          console.warn('Screech error', e);
+        }
+      }
+
+      // Chudail screech / chase alert alias
+      playScreech() {
+        this.playChudailScreech();
       }
 
       // Holy Vibhuti blast / banish stun
@@ -1204,6 +2362,84 @@
         osc.stop(now + 0.09);
       }
 
+      // Camera Angle Shutter / Lens Click
+      playCamAngleSwitch() {
+        if (!this.ctx || this.muted) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(850, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.06);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } catch (e) {}
+      }
+
+      // Iron Trishul Trident scraping on stone tiles
+      playTrishulScrape() {
+        if (!this.ctx || this.muted) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.linearRampToValueAtTime(160, now + 0.32);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.36);
+        } catch (e) {}
+      }
+
+      // Hunting alert stinger chord
+      playHuntingStinger() {
+        if (!this.ctx || this.muted) return;
+        try {
+          const now = this.ctx.currentTime;
+          [110, 116.5, 155.6, 220].forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.12 / (i + 1), now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.75);
+          });
+        } catch (e) {}
+      }
+
+      // Eerie menu hover whispering tone
+      playMenuHover() {
+        if (!this.ctx || this.muted) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.35);
+          this.playGhungroo(0.2);
+        } catch (e) {}
+      }
+
       toggleMute() {
         this.muted = !this.muted;
         if (this.droneGain) {
@@ -1214,6 +2450,20 @@
     }
 
     const audio = new HaveliAudio();
+
+    // --- REAL PHOTOREALISTIC CHARACTER ASSETS ---
+    const CHARACTER_ASSETS = {
+      player: new Image(),
+      maya: new Image(),
+      hunter: new Image(),
+      mayaFace: new Image(),
+      hunterFace: new Image()
+    };
+    CHARACTER_ASSETS.player.src = '/src/assets/images/player_character_1790770811602.jpg';
+    CHARACTER_ASSETS.maya.src = '/src/assets/images/maya_ghost_character_1790770824736.jpg';
+    CHARACTER_ASSETS.hunter.src = '/src/assets/images/hunter_shikari_character_1790770836258.jpg';
+    CHARACTER_ASSETS.mayaFace.src = '/src/assets/images/maya_jumpscare_face_1790770847561.jpg';
+    CHARACTER_ASSETS.hunterFace.src = '/src/assets/images/hunter_portrait_1790770860161.jpg';
 
     // --- GAME ENGINE & STATE ---
     const canvas = document.getElementById('game-canvas');
@@ -1397,6 +2647,7 @@
       radius: 14,
       speed: 3.1,
       angle: -Math.PI / 2,
+      facingLeft: false,
       oil: 100, // 100 to 0
       hidden: false,
       hidingSpotId: null,
@@ -1423,6 +2674,8 @@
       chaseSpeed: 3.7,
       speed: 1.8,
       angle: 0,
+      facingLeft: false,
+      echoes: [], // Spectral after-image motion echoes
       state: 'PATROL', // PATROL, INVESTIGATE, CHASE, STUNNED
       targetX: 6 * TILE_SIZE + 24,
       targetY: 6 * TILE_SIZE + 24,
@@ -1443,6 +2696,7 @@
       chaseSpeed: 3.4,
       speed: 2.1,
       angle: 0,
+      facingLeft: false,
       torchAngle: 0,
       state: 'HUNTING', // HUNTING, INVESTIGATING, PURSUING
       targetX: 28 * TILE_SIZE + 24,
@@ -1685,12 +2939,216 @@
     });
 
     // Start / Restart Buttons
-    document.getElementById('start-game-btn').addEventListener('click', () => {
+    const startGameBtn = document.getElementById('start-game-btn');
+    startGameBtn.addEventListener('mouseenter', () => {
+      if (audio.ctx && !audio.muted) {
+        audio.playMenuHover();
+      }
+    });
+
+    startScreen.addEventListener('mouseenter', () => {
+      audio.init();
+    }, { once: true });
+
+    startScreen.addEventListener('click', () => {
+      audio.init();
+    }, { once: true });
+
+    startGameBtn.addEventListener('click', () => {
       audio.init();
       startScreen.classList.add('hidden');
       resetGame();
       gameState = 'PLAYING';
     });
+
+    // --- ANIMATED HAUNTED PREVIEW ON START SCREEN ---
+    function initStartScreenHauntedCanvas() {
+      const scanvas = document.getElementById('start-haunted-canvas');
+      if (!scanvas) return;
+      const sctx = scanvas.getContext('2d');
+      let stime = 0;
+      const embers = [];
+      for (let i = 0; i < 22; i++) {
+        embers.push({
+          x: Math.random() * 580,
+          y: Math.random() * 74,
+          vy: -0.4 - Math.random() * 0.7,
+          vx: (Math.random() - 0.5) * 0.5,
+          size: 1 + Math.random() * 2,
+          alpha: Math.random(),
+          hue: Math.random() < 0.6 ? '#ef4444' : '#fbbf24'
+        });
+      }
+
+      const runes = [
+        { text: 'ॐ', x: 120, y: 55, vy: -0.2, alpha: 0.4 },
+        { text: 'रक्त', x: 200, y: 65, vy: -0.25, alpha: 0.35 },
+        { text: 'भयम्', x: 380, y: 60, vy: -0.22, alpha: 0.3 },
+        { text: 'शापित', x: 460, y: 70, vy: -0.28, alpha: 0.4 }
+      ];
+
+      function renderStartCanvas() {
+        if (startScreen.classList.contains('hidden')) {
+          requestAnimationFrame(renderStartCanvas);
+          return;
+        }
+
+        stime += 0.025;
+        sctx.clearRect(0, 0, 580, 74);
+
+        // 1. Dark Smoky Haveli Archway
+        const bgGrad = sctx.createLinearGradient(0, 0, 0, 74);
+        bgGrad.addColorStop(0, '#040106');
+        bgGrad.addColorStop(0.5, '#17060f');
+        bgGrad.addColorStop(1, '#08020a');
+        sctx.fillStyle = bgGrad;
+        sctx.fillRect(0, 0, 580, 74);
+
+        // Ancient Carved Stone Mehrab Arches on sides
+        sctx.fillStyle = '#0f040b';
+        sctx.beginPath();
+        sctx.moveTo(0, 74);
+        sctx.lineTo(0, 20);
+        sctx.quadraticCurveTo(50, 8, 90, 74);
+        sctx.closePath();
+        sctx.fill();
+
+        sctx.beginPath();
+        sctx.moveTo(580, 74);
+        sctx.lineTo(580, 20);
+        sctx.quadraticCurveTo(530, 8, 490, 74);
+        sctx.closePath();
+        sctx.fill();
+
+        // 2. Flickering Haveli Wall Torches (Left: x=50, Right: x=530)
+        [50, 530].forEach((tx, idx) => {
+          // Bracket
+          sctx.fillStyle = '#78350f';
+          sctx.fillRect(tx - 3, 38, 6, 18);
+          sctx.fillRect(tx - 7, 44, 14, 3);
+          // Cup
+          sctx.fillStyle = '#b45309';
+          sctx.beginPath();
+          sctx.ellipse(tx, 38, 7, 3, 0, 0, Math.PI * 2);
+          sctx.fill();
+          // Flame
+          const flameH = 9 + Math.sin(stime * 14 + idx * 2) * 3;
+          const flameGrad = sctx.createRadialGradient(tx, 34, 1, tx, 34, 16);
+          flameGrad.addColorStop(0, '#fef08a');
+          flameGrad.addColorStop(0.4, '#f59e0b');
+          flameGrad.addColorStop(0.8, '#dc2626');
+          flameGrad.addColorStop(1, 'rgba(0,0,0,0)');
+          sctx.fillStyle = flameGrad;
+          sctx.beginPath();
+          sctx.ellipse(tx, 34 - flameH * 0.4, 4.5, flameH, 0, 0, Math.PI * 2);
+          sctx.fill();
+        });
+
+        // 3. Floating Sanskrit Curse Runes in Smoke
+        sctx.font = '10px "Yatra One", cursive';
+        runes.forEach(r => {
+          r.y += r.vy;
+          if (r.y < 12) r.y = 70;
+          sctx.fillStyle = `rgba(239, 68, 68, ${r.alpha * (0.6 + Math.sin(stime * 3 + r.x) * 0.3)})`;
+          sctx.fillText(r.text, r.x, r.y);
+        });
+
+        // 4. Floating Embers
+        embers.forEach(e => {
+          e.y += e.vy;
+          e.x += e.vx + Math.sin(stime * 3 + e.y * 0.05) * 0.4;
+          if (e.y < 0) {
+            e.y = 74;
+            e.x = Math.random() * 580;
+          }
+          sctx.fillStyle = e.hue;
+          sctx.globalAlpha = e.alpha * 0.7;
+          sctx.beginPath();
+          sctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+          sctx.fill();
+        });
+        sctx.globalAlpha = 1.0;
+
+        // 5. Maya The Pisachini / Chudail (Center Specter with Real Photorealistic Face)
+        const ghostX = 290;
+        const ghostY = 38 + Math.sin(stime * 2.8) * 4;
+
+        // Blood-red Terror Aura
+        const terrorAura = sctx.createRadialGradient(ghostX, ghostY, 6, ghostX, ghostY, 52);
+        terrorAura.addColorStop(0, 'rgba(220, 38, 38, 0.5)');
+        terrorAura.addColorStop(0.7, 'rgba(127, 29, 29, 0.2)');
+        terrorAura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        sctx.fillStyle = terrorAura;
+        sctx.beginPath();
+        sctx.arc(ghostX, ghostY, 52, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Real Maya Character Face Image
+        if (CHARACTER_ASSETS.mayaFace.complete && CHARACTER_ASSETS.mayaFace.naturalWidth > 0) {
+          sctx.save();
+          sctx.beginPath();
+          sctx.arc(ghostX, ghostY, 24, 0, Math.PI * 2);
+          sctx.clip();
+          sctx.drawImage(CHARACTER_ASSETS.mayaFace, ghostX - 24, ghostY - 24, 48, 48);
+          sctx.restore();
+
+          // Blood-red glowing rim
+          sctx.strokeStyle = '#ef4444';
+          sctx.lineWidth = 2.5;
+          sctx.beginPath();
+          sctx.arc(ghostX, ghostY, 24, 0, Math.PI * 2);
+          sctx.stroke();
+
+          // Demonic Eye Flare
+          sctx.fillStyle = '#ff0033';
+          sctx.beginPath();
+          sctx.arc(ghostX - 5, ghostY - 2, 2, 0, Math.PI * 2);
+          sctx.arc(ghostX + 5, ghostY - 2, 2, 0, Math.PI * 2);
+          sctx.fill();
+        } else {
+          // Fallback ghost
+          sctx.fillStyle = '#e2e8f0';
+          sctx.beginPath();
+          sctx.ellipse(ghostX, ghostY, 11, 14, 0, 0, Math.PI * 2);
+          sctx.fill();
+        }
+
+        // Skeletal Claw reaching forward with broken red bangles
+        sctx.strokeStyle = '#cbd5e1';
+        sctx.lineWidth = 2.2;
+        sctx.beginPath();
+        sctx.moveTo(ghostX + 14, ghostY + 12);
+        sctx.lineTo(ghostX + 26, ghostY + 8);
+        sctx.lineTo(ghostX + 34, ghostY + 12);
+        sctx.stroke();
+
+        sctx.strokeStyle = '#dc2626';
+        sctx.lineWidth = 2.2;
+        sctx.strokeRect(ghostX + 24, ghostY + 6, 3, 4);
+
+        // Claws
+        sctx.fillStyle = '#050205';
+        sctx.beginPath();
+        sctx.moveTo(ghostX + 34, ghostY + 12);
+        sctx.lineTo(ghostX + 40, ghostY + 8);
+        sctx.lineTo(ghostX + 37, ghostY + 14);
+        sctx.closePath();
+        sctx.fill();
+
+        // 6. Occasional Spooky Lightning Glitch
+        if (Math.random() < 0.02) {
+          sctx.fillStyle = 'rgba(239, 68, 68, 0.16)';
+          sctx.fillRect(0, 0, 580, 74);
+        }
+
+        requestAnimationFrame(renderStartCanvas);
+      }
+
+      renderStartCanvas();
+    }
+
+    // Launch Start Screen Haunted Preview
+    initStartScreenHauntedCanvas();
 
     document.getElementById('restart-game-btn').addEventListener('click', () => {
       gameoverScreen.classList.add('hidden');
@@ -1738,6 +3196,8 @@
       maya.patrolTimer = 0;
       maya.investigateTimer = 0;
       maya.stunnedTimer = 0;
+      maya.facingLeft = false;
+      maya.echoes = [];
 
       hunter.x = 28 * TILE_SIZE + 24;
       hunter.y = 22 * TILE_SIZE + 24;
@@ -1932,7 +3392,10 @@
     function triggerGameOver(cause = 'Maya') {
       gameState = 'GAMEOVER';
       horrorFlash.classList.add('active');
-      audio.playScreech();
+      audio.playChudailScreech();
+      if (cause === 'Hunter') {
+        audio.playHunterCall();
+      }
       renderJumpscarePortrait(cause);
 
       setTimeout(() => {
@@ -2026,6 +3489,9 @@
       player.isMoving = moveX !== 0 || moveY !== 0;
 
       if (player.isMoving) {
+        if (moveX < -0.1) player.facingLeft = true;
+        else if (moveX > 0.1) player.facingLeft = false;
+
         const len = Math.hypot(moveX, moveY);
         moveX = (moveX / len) * player.speed;
         moveY = (moveY / len) * player.speed;
@@ -2173,8 +3639,23 @@
     }
 
     function updateMaya() {
-      maya.floatOffset = Math.sin(gameTime * 3) * 4;
+      maya.floatOffset = Math.sin(gameTime * 3) * 5;
       const distToPlayer = Math.hypot(player.x - maya.x, player.y - maya.y);
+
+      // Record spectral after-image trail
+      if (maya.state === 'CHASE' || Math.random() < 0.4) {
+        maya.echoes.push({
+          x: maya.x,
+          y: maya.y + maya.floatOffset,
+          facingLeft: maya.facingLeft,
+          alpha: maya.state === 'CHASE' ? 0.6 : 0.35
+        });
+        if (maya.echoes.length > 5) maya.echoes.shift();
+      }
+      for (let i = maya.echoes.length - 1; i >= 0; i--) {
+        maya.echoes[i].alpha -= 0.04;
+        if (maya.echoes[i].alpha <= 0) maya.echoes.splice(i, 1);
+      }
 
       // Audio cues: Play ghungroo sound & accelerated heartbeat when nearby
       if (distToPlayer < 400) {
@@ -2353,6 +3834,8 @@
       const vx = (dx / dist) * entity.speed;
       const vy = (dy / dist) * entity.speed;
       entity.angle = Math.atan2(dy, dx);
+      if (vx < -0.15) entity.facingLeft = true;
+      else if (vx > 0.15) entity.facingLeft = false;
 
       // Slide movement around obstacles
       if (!checkCircleWallCollision(entity.x + vx, entity.y, entity.radius)) {
@@ -2509,7 +3992,7 @@
       renderMinimapHUD();
     }
 
-    // Render Haveli Architecture
+    // Render Haunted Haveli Architecture & Background
     function renderHaveliTiles() {
       const startCol = Math.floor(camera.x / TILE_SIZE);
       const endCol = Math.min(COLS - 1, Math.ceil((camera.x + camera.width) / TILE_SIZE));
@@ -2521,35 +4004,137 @@
           const type = map[r][c];
           const px = c * TILE_SIZE;
           const py = r * TILE_SIZE;
+          const pseudoRandom = ((r * 37 + c * 19) % 100);
 
           if (type === T_WALL) {
-            // Ancient Carved Haveli Sandstone Wall
-            ctx.fillStyle = '#1c151b';
+            // Ancient Haunted Sandstone / Jodhpur Dark Stone Wall
+            ctx.fillStyle = '#181216';
             ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-            // Stone bevel & cracks
-            ctx.strokeStyle = '#2d222b';
+
+            // Carved stone blocks & weathered mortar lines
+            ctx.strokeStyle = '#251b22';
             ctx.lineWidth = 1.5;
             ctx.strokeRect(px + 1, py + 1, TILE_SIZE - 2, TILE_SIZE - 2);
-            // Carved arch motif inside wall
-            ctx.fillStyle = '#140f13';
+
+            // Inner Carved Rajasthani Mehrab / Jharokha Arch
+            ctx.fillStyle = '#100b0e';
             ctx.beginPath();
-            ctx.arc(px + 24, py + 24, 12, Math.PI, 0);
-            ctx.lineTo(px + 36, py + 40);
-            ctx.lineTo(px + 12, py + 40);
+            ctx.moveTo(px + 8, py + 42);
+            ctx.lineTo(px + 8, py + 22);
+            ctx.quadraticCurveTo(px + 8, py + 10, px + 24, py + 6);
+            ctx.quadraticCurveTo(px + 40, py + 10, px + 40, py + 22);
+            ctx.lineTo(px + 40, py + 42);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = '#382531';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Cracks on ancient wall
+            if (pseudoRandom < 35) {
+              ctx.strokeStyle = '#0a0709';
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              ctx.moveTo(px + 6, py + 12);
+              ctx.lineTo(px + 16, py + 22);
+              ctx.lineTo(px + 14, py + 34);
+              ctx.stroke();
+            }
+
+            // Spider Cobwebs in corners of walls
+            if (pseudoRandom > 75) {
+              ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(px + 2, py + 2);
+              ctx.lineTo(px + 16, py + 2);
+              ctx.lineTo(px + 2, py + 16);
+              ctx.closePath();
+              ctx.moveTo(px + 4, py + 4);
+              ctx.lineTo(px + 12, py + 12);
+              ctx.stroke();
+            }
+
+            // Antique Brass Wall Torch / Oil Sconce on select wall tiles
+            if ((r % 4 === 0 && c % 3 === 0)) {
+              // Brass bracket
+              ctx.fillStyle = '#78350f';
+              ctx.fillRect(px + 22, py + 18, 4, 12);
+              ctx.fillRect(px + 18, py + 28, 12, 3);
+              // Small diya oil cup
+              ctx.fillStyle = '#b45309';
+              ctx.beginPath();
+              ctx.ellipse(px + 24, py + 18, 6, 3, 0, 0, Math.PI * 2);
+              ctx.fill();
+              // Flickering amber torch flame
+              const flameHeight = 6 + Math.sin(gameTime * 8 + r + c) * 2;
+              ctx.fillStyle = '#fbbf24';
+              ctx.beginPath();
+              ctx.ellipse(px + 24, py + 14 - flameHeight * 0.4, 3, flameHeight, 0, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#ea580c';
+              ctx.beginPath();
+              ctx.ellipse(px + 24, py + 16, 1.8, 3, 0, 0, Math.PI * 2);
+              ctx.fill();
+            } else if (r % 4 === 2 && c % 3 === 1) {
+              // Ancestral Haveli Oil Portrait in carved wood frame with eerie watching eyes!
+              ctx.fillStyle = '#221106';
+              ctx.fillRect(px + 10, py + 8, 28, 30);
+              ctx.strokeStyle = '#78350f';
+              ctx.lineWidth = 1.2;
+              ctx.strokeRect(px + 10, py + 8, 28, 30);
+
+              // Canvas background
+              ctx.fillStyle = '#120b08';
+              ctx.fillRect(px + 13, py + 11, 22, 24);
+
+              // Shadowy figure silhouette
+              ctx.fillStyle = '#060303';
+              ctx.beginPath();
+              ctx.ellipse(px + 24, py + 26, 8, 6, 0, 0, Math.PI * 2);
+              ctx.arc(px + 24, py + 19, 5, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Eerie glowing phantom eyes in the painting that watch you!
+              const eyeGlint = Math.sin(gameTime * 2 + r + c) > 0.3 ? '#ef4444' : '#f8fafc';
+              ctx.fillStyle = eyeGlint;
+              ctx.fillRect(px + 22, py + 18, 1.2, 1.2);
+              ctx.fillRect(px + 25, py + 18, 1.2, 1.2);
+            }
+
+            // Bloody handprints & scratches on ancient stone
+            if (pseudoRandom === 42 || pseudoRandom === 88) {
+              ctx.fillStyle = 'rgba(153, 27, 27, 0.75)';
+              ctx.beginPath();
+              ctx.ellipse(px + 22, py + 26, 4, 5, 0.2, 0, Math.PI * 2);
+              ctx.fill();
+              for (let f = -3; f <= 3; f += 2) {
+                ctx.fillRect(px + 22 + f, py + 18, 1.5, 6);
+              }
+            }
+
           } else if (type === T_PILLAR) {
-            // Ornate stone pillar
-            ctx.fillStyle = '#261b17';
-            ctx.fillRect(px + 6, py + 6, TILE_SIZE - 12, TILE_SIZE - 12);
-            ctx.strokeStyle = '#4a3627';
+            // Ornate Carved Haveli Stone Pillar with lotus capital
+            ctx.fillStyle = '#1e1411';
+            ctx.fillRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+            ctx.strokeStyle = '#43281c';
             ctx.lineWidth = 2;
-            ctx.strokeRect(px + 6, py + 6, TILE_SIZE - 12, TILE_SIZE - 12);
-            // Brass ring on pillar
+            ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+
+            // Fluted stone shaft
+            ctx.fillStyle = '#2c1d18';
+            ctx.beginPath();
+            ctx.arc(px + 24, py + 24, 13, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#5a3825';
+            ctx.stroke();
+
+            // Brass embossed floral band in center
             ctx.fillStyle = '#b45309';
             ctx.beginPath();
-            ctx.arc(px + 24, py + 24, 8, 0, Math.PI * 2);
+            ctx.arc(px + 24, py + 24, 6, 0, Math.PI * 2);
             ctx.fill();
+
           } else if (type === T_CHAINED_DOOR) {
             // Treasury Door with heavy crisscrossing iron chains
             ctx.fillStyle = '#26150d';
@@ -2584,14 +4169,17 @@
             ctx.lineWidth = 2;
             ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
 
-            // Tulsi holy plant
+            // Tulsi holy plant & sindoor markings
             ctx.fillStyle = altarPurified ? '#4ade80' : '#15803d';
             ctx.beginPath();
             ctx.arc(px + 24, py + 20, 8, 0, Math.PI * 2);
             ctx.fill();
 
+            // Red vermilion vermillion powder mark
+            ctx.fillStyle = '#b91c1c';
+            ctx.fillRect(px + 23, py + 28, 2, 6);
+
             if (altarPurified) {
-              // Divine golden holy aura
               ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
               ctx.beginPath();
               ctx.arc(px + 24, py + 24, 16 + Math.sin(gameTime * 6) * 3, 0, Math.PI * 2);
@@ -2616,11 +4204,11 @@
             ctx.beginPath();
             ctx.arc(px + 24, py + 24, 7, 0, Math.PI * 2);
             ctx.fill();
+
           } else if (type === T_EXIT) {
             // Grand Escape Mahadwar
             ctx.fillStyle = '#382212';
             ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-            // Auspicious glowing gateway symbols
             ctx.strokeStyle = '#fbbf24';
             ctx.lineWidth = 2;
             ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
@@ -2628,29 +4216,95 @@
             ctx.font = '16px serif';
             ctx.textAlign = 'center';
             ctx.fillText('🔱', px + 24, py + 30);
+
           } else if (type === T_CARPET) {
-            // Ornate Mughal/Rajput floral red carpet
-            ctx.fillStyle = '#3b1218';
+            // Royal Rajput/Persian Antique Haveli Red Carpet
+            ctx.fillStyle = '#2f0b12';
             ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-            ctx.strokeStyle = '#611b24';
+            ctx.strokeStyle = '#54121c';
             ctx.lineWidth = 1;
             ctx.strokeRect(px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4);
-            // Gold border fringe
-            ctx.strokeStyle = '#854d0e';
-            ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+
+            // Intricate gold filigree border pattern
+            ctx.strokeStyle = '#b45309';
+            ctx.strokeRect(px + 5, py + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+
+            // Center floral lotus motif
+            ctx.fillStyle = '#78350f';
+            ctx.beginPath();
+            ctx.ellipse(px + 24, py + 24, 7, 4, 0, 0, Math.PI * 2);
+            ctx.ellipse(px + 24, py + 24, 4, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Occasional dried blood stain on carpet
+            if (pseudoRandom < 25) {
+              ctx.fillStyle = 'rgba(74, 4, 4, 0.7)';
+              ctx.beginPath();
+              ctx.ellipse(px + 20, py + 22, 6, 4, 0.4, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
           } else {
-            // Standard Ancient Stone Tile Floor
-            ctx.fillStyle = '#100c14';
+            // Weathered Ancient Stone Haveli Flagstone Floor
+            ctx.fillStyle = '#0f0b12';
             ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-            ctx.strokeStyle = '#18121d';
-            ctx.lineWidth = 1;
+
+            // Mortar joints between irregular stone tiles
+            ctx.strokeStyle = '#1b1420';
+            ctx.lineWidth = 1.2;
             ctx.strokeRect(px, py, TILE_SIZE, TILE_SIZE);
 
-            // Occasional floral rangoli / mandala engraving on select tiles
-            if ((r + c) % 8 === 0) {
-              ctx.strokeStyle = 'rgba(217, 119, 6, 0.12)';
+            // Weathered cracks on stone
+            if (pseudoRandom < 30) {
+              ctx.strokeStyle = 'rgba(5, 3, 7, 0.8)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(px + 6, py + 10);
+              ctx.lineTo(px + 18, py + 24);
+              ctx.lineTo(px + 32, py + 28);
+              ctx.stroke();
+            }
+
+            // Moss / Mold patches near damp corners
+            if (pseudoRandom > 80) {
+              ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+              ctx.beginPath();
+              ctx.arc(px + 8, py + 8, 7, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Occasional sinister dried blood stain on stone
+            if (pseudoRandom > 92) {
+              ctx.fillStyle = 'rgba(127, 29, 29, 0.45)';
+              ctx.beginPath();
+              ctx.arc(px + 28, py + 20, 5, 0, Math.PI * 2);
+              ctx.arc(px + 34, py + 24, 3, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Ancient sacred Tantric Yantra / Sanskrit mandala etched into stone flags
+            if ((r * 7 + c * 11) % 17 === 0) {
+              ctx.strokeStyle = 'rgba(217, 119, 6, 0.22)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.arc(px + 24, py + 24, 15, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(px + 24, py + 11);
+              ctx.lineTo(px + 35, py + 31);
+              ctx.lineTo(px + 13, py + 31);
+              ctx.closePath();
+              ctx.stroke();
+              ctx.fillStyle = 'rgba(217, 119, 6, 0.28)';
+              ctx.font = '8px serif';
+              ctx.textAlign = 'center';
+              ctx.fillText('ॐ', px + 24, py + 27);
+            } else if ((r + c) % 8 === 0) {
+              ctx.strokeStyle = 'rgba(217, 119, 6, 0.14)';
+              ctx.lineWidth = 1;
               ctx.beginPath();
               ctx.arc(px + 24, py + 24, 14, 0, Math.PI * 2);
+              ctx.arc(px + 24, py + 24, 8, 0, Math.PI * 2);
               ctx.stroke();
             }
           }
@@ -3004,198 +4658,285 @@
       }
     }
 
-    // Render Player Character
+    // Render Player Character (Real Photorealistic Indian Haveli Explorer)
     function renderPlayer() {
       ctx.save();
       ctx.translate(player.x, player.y);
-      ctx.rotate(player.angle);
-
-      // Footstep walk animation
-      const walkOffset = player.isMoving ? Math.sin(player.animFrame) * 4 : 0;
-
-      // Dhoti Legs
-      ctx.fillStyle = '#e2d8ce';
-      ctx.beginPath();
-      ctx.ellipse(-5, 6 + walkOffset, 4, 6, 0, 0, Math.PI * 2);
-      ctx.ellipse(-5, -6 - walkOffset, 4, 6, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Kurta Torso
-      ctx.fillStyle = '#b45309';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, 10, 12, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#92400e';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Head / Turban
-      ctx.fillStyle = '#c2410c'; // Saffron Pagri/Turban
-      ctx.beginPath();
-      ctx.arc(2, 0, 8, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fde68a';
-      ctx.fillRect(4, -3, 3, 6);
-
-      // Kerosene Lantern (Laltain) in outstretched hand
-      ctx.save();
-      ctx.translate(14, 8);
-      // Brass lantern cage
-      ctx.fillStyle = '#78350f';
-      ctx.fillRect(-3, -5, 6, 10);
-      // Glowing glass chimney with flame
-      ctx.fillStyle = player.oil > 0 ? '#fef08a' : '#475569';
-      ctx.fillRect(-2, -3, 4, 6);
-      if (player.oil > 0) {
-        ctx.fillStyle = '#f97316';
-        ctx.fillRect(-1, -1, 2, 3);
+      if (player.facingLeft) {
+        ctx.scale(-1, 1);
       }
-      ctx.restore();
 
-      ctx.restore();
-    }
+      // Footstep walk animation bobbing
+      const bobY = player.isMoving ? Math.abs(Math.sin(player.animFrame)) * 2.5 : 0;
 
-    // Render Maya (The Pisachini)
-    function renderMaya() {
-      ctx.save();
-      ctx.translate(maya.x, maya.y + maya.floatOffset);
-      ctx.rotate(maya.angle);
-
-      // Spectral Eerie Mist under her
-      const mistGradient = ctx.createRadialGradient(0, 0, 4, 0, 0, 24);
-      mistGradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-      mistGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = mistGradient;
+      // 1. Realistic Elliptical Ground Shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
       ctx.beginPath();
-      ctx.arc(0, 0, 24, 0, Math.PI * 2);
+      ctx.ellipse(0, 16, 16, 7, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Flowing Tattered White Saree
-      ctx.fillStyle = '#f8fafc';
-      ctx.beginPath();
-      ctx.moveTo(-16, -10);
-      ctx.lineTo(10, -8);
-      ctx.lineTo(8, 8);
-      ctx.lineTo(-16, 10);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = '#cbd5e1';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
+      // 2. Real Explorer Sprite (Photorealistic Asset)
+      if (CHARACTER_ASSETS.player.complete && CHARACTER_ASSETS.player.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(0, -8 - bobY, 24, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(CHARACTER_ASSETS.player, -24, -32 - bobY, 48, 48);
+        ctx.restore();
 
-      // Blood stains on white saree hem
-      ctx.fillStyle = '#991b1b';
-      ctx.beginPath();
-      ctx.arc(-14, -4, 3, 0, Math.PI * 2);
-      ctx.arc(-13, 5, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Pale Ghostly Face
-      ctx.fillStyle = '#e2e8f0';
-      ctx.beginPath();
-      ctx.arc(2, 0, 9, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Wild Tangled Jet Black Hair Billowing Outward
-      ctx.fillStyle = '#050406';
-      ctx.beginPath();
-      ctx.arc(-2, 0, 11, Math.PI * 0.4, Math.PI * 1.6);
-      ctx.lineTo(-18, Math.sin(gameTime * 8) * 4);
-      ctx.closePath();
-      ctx.fill();
-
-      // Glowing Crimson Eyes Piercing the Darkness
-      ctx.fillStyle = '#ef4444';
-      ctx.beginPath();
-      ctx.arc(5, -3, 2, 0, Math.PI * 2);
-      ctx.arc(5, 3, 2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Red demonic eye glare
-      ctx.fillStyle = 'rgba(239, 68, 68, 0.35)';
-      ctx.beginPath();
-      ctx.arc(5, -3, 4, 0, Math.PI * 2);
-      ctx.arc(5, 3, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Inverted Backward Feet (Iconic Pisachini Folklore Feature)
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillRect(-18, -6, 5, 3);
-      ctx.fillRect(-18, 4, 5, 3);
-
-      // Stunned Visual Effect (Holy smoke vortex)
-      if (maya.state === 'STUNNED') {
-        ctx.strokeStyle = '#38bdf8';
+        // Amber rim lighting from lantern
+        ctx.strokeStyle = player.oil > 0 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(148, 163, 184, 0.35)';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(0, 0, 22 + Math.sin(gameTime * 20) * 4, 0, Math.PI * 2);
+        ctx.arc(0, -8 - bobY, 24, 0, Math.PI * 2);
         ctx.stroke();
       }
 
-      ctx.restore();
+      // 3. Vintage Glowing Laltain (Lantern) held in hand
+      ctx.save();
+      ctx.translate(16, -2 - bobY);
+
+      // Brass wire handle
+      ctx.strokeStyle = '#92400e';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, -3, 5, Math.PI, 0);
+      ctx.stroke();
+
+      // Lantern brass top dome
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(-4, 0, 8, 3);
+      ctx.fillRect(-2, -2, 4, 2);
+
+      // Glass chimney
+      ctx.fillStyle = player.oil > 0 ? 'rgba(254, 240, 138, 0.95)' : 'rgba(148, 163, 184, 0.4)';
+      ctx.fillRect(-3, 3, 6, 9);
+
+      // Flickering Kerosene Flame
+      if (player.oil > 0) {
+        const flickerY = Math.sin(gameTime * 15) * 1.5;
+        ctx.fillStyle = '#f97316';
+        ctx.beginPath();
+        ctx.ellipse(0, 8, 1.5, 3.5 + flickerY * 0.4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.ellipse(0, 9, 0.9, 2 + flickerY * 0.3, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Brass protective cage & base
+      ctx.strokeStyle = '#451a03';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(-3.5, 3, 7, 9);
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(-4.5, 12, 9, 3);
+
+      ctx.restore(); // end lantern
+      ctx.restore(); // end player
     }
 
-    // Render The Hunter (Shikari / Tantrik)
+    // Render Maya (The Real Indian Horror Pisachini / Chudail)
+    function renderMaya() {
+      const isChasing = maya.state === 'CHASE';
+      const isStunned = maya.state === 'STUNNED';
+      const facingLeft = maya.facingLeft;
+
+      // 1. Ghostly After-Image Motion Echoes
+      maya.echoes.forEach(echo => {
+        ctx.save();
+        ctx.translate(echo.x, echo.y);
+        if (echo.facingLeft) ctx.scale(-1, 1);
+        ctx.globalAlpha = echo.alpha * 0.55;
+        ctx.fillStyle = isChasing ? '#881337' : '#0369a1';
+        ctx.beginPath();
+        ctx.arc(0, -10, 24, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      ctx.save();
+      // Upright floating with sinusoidal levitation
+      ctx.translate(maya.x, maya.y + maya.floatOffset);
+      if (facingLeft) {
+        ctx.scale(-1, 1);
+      }
+
+      // 2. Creeping Spectral Ground Shadow & Ectoplasm Smoke Pool
+      const groundShadowY = 22 - maya.floatOffset;
+      const shadowGrad = ctx.createRadialGradient(0, groundShadowY, 4, 0, groundShadowY, 32);
+      shadowGrad.addColorStop(0, 'rgba(5, 2, 7, 0.85)');
+      shadowGrad.addColorStop(0.5, isChasing ? 'rgba(127, 29, 29, 0.45)' : 'rgba(15, 23, 42, 0.4)');
+      shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = shadowGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, groundShadowY, 26, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Swirling tendrils of dark mist
+      ctx.strokeStyle = isChasing ? 'rgba(190, 18, 60, 0.4)' : 'rgba(148, 163, 184, 0.35)';
+      ctx.lineWidth = 1.2;
+      for (let m = -14; m <= 14; m += 7) {
+        ctx.beginPath();
+        ctx.moveTo(m, groundShadowY);
+        const mistWave = Math.sin(gameTime * 6 + m) * 6;
+        ctx.quadraticCurveTo(m + mistWave, groundShadowY - 10, m - mistWave * 0.5, groundShadowY - 20);
+        ctx.stroke();
+      }
+
+      // 3. Supernatural Aura Glow
+      const auraGrad = ctx.createRadialGradient(0, -10, 8, 0, -10, isChasing ? 46 : 32);
+      auraGrad.addColorStop(0, isChasing ? 'rgba(239, 68, 68, 0.45)' : 'rgba(56, 189, 248, 0.25)');
+      auraGrad.addColorStop(0.7, isChasing ? 'rgba(159, 18, 57, 0.2)' : 'rgba(30, 58, 138, 0.1)');
+      auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = auraGrad;
+      ctx.beginPath();
+      ctx.arc(0, -10, isChasing ? 46 : 32, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4. The Iconic Inverted Backward Feet (उल्टे पैर) dangling underneath
+      ctx.fillStyle = '#cbd5e1';
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 1;
+      ctx.save();
+      ctx.translate(0, 16);
+      ctx.beginPath();
+      ctx.moveTo(4, 0); // Heel facing forward
+      ctx.lineTo(-10, -1); // Toes facing backward!
+      ctx.lineTo(-12, 3);
+      ctx.lineTo(2, 3);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#09090b';
+      ctx.fillRect(-12, 0, 2.5, 3);
+      ctx.restore();
+
+      // 5. Real Maya Chudail Sprite Image
+      if (CHARACTER_ASSETS.maya.complete && CHARACTER_ASSETS.maya.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(0, -10, 26, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(CHARACTER_ASSETS.maya, -26, -36, 52, 52);
+        ctx.restore();
+
+        // Spectral rim ring
+        ctx.strokeStyle = isChasing ? '#ef4444' : '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, -10, 26, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 6. Burning Demonic Red Eye Flares
+      const eyeFlareX = 8;
+      const eyeFlareGrad = ctx.createRadialGradient(2, -14, 1, eyeFlareX, -14, isChasing ? 34 : 20);
+      eyeFlareGrad.addColorStop(0, '#ff0033');
+      eyeFlareGrad.addColorStop(0.5, isChasing ? 'rgba(220, 38, 38, 0.45)' : 'rgba(220, 38, 38, 0.2)');
+      eyeFlareGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+      ctx.fillStyle = eyeFlareGrad;
+      ctx.beginPath();
+      ctx.arc(eyeFlareX, -14, isChasing ? 34 : 20, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Screech shockwave ripple when chasing
+      if (isChasing) {
+        ctx.strokeStyle = 'rgba(239, 68, 68, 0.5)';
+        ctx.lineWidth = 2;
+        const waveR = 12 + Math.sin(gameTime * 25) * 8;
+        ctx.beginPath();
+        ctx.arc(6, -14, waveR, -0.6, 0.6);
+        ctx.stroke();
+      }
+
+      // 7. Stunned Visual Effect (Sacred Vibhuti smoke vortex + golden binding runes)
+      if (isStunned) {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(0, -10, 28 + Math.sin(gameTime * 20) * 6, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#fef08a';
+        ctx.font = '10px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('ॐ', Math.cos(gameTime * 6) * 32, -10 + Math.sin(gameTime * 6) * 32);
+        ctx.fillText('भय', Math.cos(gameTime * 6 + Math.PI) * 32, -10 + Math.sin(gameTime * 6 + Math.PI) * 32);
+      }
+
+      ctx.restore(); // end maya
+    }
+
+    // Render The Hunter (Shikari / Tantrik - Real Character Stalker)
     function renderHunter() {
       ctx.save();
       ctx.translate(hunter.x, hunter.y);
-      ctx.rotate(hunter.angle);
+      if (hunter.facingLeft) {
+        ctx.scale(-1, 1);
+      }
 
-      // Robust Shikari Cloak & Torso
-      ctx.fillStyle = '#3f2e1e';
+      const walkBob = (hunter.state === 'PURSUING' || hunter.state === 'INVESTIGATING') ? Math.sin(gameTime * 10) * 2 : 0;
+
+      // 1. Heavy Floor Shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
       ctx.beginPath();
-      ctx.ellipse(0, 0, 11, 13, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 16, 16, 7, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#78350f';
-      ctx.lineWidth = 1.5;
+
+      // 2. Real Hunter Sprite Image
+      if (CHARACTER_ASSETS.hunter.complete && CHARACTER_ASSETS.hunter.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(0, -10 + walkBob, 25, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(CHARACTER_ASSETS.hunter, -25, -35 + walkBob, 50, 50);
+        ctx.restore();
+
+        // Hunter leather & amber rim ring
+        ctx.strokeStyle = (hunter.state === 'PURSUING') ? '#ef4444' : '#b45309';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, -10 + walkBob, 25, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 3. Right Hand holding Sharp Steel Trishul (Hunting Spear)
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.moveTo(-10, 10 + walkBob);
+      ctx.lineTo(24, -18 + walkBob);
       ctx.stroke();
 
-      // Hunter turban/hood
-      ctx.fillStyle = '#713f12';
-      ctx.beginPath();
-      ctx.arc(2, 0, 9, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Sinister hunter mask / glowing amber eyes
-      ctx.fillStyle = '#fbbf24';
-      ctx.beginPath();
-      ctx.arc(6, -3, 2, 0, Math.PI * 2);
-      ctx.arc(6, 3, 2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Trishul / Hunting Spear in right hand
+      // Three-Pronged Steel Trishul Trident Head
+      ctx.fillStyle = '#e2e8f0';
       ctx.strokeStyle = '#94a3b8';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(8, -12); ctx.lineTo(24, -12);
-      ctx.stroke();
-      // Trident prongs
-      ctx.fillStyle = '#cbd5e1';
-      ctx.fillRect(24, -15, 6, 6);
-
-      // Hunting Lantern / Torch in left hand
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillRect(10, 8, 8, 8);
-      ctx.fillStyle = '#fef08a';
-      ctx.beginPath();
-      ctx.arc(14, 12, 3, 0, Math.PI * 2);
+      ctx.moveTo(24, -18 + walkBob); ctx.lineTo(33, -24 + walkBob); ctx.lineTo(27, -16 + walkBob);
+      ctx.moveTo(23, -20 + walkBob); ctx.lineTo(29, -27 + walkBob); ctx.lineTo(26, -22 + walkBob);
+      ctx.moveTo(25, -15 + walkBob); ctx.lineTo(31, -17 + walkBob); ctx.lineTo(27, -13 + walkBob);
       ctx.fill();
+      ctx.stroke();
 
-      ctx.restore();
+      ctx.restore(); // end hunter
 
-      // Hunter Shout speech bubble if shouting
+      // Hunter Shout dialogue bubble if shouting
       if (hunter.shoutTimer > 0) {
         ctx.save();
-        ctx.translate(hunter.x, hunter.y - 30);
-        ctx.fillStyle = 'rgba(127, 29, 29, 0.9)';
+        ctx.translate(hunter.x, hunter.y - 42);
+        ctx.fillStyle = 'rgba(127, 29, 29, 0.94)';
         ctx.strokeStyle = '#ef4444';
         ctx.lineWidth = 1.5;
-        ctx.fillRect(-45, -14, 90, 20);
-        ctx.strokeRect(-45, -14, 90, 20);
+        ctx.beginPath();
+        ctx.roundRect(-55, -14, 110, 24, 4);
+        ctx.fill();
+        ctx.stroke();
         ctx.fillStyle = '#fef2f2';
-        ctx.font = 'bold 11px sans-serif';
+        ctx.font = 'bold 12px "Rajdhani", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(hunter.shoutText, 0, 0);
+        ctx.fillText(hunter.shoutText || 'शिकार!', 0, 3);
         ctx.restore();
       }
     }
@@ -3328,8 +5069,10 @@
       // Reset composite operation
       darkCtx.globalCompositeOperation = 'source-over';
 
-      // Draw the darkness layer over main game canvas
+      // Draw the darkness layer over main game canvas with atmospheric haveli moonlight shadow
+      ctx.globalAlpha = 0.94;
       ctx.drawImage(darkCanvas, 0, 0);
+      ctx.globalAlpha = 1.0;
 
       // Warm Amber Lantern Ambient Tint on top
       if (!player.hidden && player.oil > 0) {
@@ -3378,7 +5121,7 @@
 
       ctx.save();
       // Parchment Map Frame
-      ctx.fillStyle = 'rgba(17, 12, 19, 0.88)';
+      ctx.fillStyle = 'rgba(17, 12, 19, 0.9)';
       ctx.fillRect(mx, my, mw, mh);
       ctx.strokeStyle = '#b45309';
       ctx.lineWidth = 2;
@@ -3413,11 +5156,47 @@
         ctx.stroke();
       });
 
-      // Draw Player Dot
+      // Draw Maya Ghost Skull Icon on Minimap (when chasing or in camera view or nearby)
+      const distToMaya = Math.hypot(player.x - maya.x, player.y - maya.y);
+      if (maya.state === 'CHASE' || currentCamIndex > 0 || distToMaya < 320) {
+        ctx.fillStyle = '#ef4444';
+        const gx = mx + maya.x * scaleX;
+        const gy = my + maya.y * scaleY;
+        ctx.beginPath();
+        ctx.arc(gx, gy - 1, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillRect(gx - 2, gy + 1, 4, 2);
+        // Glowing red dots for eyes
+        ctx.fillStyle = '#fef08a';
+        ctx.fillRect(gx - 1.5, gy - 1.5, 1, 1);
+        ctx.fillRect(gx + 0.5, gy - 1.5, 1, 1);
+      }
+
+      // Draw Hunter on Minimap
+      if (hunter.state === 'PURSUING' || currentCamIndex > 0) {
+        const hx = mx + hunter.x * scaleX;
+        const hy = my + hunter.y * scaleY;
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(hx, hy, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Draw Player Directional Arrow
+      const px = mx + player.x * scaleX;
+      const py = my + player.y * scaleY;
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.rotate(player.angle);
       ctx.fillStyle = '#38bdf8';
       ctx.beginPath();
-      ctx.arc(mx + player.x * scaleX, my + player.y * scaleY, 3, 0, Math.PI * 2);
+      ctx.moveTo(5, 0);
+      ctx.lineTo(-3, -3);
+      ctx.lineTo(-1, 0);
+      ctx.lineTo(-3, 3);
+      ctx.closePath();
       ctx.fill();
+      ctx.restore();
 
       // If Scrying in camera view, show Camera Target Dot
       if (currentCamIndex > 0) {
@@ -3436,93 +5215,60 @@
       ctx.restore();
     }
 
-    // Render Jumpscare Portrait in Game Over screen
+    // Render Jumpscare Portrait in Game Over screen with Real Photorealistic Characters
     function renderJumpscarePortrait(cause = 'Maya') {
       const scareCanvas = document.getElementById('scare-canvas');
       if (!scareCanvas) return;
       const sctx = scareCanvas.getContext('2d');
-      sctx.fillStyle = '#080101';
+      sctx.fillStyle = '#060101';
       sctx.fillRect(0, 0, 140, 140);
 
       if (cause === 'Hunter') {
-        // Terrifying Shikari (Hunter) Jumpscare Portrait
-        sctx.fillStyle = 'rgba(180, 83, 9, 0.4)';
-        sctx.beginPath();
-        sctx.arc(70, 70, 60, 0, Math.PI * 2);
-        sctx.fill();
+        // Real Hunter (Shikari) Jumpscare Portrait
+        if (CHARACTER_ASSETS.hunterFace.complete && CHARACTER_ASSETS.hunterFace.naturalWidth > 0) {
+          sctx.save();
+          sctx.beginPath();
+          sctx.arc(70, 70, 68, 0, Math.PI * 2);
+          sctx.clip();
+          sctx.drawImage(CHARACTER_ASSETS.hunterFace, 0, 0, 140, 140);
+          sctx.restore();
 
-        // Dark Hunter Hood
-        sctx.fillStyle = '#261b14';
-        sctx.beginPath();
-        sctx.arc(70, 65, 46, 0, Math.PI * 2);
-        sctx.fill();
-
-        // Sinister scarred hunter face
-        sctx.fillStyle = '#78350f';
-        sctx.beginPath();
-        sctx.ellipse(70, 72, 28, 34, 0, 0, Math.PI * 2);
-        sctx.fill();
-
-        // Piercing Amber Hunter Eyes
-        sctx.fillStyle = '#fbbf24';
-        sctx.beginPath();
-        sctx.arc(58, 65, 6, 0, Math.PI * 2);
-        sctx.arc(82, 65, 6, 0, Math.PI * 2);
-        sctx.fill();
-        sctx.fillStyle = '#000';
-        sctx.fillRect(56, 64, 4, 2);
-        sctx.fillRect(80, 64, 4, 2);
-
-        // Trident Blade thrusting forward
-        sctx.strokeStyle = '#e2e8f0';
-        sctx.lineWidth = 3;
-        sctx.beginPath();
-        sctx.moveTo(70, 140); sctx.lineTo(70, 95);
-        sctx.moveTo(56, 110); sctx.lineTo(56, 95); sctx.lineTo(84, 95); sctx.lineTo(84, 110);
-        sctx.stroke();
-
+          // Blood & amber sinister rim
+          sctx.strokeStyle = '#d97706';
+          sctx.lineWidth = 4;
+          sctx.beginPath();
+          sctx.arc(70, 70, 66, 0, Math.PI * 2);
+          sctx.stroke();
+        } else {
+          // Fallback Hunter art
+          sctx.fillStyle = '#261b14';
+          sctx.beginPath();
+          sctx.arc(70, 65, 46, 0, Math.PI * 2);
+          sctx.fill();
+        }
       } else {
-        // Demonic Maya (Pisachini) Jumpscare Portrait
-        sctx.fillStyle = 'rgba(220, 38, 38, 0.3)';
-        sctx.beginPath();
-        sctx.arc(70, 70, 60, 0, Math.PI * 2);
-        sctx.fill();
+        // Real Demonic Maya (Pisachini / Chudail) Jumpscare Portrait
+        if (CHARACTER_ASSETS.mayaFace.complete && CHARACTER_ASSETS.mayaFace.naturalWidth > 0) {
+          sctx.save();
+          sctx.beginPath();
+          sctx.arc(70, 70, 68, 0, Math.PI * 2);
+          sctx.clip();
+          sctx.drawImage(CHARACTER_ASSETS.mayaFace, 0, 0, 140, 140);
+          sctx.restore();
 
-        // Tangled black hair
-        sctx.fillStyle = '#020202';
-        sctx.beginPath();
-        sctx.arc(70, 70, 48, 0, Math.PI * 2);
-        sctx.fill();
-
-        // Pale corpse face
-        sctx.fillStyle = '#d1d5db';
-        sctx.beginPath();
-        sctx.ellipse(70, 72, 28, 36, 0, 0, Math.PI * 2);
-        sctx.fill();
-
-        // Screeching gaping mouth
-        sctx.fillStyle = '#180404';
-        sctx.beginPath();
-        sctx.ellipse(70, 92, 14, 18, 0, 0, Math.PI * 2);
-        sctx.fill();
-        // Sharp fangs
-        sctx.fillStyle = '#fef2f2';
-        sctx.beginPath();
-        sctx.moveTo(60, 80); sctx.lineTo(63, 88); sctx.lineTo(66, 80);
-        sctx.moveTo(74, 80); sctx.lineTo(77, 88); sctx.lineTo(80, 80);
-        sctx.fill();
-
-        // Piercing Blood Red Eyes
-        sctx.fillStyle = '#ef4444';
-        sctx.beginPath();
-        sctx.arc(58, 62, 5, 0, Math.PI * 2);
-        sctx.arc(82, 62, 5, 0, Math.PI * 2);
-        sctx.fill();
-        sctx.fillStyle = '#fef2f2';
-        sctx.beginPath();
-        sctx.arc(58, 62, 1.5, 0, Math.PI * 2);
-        sctx.arc(82, 62, 1.5, 0, Math.PI * 2);
-        sctx.fill();
+          // Blood-red terror rim ring
+          sctx.strokeStyle = '#ef4444';
+          sctx.lineWidth = 4;
+          sctx.beginPath();
+          sctx.arc(70, 70, 66, 0, Math.PI * 2);
+          sctx.stroke();
+        } else {
+          // Fallback Maya art
+          sctx.fillStyle = '#d1d5db';
+          sctx.beginPath();
+          sctx.ellipse(70, 70, 30, 40, 0, 0, Math.PI * 2);
+          sctx.fill();
+        }
       }
     }
 
