@@ -1,0 +1,8 @@
+{
+  "name": "Remix Neon Superbike Arcade 3D",
+  "description": "Classic 80s/90s pseudo-3D horizon motorcycle racer with curving mountain highways, traffic weaving, nitro boost, checkpoints, and retro audio synthesis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
