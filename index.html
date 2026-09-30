@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Neon Superbike Arcade 3D</title>
-  <meta name="description" content="Classic 80s/90s pseudo-3D horizon motorcycle racer with playable rider selection, rival AI racers, ultra-smooth steering physics, nitro boost, and retro audio synthesis." />
-  <meta property="og:title" content="Neon Superbike Arcade 3D" />
-  <meta property="og:description" content="Classic 80s/90s pseudo-3D horizon motorcycle racer with playable rider selection, rival AI racers, ultra-smooth steering physics, nitro boost, and retro audio synthesis." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <title>Andhakaar: The Dark Haveli</title>
+  <meta name="description" content="A 2D top-down Indian horror survival game set in an ancient haunted mansion. Evade the Chudail, scavenge sacred relics, refill your diya lantern, and escape the darkness." />
+  <meta property="og:title" content="Andhakaar: The Dark Haveli" />
+  <meta property="og:description" content="2D Indian top-down horror game. Evade the Chudail, collect Diyas, and escape the ancient haunted haveli." />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Yatra+One&family=Rajdhani:wght@500;700&display=swap');
 
     *, *::before, *::after {
       box-sizing: border-box;
@@ -21,412 +19,452 @@
     }
 
     body {
-      background-color: #05050d;
+      background-color: #030206;
       background-image: 
-        radial-gradient(ellipse at 50% 20%, rgba(35, 15, 60, 0.75) 0%, rgba(5, 5, 13, 1) 85%),
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-      background-size: 100% 100%, 32px 32px, 32px 32px;
-      color: #ffffff;
-      font-family: 'Press Start 2P', monospace, sans-serif;
+        radial-gradient(circle at 50% 20%, rgba(38, 12, 12, 0.4) 0%, rgba(3, 2, 6, 1) 85%),
+        linear-gradient(rgba(217, 119, 6, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(217, 119, 6, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: #e2d9cc;
+      font-family: 'Rajdhani', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px 8px;
+      padding: 10px;
       overflow-x: hidden;
-      touch-action: manipulation;
     }
 
-    /* Cabinet Bezel */
-    .arcade-wrapper {
+    .game-cabinet {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #0f111a;
-      border: 4px solid #23283e;
-      border-radius: 14px;
+      background: #0d0a11;
+      border: 3px solid #3b2a1d;
+      border-radius: 12px;
       box-shadow: 
-        0 0 0 2px #07080e,
-        0 0 50px rgba(236, 72, 153, 0.18),
-        0 20px 60px rgba(0, 0, 0, 0.9);
+        0 0 0 2px #19120b,
+        0 0 40px rgba(180, 83, 9, 0.15),
+        0 20px 50px rgba(0, 0, 0, 0.95);
       padding: 12px 14px 14px;
       max-width: 100%;
     }
 
-    /* Top HUD Dashboard */
-    .arcade-hud {
+    /* Haveli HUD */
+    .hud-bar {
       width: 100%;
-      max-width: 720px;
-      display: grid;
-      grid-template-columns: 1.1fr 1fr 1fr 1.1fr 1.1fr;
+      max-width: 800px;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      background: #090a12;
-      border: 2px solid #20263c;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      padding: 8px 14px;
+      background: linear-gradient(180deg, #18121c 0%, #0d0912 100%);
+      border: 1px solid #4a3828;
       border-radius: 8px;
+      box-shadow: inset 0 1px 0 rgba(245, 158, 11, 0.2);
     }
 
-    .hud-col {
+    .hud-item {
       display: flex;
       flex-direction: column;
       gap: 3px;
     }
 
-    .hud-title {
-      font-size: 8px;
-      letter-spacing: 1px;
-      color: #94a3b8;
+    .hud-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #9c8a78;
+      text-transform: uppercase;
     }
 
-    .hud-title.speed-label { color: #38bdf8; }
-    .hud-title.pos-label   { color: #4ade80; }
-    .hud-title.score-label { color: #f43f5e; }
-    .hud-title.time-label  { color: #eab308; }
-    .hud-title.boost-label { color: #a855f7; }
-
-    .hud-val-container {
+    /* Diya Light Bar */
+    .diya-meter-container {
       display: flex;
-      align-items: baseline;
-      gap: 3px;
+      align-items: center;
+      gap: 8px;
     }
 
-    .hud-value {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 900;
-      font-size: 21px;
-      line-height: 1;
-      color: #f8fafc;
-      letter-spacing: 1px;
-      font-variant-numeric: tabular-nums;
+    .diya-icon {
+      font-size: 16px;
+      filter: drop-shadow(0 0 6px #f59e0b);
+      animation: flame-flicker 2s infinite alternate;
     }
 
-    .hud-unit {
-      font-size: 8px;
-      color: #64748b;
+    @keyframes flame-flicker {
+      0% { transform: scale(1); filter: drop-shadow(0 0 4px #d97706); }
+      100% { transform: scale(1.12); filter: drop-shadow(0 0 9px #fbbf24); }
     }
 
-    /* Boost Bar */
-    .boost-meter-frame {
-      width: 100%;
+    .meter-track {
+      width: 130px;
       height: 12px;
-      background: #1e1b4b;
-      border: 1px solid #4338ca;
+      background: #171018;
+      border: 1px solid #5a422d;
       border-radius: 3px;
       overflow: hidden;
       position: relative;
     }
 
-    .boost-meter-fill {
+    .meter-fill {
       height: 100%;
       width: 100%;
-      background: linear-gradient(90deg, #8b5cf6, #ec4899, #f43f5e);
-      box-shadow: 0 0 10px rgba(236, 72, 153, 0.8);
-      transition: width 0.05s linear;
+      background: linear-gradient(90deg, #b45309, #f59e0b, #fef08a);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+      transition: width 0.15s ease-out;
     }
 
-    /* Canvas Container */
-    .canvas-container {
+    .meter-fill.critical {
+      background: linear-gradient(90deg, #7f1d1d, #ef4444);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+      animation: low-pulse 0.8s infinite;
+    }
+
+    @keyframes low-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Relic Icons */
+    .relics-list {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .relic-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #15101a;
+      border: 1px solid #3d2c20;
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #6d5b4d;
+      transition: all 0.3s ease;
+    }
+
+    .relic-badge.collected {
+      border-color: #d97706;
+      background: #2a1b12;
+      color: #fbbf24;
+      box-shadow: 0 0 8px rgba(217, 119, 6, 0.5);
+    }
+
+    /* Status Pill */
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: #1c1822;
+      border: 1px solid #3f3647;
+      color: #94a3b8;
+      transition: all 0.2s ease;
+    }
+
+    .status-pill.hidden-state {
+      background: #064e3b;
+      border-color: #059669;
+      color: #6ee7b7;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .status-pill.noise-state {
+      background: #78350f;
+      border-color: #d97706;
+      color: #fde68a;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+      animation: alert-blink 0.5s infinite;
+    }
+
+    .status-pill.spotted-state {
+      background: #7f1d1d;
+      border-color: #dc2626;
+      color: #fca5a5;
+      box-shadow: 0 0 16px rgba(220, 38, 38, 0.8);
+      animation: alert-blink 0.3s infinite;
+    }
+
+    @keyframes alert-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Canvas Viewport */
+    .viewport-box {
       position: relative;
-      width: 720px;
-      height: 500px;
+      width: 800px;
+      height: 600px;
       max-width: 100%;
-      background: #000;
-      border: 3px solid #1e263d;
+      background: #020204;
+      border: 2px solid #332317;
       border-radius: 6px;
       overflow: hidden;
-      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.95);
     }
 
     canvas {
       display: block;
       width: 100%;
       height: 100%;
-      image-rendering: auto;
+      image-rendering: pixelated;
     }
 
-    /* CRT scanline overlay */
-    .crt-overlay {
+    /* Film Grain & Darkness Vignette Overlay */
+    .vignette-overlay {
       pointer-events: none;
       position: absolute;
       inset: 0;
-      background: 
-        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%),
-        radial-gradient(circle at 50% 50%, transparent 68%, rgba(0, 0, 0, 0.45) 100%);
-      background-size: 100% 4px, 100% 100%;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(10, 5, 2, 0.8);
       z-index: 5;
     }
 
-    /* Nitro Screen Flash */
-    .nitro-flash {
+    /* Jumpscare & Red Horror Flash */
+    .horror-flash {
       pointer-events: none;
       position: absolute;
       inset: 0;
-      border: 4px solid #ec4899;
-      box-shadow: inset 0 0 45px rgba(236, 72, 153, 0.5);
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.85) 0%, rgba(69, 10, 10, 0.95) 100%);
       opacity: 0;
-      transition: opacity 0.1s ease;
-      z-index: 6;
+      z-index: 15;
+      transition: opacity 0.08s ease;
     }
 
-    .nitro-flash.active {
+    .horror-flash.active {
       opacity: 1;
     }
 
-    /* In-game Floating Notifications (Checkpoint, Near Miss, Overtake) */
-    .banner-notification {
+    /* Interaction Prompt */
+    .prompt-bubble {
       pointer-events: none;
       position: absolute;
-      top: 18%;
+      bottom: 24px;
       left: 50%;
-      transform: translateX(-50%) scale(0.9);
-      background: rgba(15, 23, 42, 0.94);
-      border: 2px solid #38bdf8;
-      border-radius: 8px;
-      padding: 10px 18px;
-      text-align: center;
-      color: #f8fafc;
-      font-size: 12px;
-      letter-spacing: 2px;
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
-      opacity: 0;
-      transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.2s ease;
+      transform: translateX(-50%);
+      background: rgba(18, 12, 15, 0.92);
+      border: 1px solid #d97706;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fef3c7;
+      box-shadow: 0 0 20px rgba(217, 119, 6, 0.5);
       z-index: 8;
+      display: none;
+      text-align: center;
       white-space: nowrap;
     }
 
-    .banner-notification.visible {
-      opacity: 1;
-      transform: translateX(-50%) scale(1);
+    .prompt-bubble.show {
+      display: block;
+      animation: float-prompt 1.2s ease-in-out infinite alternate;
     }
 
-    .banner-notification.checkpoint {
-      border-color: #22c55e;
-      color: #4ade80;
-      box-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
+    @keyframes float-prompt {
+      0% { transform: translateX(-50%) translateY(0); }
+      100% { transform: translateX(-50%) translateY(-4px); }
     }
 
-    .banner-notification.nearmiss {
-      top: 26%;
-      border-color: #facc15;
-      color: #fef08a;
-      font-size: 10px;
-      box-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
-    }
-
-    .banner-notification.overtake {
-      top: 12%;
-      border-color: #a855f7;
-      color: #c084fc;
-      font-size: 11px;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
-    }
-
-    /* Game State Overlays */
-    .game-overlay {
+    /* Overlays (Title, Game Over, Win) */
+    .overlay-screen {
       position: absolute;
       inset: 0;
-      z-index: 10;
-      background: rgba(5, 7, 16, 0.92);
-      backdrop-filter: blur(2px);
+      z-index: 20;
+      background: rgba(4, 3, 7, 0.94);
+      backdrop-filter: blur(4px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
       text-align: center;
-      transition: opacity 0.2s ease;
-      overflow-y: auto;
+      transition: opacity 0.25s ease;
     }
 
-    .game-overlay.hidden {
+    .overlay-screen.hidden {
       display: none;
     }
 
-    .overlay-badge {
-      font-size: 8px;
+    .devanagari-title {
+      font-family: 'Yatra One', cursive;
+      font-size: 26px;
+      color: #b45309;
       letter-spacing: 2px;
-      color: #ec4899;
+      text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+      margin-bottom: -4px;
+    }
+
+    .main-title {
+      font-family: 'Cinzel', serif;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #f59e0b;
+      text-shadow: 0 0 25px rgba(245, 158, 11, 0.7), 0 4px 8px #000;
       margin-bottom: 6px;
-      text-transform: uppercase;
     }
 
-    .overlay-title {
-      font-size: 24px;
-      line-height: 1.25;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-
-    .title-start {
-      color: #38bdf8;
-      text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
-    }
-
-    .title-gameover {
-      color: #f43f5e;
-      text-shadow: 0 0 20px rgba(244, 63, 94, 0.6);
-    }
-
-    .title-paused {
-      color: #eab308;
-      text-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
-    }
-
-    /* Player / Rider Selection Grid */
-    .player-select-container {
-      width: 100%;
+    .tagline {
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: #a8998a;
       max-width: 580px;
-      margin-bottom: 14px;
+      line-height: 1.5;
+      margin-bottom: 20px;
     }
 
-    .select-label {
-      font-size: 9px;
-      color: #38bdf8;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-      text-align: left;
-    }
-
-    .riders-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .rider-card {
-      background: #0b0e1b;
-      border: 2px solid #1e263d;
+    .lore-box {
+      background: #110c14;
+      border: 1px solid #453424;
       border-radius: 8px;
-      padding: 8px 6px;
-      cursor: pointer;
+      padding: 14px 20px;
+      max-width: 620px;
+      text-align: left;
+      font-size: 12px;
+      color: #cfc4b6;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .lore-box h4 {
+      font-family: 'Cinzel', serif;
+      color: #f59e0b;
+      font-size: 14px;
+      margin-bottom: 8px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
     }
 
-    .rider-card:hover {
-      border-color: #ec4899;
-      transform: translateY(-2px);
-      box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+    .lore-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
     }
 
-    .rider-card.selected {
-      border-color: #38bdf8;
-      background: #10172a;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.5);
-    }
-
-    .rider-icon-box {
-      width: 32px;
-      height: 32px;
+    .lore-card {
+      background: #18111e;
+      border: 1px solid #33241b;
+      padding: 8px 10px;
       border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
+      font-size: 11px;
     }
 
-    .rider-name {
-      font-size: 8px;
-      color: #f8fafc;
-      font-weight: bold;
-    }
-
-    .rider-title {
-      font-size: 6px;
-      color: #94a3b8;
-    }
-
-    .rider-stat {
-      font-size: 6px;
-      color: #38bdf8;
-      background: #1e263d;
-      padding: 2px 4px;
-      border-radius: 3px;
-      width: 100%;
-      text-align: center;
+    .lore-card strong {
+      color: #fbbf24;
+      display: block;
+      margin-bottom: 2px;
     }
 
     .action-btn {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 11px;
-      padding: 13px 26px;
-      background: #ec4899;
-      color: #ffffff;
-      border: 2px solid #f472b6;
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
+      color: #fffbeb;
+      border: 2px solid #f59e0b;
       border-radius: 6px;
+      padding: 12px 32px;
       cursor: pointer;
-      box-shadow: 0 4px 0 #9d174d, 0 0 25px rgba(236, 72, 153, 0.4);
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
-      white-space: nowrap;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 4px 0 #451a03;
+      transition: all 0.15s ease;
     }
 
     .action-btn:hover {
-      background: #f43f5e;
+      background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 0 #9d174d, 0 0 30px rgba(244, 63, 94, 0.5);
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.6), 0 6px 0 #451a03;
     }
 
     .action-btn:active {
       transform: translateY(2px);
-      box-shadow: 0 2px 0 #9d174d;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.3), 0 1px 0 #451a03;
     }
 
-    .key-prompt {
-      margin-top: 10px;
-      font-size: 8px;
-      color: #64748b;
-      animation: blink 1.2s infinite;
+    /* Horror Jumpscare Artwork Canvas in GameOver */
+    .scare-portrait {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid #b91c1c;
+      box-shadow: 0 0 30px rgba(220, 38, 38, 0.9);
+      margin-bottom: 14px;
+      overflow: hidden;
+      background: #130303;
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    .gameover-title {
+      font-family: 'Cinzel', serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #ef4444;
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+      margin-bottom: 8px;
     }
 
-    /* Footer & Controls Info */
-    .controls-footer {
+    .win-title {
+      font-family: 'Cinzel', serif;
+      font-size: 34px;
+      font-weight: 900;
+      color: #fbbf24;
+      letter-spacing: 3px;
+      text-shadow: 0 0 25px rgba(251, 191, 36, 0.8);
+      margin-bottom: 8px;
+    }
+
+    .stats-summary {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* Footer & Controls */
+    .hud-footer {
       width: 100%;
-      max-width: 720px;
-      margin-top: 10px;
+      max-width: 800px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 8px;
-      color: #64748b;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #8c7b6d;
       gap: 12px;
-    }
-
-    .help-text {
-      display: flex;
-      align-items: center;
-      gap: 5px;
       flex-wrap: wrap;
     }
 
-    .key-pill {
-      background: #1e263d;
-      color: #cbd5e1;
-      padding: 3px 6px;
-      border-radius: 4px;
-      border-bottom: 2px solid #0f1422;
-      font-size: 8px;
+    .key-tag {
+      background: #1e1724;
+      border: 1px solid #4a382c;
+      color: #fbbf24;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: bold;
     }
 
-    .sound-toggle-btn {
-      background: #0f1422;
-      border: 1px solid #28334e;
-      color: #94a3b8;
+    .footer-btn {
+      background: #18121f;
+      border: 1px solid #453427;
+      color: #d1c5b8;
       font-family: inherit;
-      font-size: 8px;
-      padding: 6px 10px;
+      font-size: 11px;
+      padding: 6px 12px;
       border-radius: 4px;
       cursor: pointer;
       display: flex;
@@ -435,1747 +473,3068 @@
       transition: all 0.15s ease;
     }
 
-    .sound-toggle-btn:hover {
-      background: #1a2236;
-      color: #f1f5f9;
-      border-color: #3b4b72;
+    .footer-btn:hover {
+      background: #251c30;
+      color: #fff;
+      border-color: #b45309;
     }
 
     /* Mobile On-Screen Controls */
-    .touch-controls {
+    .touch-panel {
       display: none;
-      margin-top: 12px;
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
+      margin-top: 10px;
       justify-content: space-between;
-      gap: 12px;
+      align-items: center;
+      padding: 0 10px;
     }
 
-    .touch-group {
-      display: flex;
-      gap: 8px;
+    .dpad-container {
+      display: grid;
+      grid-template-columns: repeat(3, 44px);
+      grid-template-rows: repeat(3, 44px);
+      gap: 4px;
     }
 
-    .mobile-btn {
-      width: 60px;
-      height: 48px;
-      background: #1e263d;
-      border: 2px solid #334164;
+    .touch-btn {
+      background: #1e1627;
+      border: 2px solid #5a412e;
+      color: #fef3c7;
+      font-size: 16px;
+      font-weight: bold;
       border-radius: 8px;
-      color: #38bdf8;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 4px 0 #0f1422;
       touch-action: manipulation;
     }
 
-    .mobile-btn:active, .mobile-btn.active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #0f1422;
-      background: #38bdf8;
-      color: #0f1422;
+    .touch-btn:active, .touch-btn.active {
+      background: #d97706;
+      color: #000;
     }
 
-    .boost-btn {
-      background: #9333ea;
-      border-color: #c084fc;
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
-      box-shadow: 0 4px 0 #581c87;
-      width: 74px;
+    .touch-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .boost-btn:active, .boost-btn.active {
-      background: #ec4899;
-      box-shadow: 0 2px 0 #581c87;
-      color: #fff;
+    .act-btn {
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border-radius: 6px;
+      background: #311c10;
+      border: 2px solid #b45309;
+      color: #fde68a;
     }
 
-    .gas-btn {
-      background: #16a34a;
-      border-color: #4ade80;
-      color: #fff;
-      box-shadow: 0 4px 0 #14532d;
-      width: 72px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
-    }
-
-    .gas-btn:active, .gas-btn.active {
-      background: #22c55e;
-      box-shadow: 0 2px 0 #14532d;
+    .act-btn:active {
+      background: #b45309;
       color: #fff;
     }
 
-    @media (max-width: 760px) {
-      .arcade-wrapper {
+    /* Camera Scrying & CCTV Overlay */
+    .camera-hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(3, 7, 5, 0.88);
+      border: 1px solid #10b981;
+      border-radius: 6px;
+      padding: 6px 12px;
+      z-index: 12;
+      font-size: 11px;
+      color: #6ee7b7;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+      font-family: monospace;
+    }
+
+    .camera-hud.hidden {
+      display: none;
+    }
+
+    .rec-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background: #ef4444;
+      border-radius: 50%;
+      margin-right: 6px;
+      box-shadow: 0 0 8px #ef4444;
+      animation: rec-blink 1s infinite;
+    }
+
+    @keyframes rec-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    .cam-btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .cam-ctrl-btn {
+      background: #064e3b;
+      border: 1px solid #10b981;
+      color: #ecfdf5;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .cam-ctrl-btn:hover {
+      background: #047857;
+    }
+
+    /* Trapped alert */
+    .trapped-banner {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(127, 29, 29, 0.95);
+      border: 2px solid #ef4444;
+      color: #fee2e2;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      box-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
+      z-index: 18;
+      display: none;
+      animation: alert-blink 0.4s infinite;
+      text-align: center;
+    }
+
+    /* Map & Tasks Modal */
+    .parchment-modal {
+      position: absolute;
+      inset: 20px;
+      z-index: 25;
+      background: #140f13;
+      border: 2px solid #b45309;
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.95), inset 0 0 30px rgba(180, 83, 9, 0.2);
+      overflow-y: auto;
+    }
+
+    .parchment-modal.hidden {
+      display: none;
+    }
+
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .task-item {
+      background: #1b1420;
+      border: 1px solid #4a3424;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #cbd5e1;
+    }
+
+    .task-item.done {
+      border-color: #10b981;
+      background: #064e3b22;
+      color: #6ee7b7;
+      text-decoration: line-through;
+    }
+
+    .task-checkbox {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid #b45309;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #fbbf24;
+    }
+
+    @media (max-width: 820px) {
+      .game-cabinet {
         padding: 6px;
         width: 100%;
       }
-      .canvas-container {
+      .viewport-box {
         width: 100%;
         height: auto;
-        aspect-ratio: 720 / 500;
+        aspect-ratio: 800 / 600;
       }
-      .touch-controls {
+      .hud-bar {
+        padding: 6px 8px;
+        gap: 6px;
+      }
+      .meter-track {
+        width: 80px;
+      }
+      .touch-panel {
         display: flex;
       }
-      .arcade-hud {
-        grid-template-columns: repeat(3, 1fr);
-        row-gap: 6px;
+      .main-title {
+        font-size: 26px;
       }
-      .riders-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .overlay-title {
-        font-size: 17px;
+      .lore-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="arcade-wrapper">
+  <div class="game-cabinet">
     <!-- Top HUD Dashboard -->
-    <header class="arcade-hud">
-      <!-- Speed -->
-      <div class="hud-col">
-        <span class="hud-title speed-label">SPEED</span>
-        <div class="hud-val-container">
-          <span id="speed-display" class="hud-value">000</span>
-          <span class="hud-unit">MPH</span>
+    <header class="hud-bar">
+      <!-- Diya Light Level -->
+      <div class="hud-item">
+        <span class="hud-label">Laltain / Diya Oil</span>
+        <div class="diya-meter-container">
+          <span class="diya-icon">🪔</span>
+          <div class="meter-track">
+            <div id="diya-meter-fill" class="meter-fill" style="width: 100%;"></div>
+          </div>
+          <span id="diya-percent" style="font-size: 11px; font-weight: 700; color: #f59e0b; min-width: 32px;">100%</span>
         </div>
       </div>
 
-      <!-- Race Position -->
-      <div class="hud-col">
-        <span class="hud-title pos-label">POSITION</span>
-        <div class="hud-val-container">
-          <span id="pos-display" class="hud-value" style="color: #4ade80;">4th</span>
-          <span class="hud-unit">/ 4</span>
+      <!-- Relics Collected -->
+      <div class="hud-item">
+        <span class="hud-label">Sacred Relics (0/3)</span>
+        <div class="relics-list">
+          <div class="relic-badge" id="badge-key" title="Brass Key (Chavi)">🗝️ Chavi</div>
+          <div class="relic-badge" id="badge-ash" title="Holy Ash (Vibhuti)">✨ Vibhuti</div>
+          <div class="relic-badge" id="badge-bell" title="Sacred Bell (Ghanti)">🔔 Ghanti</div>
         </div>
       </div>
 
-      <!-- Time Left -->
-      <div class="hud-col">
-        <span class="hud-title time-label">TIME</span>
-        <div class="hud-val-container">
-          <span id="time-display" class="hud-value">45.0</span>
-          <span class="hud-unit">S</span>
-        </div>
-      </div>
-
-      <!-- Score & Distance -->
-      <div class="hud-col">
-        <span class="hud-title score-label">SCORE</span>
-        <div class="hud-val-container">
-          <span id="score-display" class="hud-value">00000</span>
-          <span class="hud-unit" id="distance-display">0.0KM</span>
-        </div>
-      </div>
-
-      <!-- Nitro Boost Gauge -->
-      <div class="hud-col">
-        <span class="hud-title boost-label">NITRO BOOST</span>
-        <div class="boost-meter-frame">
-          <div id="boost-meter-fill" class="boost-meter-fill" style="width: 100%;"></div>
-        </div>
+      <!-- Player State -->
+      <div class="hud-item" style="align-items: flex-end;">
+        <span class="hud-label">Status</span>
+        <div id="player-status-pill" class="status-pill">Normal</div>
       </div>
     </header>
 
-    <!-- Canvas Frame with CRT & Notifications -->
-    <div class="canvas-container">
-      <canvas id="game-canvas" width="720" height="500"></canvas>
-      <div class="crt-overlay"></div>
-      <div id="nitro-flash" class="nitro-flash"></div>
+    <!-- Canvas Game Viewport (800x600) -->
+    <div class="viewport-box" id="viewport-box">
+      <canvas id="game-canvas" width="800" height="600"></canvas>
+      <div class="vignette-overlay"></div>
+      <div class="horror-flash" id="horror-flash"></div>
+      
+      <!-- Interactive prompt -->
+      <div class="prompt-bubble" id="prompt-bubble">[E] or [SPACE] TO HIDE</div>
 
-      <!-- In-game Banners -->
-      <div id="checkpoint-banner" class="banner-notification checkpoint">CHECKPOINT! +30 SECONDS</div>
-      <div id="nearmiss-banner" class="banner-notification nearmiss">NEAR MISS! +500 PTS</div>
-      <div id="overtake-banner" class="banner-notification overtake">OVERTOKE RIVAL! +1,000 PTS</div>
+      <!-- Hunter Bone Trap Struggle Alert -->
+      <div class="trapped-banner" id="trapped-banner">
+        ⚠️ CAUGHT IN HUNTER'S BONE TRAP! ⚠️<br>
+        <span style="font-size: 13px; font-weight: normal; color: #fecaca;">MASH [E] OR [SPACE] TO BREAK FREE! (<span id="trap-count">3</span>)</span>
+      </div>
 
-      <!-- Start Overlay with Player Selection -->
-      <div id="start-overlay" class="game-overlay">
-        <div class="overlay-badge">SUPER SCALER 3D RACER</div>
-        <h1 class="overlay-title title-start">NEON SUPERBIKE</h1>
+      <!-- Scrying Camera / CCTV View HUD -->
+      <div class="camera-hud hidden" id="camera-hud">
+        <div style="display: flex; align-items: center;">
+          <span class="rec-dot"></span>
+          <span id="cam-name" style="font-weight: bold; letter-spacing: 1px;">CAM 01 - AANGAN (CENTRAL COURTYARD)</span>
+        </div>
+        <div class="cam-btn-group">
+          <button class="cam-ctrl-btn" id="cam-prev-btn">◀ PREV</button>
+          <button class="cam-ctrl-btn" id="cam-next-btn">NEXT ▶</button>
+          <button class="cam-ctrl-btn" id="cam-exit-btn" style="background: #991b1b; border-color: #ef4444;">EXIT [C]</button>
+        </div>
+      </div>
 
-        <!-- Select Player / Bike -->
-        <div class="player-select-container">
-          <div class="select-label">SELECT YOUR RACER & SUPERBIKE:</div>
-          <div class="riders-grid" id="riders-grid">
-            <!-- Rendered dynamically -->
+      <!-- Map & Granny Tasks Modal -->
+      <div class="parchment-modal hidden" id="map-modal">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #4a3424; padding-bottom: 8px;">
+          <div>
+            <div class="devanagari-title" style="font-size: 18px;">हवेली का नक्शा एवं escape कार्य</div>
+            <h3 style="font-family: 'Cinzel', serif; color: #fbbf24; font-size: 16px; margin: 0;">HAVELI BLUEPRINT & SURVIVAL TASKS</h3>
+          </div>
+          <button class="action-btn" id="close-map-btn" style="padding: 4px 12px; font-size: 11px;">CLOSE [M]</button>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <h4 style="font-size: 12px; color: #f59e0b; margin-bottom: 6px;">📋 GRANNY-STYLE ESCAPE TASKS:</h4>
+            <div class="tasks-grid">
+              <div class="task-item" id="task-pliers">
+                <div class="task-checkbox" id="chk-pliers"></div>
+                <span>1. Find Iron Pliers (Chheni) in Zenana wing</span>
+              </div>
+              <div class="task-item" id="task-chains">
+                <div class="task-checkbox" id="chk-chains"></div>
+                <span>2. Cut chained lock on Toshakhana Treasury</span>
+              </div>
+              <div class="task-item" id="task-relics">
+                <div class="task-checkbox" id="chk-relics"></div>
+                <span>3. Collect 3 Sacred Relics (Chavi, Ash, Bell)</span>
+              </div>
+              <div class="task-item" id="task-altar">
+                <div class="task-checkbox" id="chk-altar"></div>
+                <span>4. Purify Courtyard Tulsi Altar with Gangajal</span>
+              </div>
+              <div class="task-item" id="task-traps">
+                <div class="task-checkbox" id="chk-traps"></div>
+                <span>5. Evade Hunter's bone bear-traps & fragile vases</span>
+              </div>
+              <div class="task-item" id="task-escape">
+                <div class="task-checkbox" id="chk-escape"></div>
+                <span>6. Ring Sacred Ghanti at Mahadwar & Escape!</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <button id="start-btn" class="action-btn">START RACE</button>
-        <div class="key-prompt">PRESS [SPACE] OR CLICK TO RACE</div>
+        <div style="margin-top: 12px; border-top: 1px solid #3d281a; padding-top: 8px; font-size: 11px; color: #a8998a; line-height: 1.5;">
+          <strong style="color: #fbbf24;">HAVELI SURVEILLANCE NOTE:</strong> Press <span class="key-tag">C</span> at any time to switch to ancient scrying mirrors across the mansion to track the locations of <strong>Maya (The Pisachini)</strong> and <strong>The Hunter (Shikari)</strong>!
+        </div>
+      </div>
+
+      <!-- Start Overlay -->
+      <div class="overlay-screen" id="start-screen">
+        <div class="devanagari-title">अन्धकार : माया एक पिशाचिनी</div>
+        <h1 class="main-title">ANDHAKAAR</h1>
+        <div class="tagline">Maya, the terrifying Pisachini, stalks the haunted shadows while the ruthless Shikari (Hunter) lays bone traps and searches with his lantern!</div>
+        
+        <div class="lore-box">
+          <h4>🪔 HAVELI SURVIVAL & HUNTING PROTOCOL:</h4>
+          <div class="lore-grid">
+            <div class="lore-card">
+              <strong>1. The Dual Menace (Maya & The Hunter)</strong>
+              <strong>Maya</strong> teleports and glides in the dark. <strong>The Hunter</strong> sweeps rooms with a flashlight cone and lays bear-traps. Both hunt by sound!
+            </div>
+            <div class="lore-card">
+              <strong>2. Granny-Style Noise & Traps</strong>
+              Bumping fragile clay vases shatters them loudly. Stepping into bone traps clamps you in place — mash <span class="key-tag">E</span> to escape!
+            </div>
+            <div class="lore-card">
+              <strong>3. Haveli Scrying Cameras (C) & Map (M)</strong>
+              Use ancient enchanted mirrors (<span class="key-tag">C</span>) to spy on enemy patrol routes across rooms. Press <span class="key-tag">M</span> for Blueprint & Tasks.
+            </div>
+            <div class="lore-card">
+              <strong>4. Relic Escape Protocol</strong>
+              Cut chains with Pliers, collect the 3 Sacred Relics (Key, Holy Ash, Sacred Bell), purify the altar, and unlock the Mahadwar!
+            </div>
+          </div>
+        </div>
+
+        <button class="action-btn" id="start-game-btn">ENTER THE HAVELI</button>
+        <div style="font-size: 11px; color: #8c7b6d; margin-top: 12px;">Controls: WASD Move · E/Space Interact/Hide · F Stun Maya · C Scrying Cams · M Map</div>
       </div>
 
       <!-- Game Over Overlay -->
-      <div id="gameover-overlay" class="game-overlay hidden">
-        <div class="overlay-badge">RACE COMPLETED</div>
-        <h2 class="overlay-title title-gameover">FINAL RESULTS</h2>
-        <p class="overlay-subtitle" id="gameover-stats">Final Score: 00000 · Distance: 0.0 KM</p>
-        <button id="restart-btn" class="action-btn">RACE AGAIN</button>
-        <div class="key-prompt">PRESS [SPACE] OR CLICK TO RESTART</div>
+      <div class="overlay-screen hidden" id="gameover-screen">
+        <canvas class="scare-portrait" id="scare-canvas" width="140" height="140"></canvas>
+        <h2 class="gameover-title">CAPTURED IN THE DARK</h2>
+        <div class="devanagari-title" style="font-size: 16px; margin-bottom: 12px; color: #f87171;">हवेली की आत्मा ने तुम्हें पकड़ लिया</div>
+        <p class="stats-summary" id="death-stats">
+          The Chudail tore through the shadows.<br>
+          Relics Secured: 0/3 · Diyas Lit: 0 · Survived: 00:00
+        </p>
+        <button class="action-btn" id="restart-game-btn" style="border-color: #ef4444; background: linear-gradient(180deg, #991b1b, #450a0a);">TRY TO ESCAPE AGAIN</button>
       </div>
 
-      <!-- Pause Overlay -->
-      <div id="pause-overlay" class="game-overlay hidden">
-        <h2 class="overlay-title title-paused">PAUSED</h2>
-        <p class="overlay-subtitle">Smooth throttle check. Ready your line.</p>
-        <button id="resume-btn" class="action-btn">RESUME</button>
-        <div class="key-prompt">PRESS [P] OR [SPACE] TO RESUME</div>
+      <!-- Victory Overlay -->
+      <div class="overlay-screen hidden" id="win-screen">
+        <div style="font-size: 48px; filter: drop-shadow(0 0 20px #fbbf24); margin-bottom: 6px;">🔱</div>
+        <div class="devanagari-title">मोक्ष प्राप्त : हवेली से मुक्ति</div>
+        <h2 class="win-title">THE HAVELI IS PURIFIED!</h2>
+        <p class="stats-summary" id="win-stats">
+          With the sacred bell rung and holy vibhuti cast, the dark curse has shattered.<br>
+          Dawn breaks over the ancient courtyards. You survived the darkness!
+        </p>
+        <button class="action-btn" id="play-again-btn">PLAY AGAIN</button>
       </div>
     </div>
 
-    <!-- Controls Footer -->
-    <footer class="controls-footer">
-      <div class="help-text">
-        <span>STEER:</span>
-        <span class="key-pill">◀</span>
-        <span class="key-pill">▶</span>
-        <span>or</span>
-        <span class="key-pill">A</span>
-        <span class="key-pill">D</span>
-        <span style="margin-left: 6px;">GAS:</span>
-        <span class="key-pill">▲</span>
-        <span style="margin-left: 6px;">BRAKE:</span>
-        <span class="key-pill">▼</span>
-        <span style="margin-left: 6px;">NITRO:</span>
-        <span class="key-pill">SPACE</span>
-        <span style="margin-left: 6px;">PAUSE:</span>
-        <span class="key-pill">P</span>
+    <!-- Bottom Controls & Hints -->
+    <footer class="hud-footer">
+      <div>
+        <span>MOVE:</span> <span class="key-tag">W</span><span class="key-tag">A</span><span class="key-tag">S</span><span class="key-tag">D</span>
+        <span style="margin-left: 8px;">HIDE/ACT:</span> <span class="key-tag">E</span>
+        <span style="margin-left: 8px;">STUN:</span> <span class="key-tag">F</span>
+        <span style="margin-left: 8px;">CAMS:</span> <span class="key-tag">C</span>
+        <span style="margin-left: 8px;">MAP:</span> <span class="key-tag">M</span>
       </div>
-
-      <button id="sound-btn" class="sound-toggle-btn" title="Toggle Sound FX">
-        <span id="sound-icon">🔊</span>
-        <span id="sound-text">SOUND ON</span>
-      </button>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="footer-btn" id="btn-toggle-cam" title="Toggle Haveli Scrying Cameras (C)">
+          <span>📹</span> <span>CAM VIEW (C)</span>
+        </button>
+        <button class="footer-btn" id="btn-toggle-map" title="View Map & Tasks (M)">
+          <span>🗺️</span> <span>MAP & TASKS (M)</span>
+        </button>
+        <button class="footer-btn" id="sound-toggle-btn">
+          <span id="sound-icon">🔊</span>
+          <span id="sound-text">SOUND ON</span>
+        </button>
+      </div>
     </footer>
 
-    <!-- Mobile On-Screen Controls -->
-    <div class="touch-controls" id="touch-controls">
-      <div class="touch-group">
-        <button class="mobile-btn" id="btn-left" aria-label="Steer Left">◀</button>
-        <button class="mobile-btn" id="btn-right" aria-label="Steer Right">▶</button>
+    <!-- Mobile Touch Controls -->
+    <div class="touch-panel" id="touch-panel">
+      <div class="dpad-container">
+        <div></div>
+        <button class="touch-btn" id="m-up">▲</button>
+        <div></div>
+        <button class="touch-btn" id="m-left">◀</button>
+        <div></div>
+        <button class="touch-btn" id="m-right">▶</button>
+        <div></div>
+        <button class="touch-btn" id="m-down">▼</button>
+        <div></div>
       </div>
-      <div class="touch-group">
-        <button class="mobile-btn boost-btn" id="btn-nitro">NITRO</button>
-        <button class="mobile-btn" id="btn-brake" style="font-size: 10px;">BRAKE</button>
-        <button class="mobile-btn gas-btn" id="btn-gas">GAS</button>
+      <div class="touch-actions">
+        <div style="display: flex; gap: 6px;">
+          <button class="act-btn" id="m-act" style="flex: 1;">E/ACT</button>
+          <button class="act-btn" id="m-stun" style="border-color: #38bdf8; color: #bae6fd; flex: 1;">F/STUN</button>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button class="act-btn" id="m-cam" style="border-color: #10b981; color: #a7f3d0; font-size: 10px; flex: 1;">📹 CAMS</button>
+          <button class="act-btn" id="m-map" style="border-color: #f59e0b; color: #fde68a; font-size: 10px; flex: 1;">🗺️ MAP</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
     /**
-     * NEON SUPERBIKE 3D ARCADE ENGINE
-     * Enhanced with Multiple Playable Racers, AI Rivals, & Physics-Smoothed Steering
+     * ANDHAKAAR: THE DARK HAVELI
+     * Pure HTML5 Canvas 2D Indian Horror Survival Engine
+     * Procedural vector artwork, dynamic field of view darkness, Web Audio synthesizer
      */
 
-    // --- PLAYABLE RACERS DATA ---
-    const RACERS = [
-      {
-        id: 'vixen',
-        name: 'VIXEN',
-        title: 'AGILE SPEC',
-        icon: '⚡',
-        accentColor: '#ec4899', // Pink
-        secondaryColor: '#38bdf8', // Cyan
-        jacketColor: '#1e1b4b',
-        visorColor: '#38bdf8',
-        topSpeedMod: 165,
-        boostSpeedMod: 225,
-        handlingMod: 1.25, // Extra agile turn rate
-        nitroRate: 0.35,
-        perk: '+25% AGILITY'
-      },
-      {
-        id: 'thunder',
-        name: 'THUNDER',
-        title: 'TOP SPEED',
-        icon: '🔥',
-        accentColor: '#facc15', // Yellow
-        secondaryColor: '#0f172a', // Black
-        jacketColor: '#1e293b',
-        visorColor: '#fef08a',
-        topSpeedMod: 180,
-        boostSpeedMod: 240,
-        handlingMod: 1.0,
-        nitroRate: 0.35,
-        perk: '+15 MPH TOP'
-      },
-      {
-        id: 'viper',
-        name: 'VIPER',
-        title: 'NITRO SPECIAL',
-        icon: '🐍',
-        accentColor: '#06b6d4', // Cyan
-        secondaryColor: '#10b981', // Emerald
-        jacketColor: '#042f2e',
-        visorColor: '#67e8f9',
-        topSpeedMod: 162,
-        boostSpeedMod: 232,
-        handlingMod: 1.15,
-        nitroRate: 0.22, // 50% longer Nitro duration!
-        perk: 'EXTENDED NITRO'
-      },
-      {
-        id: 'inferno',
-        name: 'INFERNO',
-        title: 'TORQUE BEAST',
-        icon: '💀',
-        accentColor: '#ef4444', // Crimson
-        secondaryColor: '#f97316', // Orange
-        jacketColor: '#450a0a',
-        visorColor: '#fca5a5',
-        topSpeedMod: 168,
-        boostSpeedMod: 228,
-        handlingMod: 1.05,
-        nitroRate: 0.32,
-        perk: '+40% SLIPSTREAM'
-      }
-    ];
-
-    let selectedRacerIndex = 0;
-
-    // --- SOUND ENGINE (Web Audio API) ---
-    class SoundEngine {
+    // --- AUDIO SYNTHESIZER (Pure Web Audio API) ---
+    class HaveliAudio {
       constructor() {
         this.ctx = null;
-        this.enabled = true;
-        this.engineOsc = null;
-        this.engineGain = null;
-        this.isEngineRunning = false;
+        this.muted = false;
+        this.droneOsc1 = null;
+        this.droneOsc2 = null;
+        this.droneGain = null;
+        this.heartbeatTimer = null;
+        this.lastHeartbeatTime = 0;
       }
 
       init() {
-        if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (AudioContext) {
-            this.ctx = new AudioContext();
-          }
-        }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
+        if (this.ctx) return;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        this.ctx = new AudioCtx();
+        this.startAmbientDrone();
       }
 
-      toggle() {
-        this.enabled = !this.enabled;
-        if (!this.enabled && this.engineGain) {
-          this.engineGain.gain.setValueAtTime(0, this.ctx.currentTime);
-        }
-        return this.enabled;
-      }
-
-      startEngine() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx || this.isEngineRunning) return;
-
-        try {
-          this.engineOsc = this.ctx.createOscillator();
-          this.engineGain = this.ctx.createGain();
-
-          this.engineOsc.type = 'sawtooth';
-          this.engineOsc.frequency.setValueAtTime(55, this.ctx.currentTime);
-
-          this.engineGain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-
-          this.engineOsc.connect(this.engineGain);
-          this.engineGain.connect(this.ctx.destination);
-
-          this.engineOsc.start();
-          this.isEngineRunning = true;
-        } catch (e) {}
-      }
-
-      updateEngine(speedRatio, isBoosting) {
-        if (!this.enabled || !this.engineOsc || !this.engineGain || !this.ctx) return;
+      startAmbientDrone() {
+        if (!this.ctx || this.muted) return;
         try {
           const now = this.ctx.currentTime;
-          const baseFreq = 52 + speedRatio * 230;
-          const targetFreq = isBoosting ? baseFreq * 1.36 : baseFreq;
-          this.engineOsc.frequency.setTargetAtTime(targetFreq, now, 0.04);
-
-          const vol = 0.05 + speedRatio * 0.12 + (isBoosting ? 0.05 : 0);
-          this.engineGain.gain.setTargetAtTime(vol, now, 0.04);
-        } catch (e) {}
-      }
-
-      stopEngine() {
-        if (this.engineGain && this.ctx) {
-          try {
-            this.engineGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.1);
-          } catch (e) {}
-        }
-        this.isEngineRunning = false;
-      }
-
-      playCrash() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        try {
-          const now = this.ctx.currentTime;
-          const osc = this.ctx.createOscillator();
+          // Sub bass haveli ominous drone
+          const osc1 = this.ctx.createOscillator();
+          const osc2 = this.ctx.createOscillator();
+          const filter = this.ctx.createBiquadFilter();
           const gain = this.ctx.createGain();
 
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(30, now + 0.45);
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(55, now); // A1 note
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(57.5, now); // eerie beating binaural tone
 
-          gain.gain.setValueAtTime(0.35, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.45);
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(140, now);
+
+          gain.gain.setValueAtTime(0.08, now);
+
+          osc1.connect(filter);
+          osc2.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc1.start();
+          osc2.start();
+          this.droneOsc1 = osc1;
+          this.droneOsc2 = osc2;
+          this.droneGain = gain;
+        } catch (e) {
+          console.warn('Audio drone error', e);
+        }
+      }
+
+      playHeartbeat(urgency = 1.0) {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(65, now);
+        osc.frequency.exponentialRampToValueAtTime(32, now + 0.12);
+
+        gain.gain.setValueAtTime(0.25 * urgency, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+
+        // Second pulse (lub-dub)
+        setTimeout(() => {
+          if (!this.ctx || this.muted) return;
+          const t2 = this.ctx.currentTime;
+          const osc2 = this.ctx.createOscillator();
+          const gain2 = this.ctx.createGain();
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(58, t2);
+          osc2.frequency.exponentialRampToValueAtTime(28, t2 + 0.1);
+          gain2.gain.setValueAtTime(0.2 * urgency, t2);
+          gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.12);
+          osc2.connect(gain2);
+          gain2.connect(this.ctx.destination);
+          osc2.start(t2);
+          osc2.stop(t2 + 0.13);
+        }, 130);
+      }
+
+      // Chudail silver ghungroo anklet bells sound
+      playGhungroo(proximity = 0.5) {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        // Metallic resonant cluster
+        const freqs = [2600, 3400, 4800, 6200];
+        freqs.forEach((f, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f + (Math.random() * 80 - 40), now);
+          
+          const vol = Math.min(0.18, 0.04 + proximity * 0.12);
+          gain.gain.setValueAtTime(vol / (i + 1), now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
 
           osc.connect(gain);
           gain.connect(this.ctx.destination);
-
           osc.start(now);
-          osc.stop(now + 0.46);
-        } catch (e) {}
+          osc.stop(now + 0.2);
+        });
       }
 
-      playNearMiss() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        try {
-          const now = this.ctx.currentTime;
+      // Resonant Temple Brass Bell (Ghanti)
+      playTempleBell() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const harmonics = [440, 880, 1320, 2200, 3100];
+        harmonics.forEach((h, index) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
-
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(700, now);
-          osc.frequency.linearRampToValueAtTime(1200, now + 0.09);
-
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
-
+          osc.frequency.setValueAtTime(h, now);
+          gain.gain.setValueAtTime(0.2 / (index + 1), now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.4 - (index * 0.3));
           osc.connect(gain);
           gain.connect(this.ctx.destination);
-
           osc.start(now);
-          osc.stop(now + 0.1);
-        } catch (e) {}
+          osc.stop(now + 2.5);
+        });
       }
 
-      playOvertake() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        try {
-          const notes = [440, 659.25, 880];
-          let curTime = this.ctx.currentTime;
-          notes.forEach((freq, idx) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, curTime);
-            gain.gain.setValueAtTime(0.15, curTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, curTime + 0.08);
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.start(curTime);
-            osc.stop(curTime + 0.09);
-            curTime += 0.06;
-          });
-        } catch (e) {}
+      // Diya collect / flame ignite
+      playDiyaChime() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.05);
+          gain.gain.setValueAtTime(0.12, now + i * 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.4);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.05);
+          osc.stop(now + i * 0.05 + 0.45);
+        });
       }
 
-      playCheckpoint() {
-        if (!this.enabled) return;
-        this.init();
-        if (!this.ctx) return;
-        try {
-          const notes = [523.25, 659.25, 783.99, 1046.5];
-          let curTime = this.ctx.currentTime;
-          notes.forEach((freq, idx) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
+      // Chudail screech / chase alert
+      playScreech() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(680, now);
+        osc.frequency.exponentialRampToValueAtTime(240, now + 0.55);
 
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, curTime);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
-            gain.gain.setValueAtTime(0.18, curTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, curTime + 0.14);
-
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-
-            osc.start(curTime);
-            osc.stop(curTime + 0.15);
-            curTime += 0.09;
-          });
-        } catch (e) {}
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.65);
       }
-    }
 
-    const sound = new SoundEngine();
+      // Holy Vibhuti blast / banish stun
+      playVibhutiBlast() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        // White noise whoosh + divine chord
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.linearRampToValueAtTime(1760, now + 0.35);
 
-    // --- GAME CONSTANTS ---
-    const CANVAS_WIDTH = 720;
-    const CANVAS_HEIGHT = 500;
-    const ROAD_WIDTH = 2000;
-    const SEGMENT_LENGTH = 200;
-    const CAMERA_HEIGHT = 1000;
-    const CAMERA_DEPTH = 0.84;
-    const DRAW_DISTANCE = 300;
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
-    const ACCEL_BASE = 68;
-    const BRAKING_BASE = -135;
-    const DECEL_BASE = -32;
-    const OFF_ROAD_MAX_SPEED = 48;
-
-    // --- ROAD SEGMENTS ---
-    const segments = [];
-    let totalSegments = 0;
-    let trackLength = 0;
-
-    function addRoadSegment(curve, y) {
-      const n = segments.length;
-      segments.push({
-        index: n,
-        p1: { world: { y: y, z: n * SEGMENT_LENGTH }, camera: {}, screen: {} },
-        p2: { world: { y: y, z: (n + 1) * SEGMENT_LENGTH }, camera: {}, screen: {} },
-        curve: curve,
-        sprites: [],
-        color: Math.floor(n / 3) % 2 ? {
-          road: '#25293a',
-          grass: '#064e3b',
-          rumble: '#ec4899',
-          lane: '#ffffff'
-        } : {
-          road: '#1a1d2c',
-          grass: '#04382a',
-          rumble: '#ffffff',
-          lane: '#1a1d2c'
-        },
-        isCheckpoint: false
-      });
-    }
-
-    function addRoadSection(num, enterCurve, holdCurve, exitCurve, enterY, holdY, exitY) {
-      const startY = segments.length ? segments[segments.length - 1].p2.world.y : 0;
-      const endY = startY + holdY * SEGMENT_LENGTH;
-      const total = num;
-
-      for (let i = 0; i < total; i++) {
-        let c = holdCurve;
-        if (i < total * 0.2) c = enterCurve + (holdCurve - enterCurve) * (i / (total * 0.2));
-        else if (i > total * 0.8) c = holdCurve + (exitCurve - holdCurve) * ((i - total * 0.8) / (total * 0.2));
-
-        const hillProgress = i / total;
-        const currentY = startY + (endY - startY) * (0.5 - 0.5 * Math.cos(hillProgress * Math.PI));
-
-        addRoadSegment(c, currentY);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.65);
       }
-    }
 
-    function buildTrack() {
-      segments.length = 0;
+      // Creaking wooden door or wardrobe
+      playWoodCreak() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.linearRampToValueAtTime(85, now + 0.25);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.32);
+      }
 
-      // 1. Starting Flat Straight
-      addRoadSection(100, 0, 0, 0, 0, 0, 0);
-
-      // 2. Gentle Right S-Turn
-      addRoadSection(120, 0, 2.5, 0, 0, 0, 0);
-
-      // 3. Hill Crest (Ascent & Dip)
-      addRoadSection(140, 0, 0, 0, 0, 15, 0);
-
-      // 4. Checkpoint 1 (at segment 400)
-      addRoadSection(40, 0, -1.5, 0, 0, 0, 0);
-
-      // 5. Mountain S-Curves (Left then Right)
-      addRoadSection(160, 0, -3.5, 0, 0, 25, 0);
-      addRoadSection(160, 0, 4.0, 0, 0, -15, 0);
-
-      // 6. Checkpoint 2 (at segment 860)
-      addRoadSection(100, 0, 0, 0, 0, 0, 0);
-
-      // 7. Rollercoaster Hills & Coastal Highway
-      addRoadSection(180, 0, 3.0, 0, 0, -30, 0);
-      addRoadSection(160, 0, -3.0, 0, 0, 20, 0);
-
-      // 8. Checkpoint 3 (at segment 1300)
-      addRoadSection(100, 0, 0, 0, 0, 0, 0);
-
-      // 9. High-Speed Home Stretch
-      addRoadSection(150, 0, 1.5, 0, 0, -10, 0);
-
-      totalSegments = segments.length;
-      trackLength = totalSegments * SEGMENT_LENGTH;
-
-      // Mark Checkpoints
-      [400, 860, 1300].forEach(idx => {
-        if (segments[idx]) {
-          segments[idx].isCheckpoint = true;
-          segments[idx].sprites.push({
-            type: 'ARCHWAY',
-            offset: 0
-          });
+      // Fragile Ceramic Vase / Surahi Crash
+      playVaseCrash() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        // High frequency shatter bursts
+        for (let i = 0; i < 4; i++) {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(1200 + Math.random() * 2400, now + i * 0.03);
+          osc.frequency.exponentialRampToValueAtTime(300, now + i * 0.03 + 0.2);
+          gain.gain.setValueAtTime(0.2, now + i * 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.03 + 0.22);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.03);
+          osc.stop(now + i * 0.03 + 0.25);
         }
-      });
+      }
 
-      // Procedural Scenery
-      for (let i = 20; i < totalSegments; i += 6) {
-        const seg = segments[i];
-        const side = (i % 12 === 0) ? -1 : 1;
-        const offset = side * (1.3 + (i % 5) * 0.15);
+      // Hunter's Bone Bear Trap Snap
+      playTrapSnap() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
 
-        let kind = 'PALM_TREE';
-        if (i % 24 === 0) kind = 'BILLBOARD';
-        else if (i % 18 === 0) kind = 'STREETLIGHT';
-        else if (Math.abs(seg.curve) > 2) kind = 'CHEVRON';
+      // Hunter ominous hunting call ("वहाँ कौन है!")
+      playHunterCall() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.linearRampToValueAtTime(95, now + 0.4);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      }
 
-        seg.sprites.push({
-          type: kind,
-          offset: offset
-        });
+      // Camera Scrying static switch
+      playCameraClick() {
+        if (!this.ctx || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1800, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.09);
+      }
+
+      toggleMute() {
+        this.muted = !this.muted;
+        if (this.droneGain) {
+          this.droneGain.gain.setValueAtTime(this.muted ? 0 : 0.08, this.ctx.currentTime);
+        }
+        return !this.muted;
       }
     }
 
-    function findSegment(z) {
-      return segments[Math.floor(z / SEGMENT_LENGTH) % totalSegments];
-    }
+    const audio = new HaveliAudio();
 
-    function project(p, cameraX, cameraY, cameraZ, cameraDepth, width, height, roadWidth) {
-      p.camera.x = (p.world.x || 0) - cameraX;
-      p.camera.y = (p.world.y || 0) - cameraY;
-      p.camera.z = (p.world.z || 0) - cameraZ;
-
-      p.screen.scale = cameraDepth / p.camera.z;
-      p.screen.x = Math.round((width / 2) + (p.screen.scale * p.camera.x * width / 2));
-      p.screen.y = Math.round((height / 2) - (p.screen.scale * p.camera.y * height / 2));
-      p.screen.w = Math.round(p.screen.scale * roadWidth * width / 2);
-    }
-
-    // --- TRAFFIC & RIVAL AI RACERS ---
-    const traffic = [];
-    const rivals = [];
-
-    function initRacersAndTraffic() {
-      traffic.length = 0;
-      rivals.length = 0;
-
-      // 1. Spawn 3 Distinct Rival AI Racers
-      const rivalTemplates = [
-        { name: 'VIPER', color: '#06b6d4', jacket: '#042f2e', visor: '#67e8f9', speedBase: 142, lane: -0.45 },
-        { name: 'THUNDER', color: '#facc15', jacket: '#1e293b', visor: '#fef08a', speedBase: 152, lane: 0.45 },
-        { name: 'INFERNO', color: '#ef4444', jacket: '#450a0a', visor: '#fca5a5', speedBase: 146, lane: 0.1 }
-      ];
-
-      rivalTemplates.forEach((t, i) => {
-        rivals.push({
-          isRival: true,
-          name: t.name,
-          z: 1400 + i * 1600, // Starts ahead on track
-          x: t.lane,
-          targetX: t.lane,
-          speed: t.speedBase,
-          color: t.color,
-          jacket: t.jacket,
-          visor: t.visor,
-          lean: 0,
-          overtaken: false
-        });
-      });
-
-      // 2. Standard Traffic Vehicles
-      const types = ['CAR_SEDAN', 'CAR_SPORTS', 'TRUCK'];
-      const colors = ['#f43f5e', '#38bdf8', '#fbbf24', '#a855f7', '#22c55e', '#f97316'];
-
-      for (let i = 0; i < 24; i++) {
-        const z = 800 + i * ((trackLength - 1200) / 24) + Math.random() * 200;
-        traffic.push({
-          isRival: false,
-          z: z,
-          x: (Math.random() * 1.4) - 0.7,
-          speed: 60 + Math.random() * 55,
-          type: types[Math.floor(Math.random() * types.length)],
-          color: colors[Math.floor(Math.random() * colors.length)],
-          nearMissed: false
-        });
-      }
-    }
-
-    // --- GAME ENGINE STATE ---
-    const STATE = {
-      START: 'START',
-      PLAYING: 'PLAYING',
-      PAUSED: 'PAUSED',
-      GAME_OVER: 'GAME_OVER'
-    };
-
-    let currentState = STATE.START;
-    let playerPositionZ = 0;
-
-    // --- SMOOTH STEERING PHYSICS ENGINE ---
-    let playerX = 0; // -1 to 1 is road
-    let steerVelocity = 0; // Smooth horizontal inertia
-    let currentLean = 0; // Smooth bike angle (-0.28 to +0.28 rad)
-    let suspensionDip = 0; // Front fork pitch on braking / wheelie on boost
-    let cameraBankAngle = 0; // Subtle horizon roll in turns
-
-    let speed = 0; // Current speed (MPH)
-    let score = 0;
-    let highScore = parseInt(localStorage.getItem('neon_bike_hiscore') || '0', 10);
-    let timeRemaining = 45.0;
-    let nitroStamina = 1.0;
-    let isBoosting = false;
-    let distanceCovered = 0;
-    let nextCheckpointIndex = 400;
-    let currentRacePosition = 4; // 1st, 2nd, 3rd, 4th
-
-    // Crash wipeout animation
-    let isCrashing = false;
-    let crashTimer = 0;
-    let screenShake = 0;
-
-    // Notifications
-    let bannerCheckpointTimer = 0;
-    let bannerNearMissTimer = 0;
-    let bannerOvertakeTimer = 0;
-
-    // Parallax background offsets
-    let mountainOffset = 0;
-    let cityOffset = 0;
-
-    // Input States
-    const keys = {
-      left: false,
-      right: false,
-      up: false,
-      down: false,
-      boost: false
-    };
-
-    // --- DOM REFERENCES ---
+    // --- GAME ENGINE & STATE ---
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d');
-    const speedDisplay = document.getElementById('speed-display');
-    const posDisplay = document.getElementById('pos-display');
-    const timeDisplay = document.getElementById('time-display');
-    const scoreDisplay = document.getElementById('score-display');
-    const distanceDisplay = document.getElementById('distance-display');
-    const boostMeterFill = document.getElementById('boost-meter-fill');
-    const nitroFlash = document.getElementById('nitro-flash');
 
-    const checkpointBanner = document.getElementById('checkpoint-banner');
-    const nearMissBanner = document.getElementById('nearmiss-banner');
-    const overtakeBanner = document.getElementById('overtake-banner');
+    // Offscreen Canvas for Dynamic FOV Darkness / Lighting Mask
+    const darkCanvas = document.createElement('canvas');
+    darkCanvas.width = 800;
+    darkCanvas.height = 600;
+    const darkCtx = darkCanvas.getContext('2d');
 
-    const startOverlay = document.getElementById('start-overlay');
-    const gameoverOverlay = document.getElementById('gameover-overlay');
-    const pauseOverlay = document.getElementById('pause-overlay');
-    const gameoverStats = document.getElementById('gameover-stats');
-    const ridersGrid = document.getElementById('riders-grid');
-
-    const startBtn = document.getElementById('start-btn');
-    const restartBtn = document.getElementById('restart-btn');
-    const resumeBtn = document.getElementById('resume-btn');
-    const soundBtn = document.getElementById('sound-btn');
+    // UI Elements
+    const diyaMeterFill = document.getElementById('diya-meter-fill');
+    const diyaPercent = document.getElementById('diya-percent');
+    const badgeKey = document.getElementById('badge-key');
+    const badgeAsh = document.getElementById('badge-ash');
+    const badgeBell = document.getElementById('badge-bell');
+    const statusPill = document.getElementById('player-status-pill');
+    const promptBubble = document.getElementById('prompt-bubble');
+    const horrorFlash = document.getElementById('horror-flash');
+    const startScreen = document.getElementById('start-screen');
+    const gameoverScreen = document.getElementById('gameover-screen');
+    const winScreen = document.getElementById('win-screen');
+    const deathStats = document.getElementById('death-stats');
+    const winStats = document.getElementById('win-stats');
+    const soundToggleBtn = document.getElementById('sound-toggle-btn');
     const soundIcon = document.getElementById('sound-icon');
     const soundText = document.getElementById('sound-text');
+    const trappedBanner = document.getElementById('trapped-banner');
+    const trapCountSpan = document.getElementById('trap-count');
+    const cameraHud = document.getElementById('camera-hud');
+    const camName = document.getElementById('cam-name');
+    const mapModal = document.getElementById('map-modal');
 
-    // --- RENDER RIDER SELECTOR UI ---
-    function renderRiderSelection() {
-      ridersGrid.innerHTML = '';
-      RACERS.forEach((racer, idx) => {
-        const card = document.createElement('div');
-        card.className = `rider-card ${idx === selectedRacerIndex ? 'selected' : ''}`;
-        card.innerHTML = `
-          <div class="rider-icon-box" style="background: ${racer.accentColor}22; border: 1px solid ${racer.accentColor};">
-            ${racer.icon}
-          </div>
-          <div class="rider-name" style="color: ${racer.accentColor};">${racer.name}</div>
-          <div class="rider-title">${racer.title}</div>
-          <div class="rider-stat">${racer.perk}</div>
-        `;
-        card.addEventListener('click', () => {
-          selectedRacerIndex = idx;
-          renderRiderSelection();
-          sound.playNearMiss();
-        });
-        ridersGrid.appendChild(card);
-      });
-    }
+    // Map Dimensions (Grid: 36 columns x 28 rows, tile size = 48px -> 1728 x 1344 world)
+    const TILE_SIZE = 48;
+    const COLS = 36;
+    const ROWS = 28;
+    const WORLD_WIDTH = COLS * TILE_SIZE;
+    const WORLD_HEIGHT = ROWS * TILE_SIZE;
 
-    // --- GAME ACTIONS ---
-    function startRace() {
-      playerPositionZ = 0;
-      playerX = 0;
-      steerVelocity = 0;
-      currentLean = 0;
-      suspensionDip = 0;
-      cameraBankAngle = 0;
-      speed = 0;
-      score = 0;
-      distanceCovered = 0;
-      timeRemaining = 45.0;
-      nitroStamina = 1.0;
-      isCrashing = false;
-      crashTimer = 0;
-      nextCheckpointIndex = 400;
-      currentRacePosition = 4;
+    // Tile Types
+    const T_FLOOR = 0;
+    const T_WALL = 1;
+    const T_PILLAR = 2;
+    const T_GATE = 3; // Courtyard locked gate (needs key)
+    const T_EXIT = 4; // Main Mahadwar escape door
+    const T_CARPET = 5; // Rajput floral red carpet floor
+    const T_CHAINED_DOOR = 6; // Chained treasury door (needs Pliers)
+    const T_ALTAR = 7; // Courtyard Tulsi altar (needs Gangajal)
 
-      buildTrack();
-      initRacersAndTraffic();
-
-      currentState = STATE.PLAYING;
-      hideOverlays();
-      sound.init();
-      sound.startEngine();
-      updateHUD();
-    }
-
-    function togglePause() {
-      if (currentState === STATE.PLAYING) {
-        currentState = STATE.PAUSED;
-        pauseOverlay.classList.remove('hidden');
-        sound.stopEngine();
-      } else if (currentState === STATE.PAUSED) {
-        currentState = STATE.PLAYING;
-        pauseOverlay.classList.add('hidden');
-        sound.startEngine();
+    // Generate Haveli Mansion Map Layout
+    const map = [];
+    for (let r = 0; r < ROWS; r++) {
+      map[r] = [];
+      for (let c = 0; c < COLS; c++) {
+        // Outer perimeter boundary
+        if (r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1) {
+          map[r][c] = T_WALL;
+        } else {
+          map[r][c] = T_FLOOR;
+        }
       }
     }
 
-    function triggerCrash() {
-      if (isCrashing) return;
-      isCrashing = true;
-      crashTimer = 75;
-      screenShake = 18;
-      speed = 0;
-      steerVelocity = 0;
-      sound.playCrash();
-    }
-
-    function triggerCheckpoint() {
-      timeRemaining += 30.0;
-      score += 2500;
-      sound.playCheckpoint();
-      bannerCheckpointTimer = 120;
-      checkpointBanner.classList.add('visible');
-    }
-
-    function triggerNearMiss() {
-      score += 500;
-      sound.playNearMiss();
-      bannerNearMissTimer = 60;
-      nearMissBanner.classList.add('visible');
-    }
-
-    function triggerOvertake(rivalName) {
-      score += 1000;
-      sound.playOvertake();
-      overtakeBanner.textContent = `OVERTOKE ${rivalName}! +1,000 PTS`;
-      bannerOvertakeTimer = 75;
-      overtakeBanner.classList.add('visible');
-    }
-
-    function triggerGameOver() {
-      currentState = STATE.GAME_OVER;
-      sound.stopEngine();
-
-      if (score > highScore) {
-        highScore = score;
-        try {
-          localStorage.setItem('neon_bike_hiscore', highScore.toString());
-        } catch (e) {}
-      }
-
-      const posSuffix = currentRacePosition === 1 ? 'st' : currentRacePosition === 2 ? 'nd' : currentRacePosition === 3 ? 'rd' : 'th';
-      gameoverStats.innerHTML = `
-        <div style="font-size:12px; color:#4ade80; margin-bottom:6px;">FINISHED IN ${currentRacePosition}${posSuffix} PLACE</div>
-        <div>FINAL SCORE: ${score.toString().padStart(5, '0')}</div>
-        <div style="margin-top:6px; color:#38bdf8;">DISTANCE: ${distanceCovered.toFixed(1)} KM · TOP HIGH SCORE: ${highScore}</div>
-      `;
-      gameoverOverlay.classList.remove('hidden');
-    }
-
-    function hideOverlays() {
-      startOverlay.classList.add('hidden');
-      gameoverOverlay.classList.add('hidden');
-      pauseOverlay.classList.add('hidden');
-    }
-
-    function updateHUD() {
-      speedDisplay.textContent = Math.round(speed).toString().padStart(3, '0');
-      timeDisplay.textContent = Math.max(0, timeRemaining).toFixed(1);
-      scoreDisplay.textContent = score.toString().padStart(5, '0');
-      distanceDisplay.textContent = `${distanceCovered.toFixed(1)}KM`;
-      boostMeterFill.style.width = `${Math.round(nitroStamina * 100)}%`;
-
-      const posSuffix = currentRacePosition === 1 ? 'st' : currentRacePosition === 2 ? 'nd' : currentRacePosition === 3 ? 'rd' : 'th';
-      posDisplay.textContent = `${currentRacePosition}${posSuffix}`;
-
-      if (currentRacePosition === 1) posDisplay.style.color = '#facc15'; // Gold 1st
-      else if (currentRacePosition === 2) posDisplay.style.color = '#38bdf8';
-      else posDisplay.style.color = '#4ade80';
-
-      if (timeRemaining < 10) {
-        timeDisplay.style.color = (Math.floor(Date.now() / 250) % 2 === 0) ? '#ef4444' : '#ffffff';
-      } else {
-        timeDisplay.style.color = '#f8fafc';
+    // Interior Haveli Architecture Walls
+    function fillWallRect(c1, r1, c2, r2) {
+      for (let r = r1; r <= r2; r++) {
+        for (let c = c1; c <= c2; c++) {
+          if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
+            map[r][c] = T_WALL;
+          }
+        }
       }
     }
 
-    // --- KEYBOARD LISTENERS ---
+    function fillFloorRect(c1, r1, c2, r2, type = T_FLOOR) {
+      for (let r = r1; r <= r2; r++) {
+        for (let c = c1; c <= c2; c++) {
+          if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
+            map[r][c] = type;
+          }
+        }
+      }
+    }
+
+    // Partition Rooms:
+    // Room 1: Northwest Storage / Treasury (Holds Brass Key)
+    fillWallRect(1, 10, 14, 10);
+    fillWallRect(14, 1, 14, 10);
+    // Doorway to Treasury with heavy iron chains!
+    map[10][7] = T_CHAINED_DOOR;
+    map[10][8] = T_WALL;
+
+    // Room 2: Northeast Mandir / Puja Room (Holds Sacred Bell)
+    fillWallRect(22, 1, 22, 10);
+    fillWallRect(22, 10, 34, 10);
+    // Doorway to Mandir
+    map[10][27] = T_FLOOR;
+    map[10][28] = T_FLOOR;
+
+    // Central Courtyard & Corridor dividing wall
+    fillWallRect(10, 16, 26, 16);
+    fillWallRect(10, 11, 10, 16);
+    fillWallRect(26, 11, 26, 16);
+    // Locked Courtyard Gate in the middle of north courtyard
+    map[16][17] = T_GATE;
+    map[16][18] = T_GATE;
+    map[16][19] = T_GATE;
+
+    // Sacred Tulsi Altar in Courtyard
+    map[13][18] = T_ALTAR;
+
+    // Room 3: Southwest Bedchambers / Zenana (Holds Holy Ash & Pliers)
+    fillWallRect(1, 18, 14, 18);
+    fillWallRect(14, 18, 14, 26);
+    // Doorways
+    map[18][6] = T_FLOOR;
+    map[22][14] = T_FLOOR;
+
+    // Room 4: Southeast Royal Hall & Library (Holds Gangajal)
+    fillWallRect(22, 18, 34, 18);
+    fillWallRect(22, 18, 22, 26);
+    // Doorways
+    map[18][28] = T_FLOOR;
+    map[23][22] = T_FLOOR;
+
+    // Ornate pillars in Courtyard & Hallways
+    map[5][18] = T_PILLAR;
+    map[7][16] = T_PILLAR;
+    map[7][20] = T_PILLAR;
+    map[13][14] = T_PILLAR;
+    map[13][22] = T_PILLAR;
+    map[20][17] = T_PILLAR;
+    map[20][19] = T_PILLAR;
+
+    // Red Haveli Carpet paths
+    fillFloorRect(16, 2, 20, 9, T_CARPET);
+    fillFloorRect(16, 21, 20, 26, T_CARPET);
+    fillFloorRect(4, 5, 10, 8, T_CARPET);
+    fillFloorRect(25, 4, 31, 8, T_CARPET);
+
+    // Main Exit Gate (Mahadwar) at top center
+    map[0][17] = T_EXIT;
+    map[0][18] = T_EXIT;
+    map[0][19] = T_EXIT;
+
+    // --- GAME ENTITIES & PROPS ---
+    let gameState = 'START'; // START, PLAYING, GAMEOVER, WON
+    let gameTime = 0;
+    let diyasCollected = 0;
+    let gateUnlocked = false;
+    let chainsCut = false;
+    let altarPurified = false;
+
+    // Granny-Style Tasks Checklist
+    const tasks = {
+      pliers: false,
+      chains: false,
+      relics: false,
+      altar: false,
+      trapsEvaded: true,
+      escape: false
+    };
+
+    // Haveli Scrying Cameras ("Divya Drishti")
+    const haveliCameras = [
+      { id: 0, name: 'PLAYER FOLLOW VIEW', mode: 'PLAYER' },
+      { id: 1, name: 'CAM 01 - AANGAN (CENTRAL COURTYARD)', x: 18 * TILE_SIZE, y: 13 * TILE_SIZE },
+      { id: 2, name: 'CAM 02 - PUJA MANDIR (EAST WING)', x: 28 * TILE_SIZE, y: 6 * TILE_SIZE },
+      { id: 3, name: 'CAM 03 - ZENANA BEDCHAMBERS (SOUTH-WEST)', x: 7 * TILE_SIZE, y: 22 * TILE_SIZE },
+      { id: 4, name: 'CAM 04 - NORTHERN MAHADWAR GATE', x: 18 * TILE_SIZE, y: 4 * TILE_SIZE },
+      { id: 5, name: 'CAM 05 - OLD TOSHAKHANA TREASURY', x: 7 * TILE_SIZE, y: 6 * TILE_SIZE }
+    ];
+    let currentCamIndex = 0;
+
+    // Player
+    const player = {
+      x: 18 * TILE_SIZE + 24,
+      y: 24 * TILE_SIZE + 24,
+      radius: 14,
+      speed: 3.1,
+      angle: -Math.PI / 2,
+      oil: 100, // 100 to 0
+      hidden: false,
+      hidingSpotId: null,
+      isTrapped: false,
+      trapStruggle: 0,
+      items: {
+        pliers: false,  // Iron Pliers (Chheni) to cut chains
+        gangajal: false,// Sacred Holy Water for Tulsi altar
+        key: false,     // Brass Key (Chavi)
+        ash: false,     // Holy Ash (Vibhuti)
+        bell: false     // Sacred Bell (Ghanti)
+      },
+      hasVibhutiCharge: false,
+      isMoving: false,
+      animFrame: 0
+    };
+
+    // Maya (The Pisachini)
+    const maya = {
+      x: 6 * TILE_SIZE + 24,
+      y: 6 * TILE_SIZE + 24,
+      radius: 16,
+      baseSpeed: 1.8,
+      chaseSpeed: 3.7,
+      speed: 1.8,
+      angle: 0,
+      state: 'PATROL', // PATROL, INVESTIGATE, CHASE, STUNNED
+      targetX: 6 * TILE_SIZE + 24,
+      targetY: 6 * TILE_SIZE + 24,
+      patrolTimer: 0,
+      investigateTimer: 0,
+      stunnedTimer: 0,
+      floatOffset: 0,
+      lastGhungrooTime: 0,
+      teleportTimer: 0
+    };
+
+    // The Hunter (Shikari / Tantrik)
+    const hunter = {
+      x: 28 * TILE_SIZE + 24,
+      y: 22 * TILE_SIZE + 24,
+      radius: 16,
+      baseSpeed: 2.1,
+      chaseSpeed: 3.4,
+      speed: 2.1,
+      angle: 0,
+      torchAngle: 0,
+      state: 'HUNTING', // HUNTING, INVESTIGATING, PURSUING
+      targetX: 28 * TILE_SIZE + 24,
+      targetY: 22 * TILE_SIZE + 24,
+      patrolTimer: 0,
+      investigateTimer: 0,
+      shoutTimer: 0,
+      shoutText: '',
+      trapPlaceCooldown: 300
+    };
+
+    // Bone Bear-Traps (Phanda)
+    const bearTraps = [
+      { id: 1, x: 18 * TILE_SIZE + 24, y: 11 * TILE_SIZE + 24, active: true },
+      { id: 2, x: 14 * TILE_SIZE + 24, y: 19 * TILE_SIZE + 24, active: true },
+      { id: 3, x: 25 * TILE_SIZE + 24, y: 11 * TILE_SIZE + 24, active: true }
+    ];
+
+    // Fragile Ceramic Vases (Surahi) on Stands
+    const fragileVases = [
+      { id: 1, x: 10 * TILE_SIZE + 24, y: 8 * TILE_SIZE + 24, shattered: false },
+      { id: 2, x: 26 * TILE_SIZE + 24, y: 8 * TILE_SIZE + 24, shattered: false },
+      { id: 3, x: 15 * TILE_SIZE + 24, y: 15 * TILE_SIZE + 24, shattered: false },
+      { id: 4, x: 7 * TILE_SIZE + 24, y: 20 * TILE_SIZE + 24, shattered: false },
+      { id: 5, x: 27 * TILE_SIZE + 24, y: 21 * TILE_SIZE + 24, shattered: false }
+    ];
+
+    // Extra Granny Puzzle Items
+    const puzzleItems = {
+      pliers: {
+        name: 'Iron Pliers (Chheni)',
+        desc: 'Heavy blacksmith tool to cut locked iron chains',
+        x: 4 * TILE_SIZE + 24,
+        y: 25 * TILE_SIZE + 24,
+        collected: false
+      },
+      gangajal: {
+        name: 'Sacred Gangajal Flask',
+        desc: 'Holy water to purify the courtyard Tulsi altar',
+        x: 32 * TILE_SIZE + 24,
+        y: 25 * TILE_SIZE + 24,
+        collected: false
+      }
+    };
+
+    // Hiding Spots (Wardrobes / Almirahs, Giant Brass Urns, Silk Curtains)
+    const hidingSpots = [
+      { id: 1, type: 'WARDROBE', x: 3 * TILE_SIZE + 24, y: 3 * TILE_SIZE + 24, w: 42, h: 42, name: 'Sheesham Almirah' },
+      { id: 2, type: 'URN',      x: 12 * TILE_SIZE + 24, y: 8 * TILE_SIZE + 24, w: 36, h: 36, name: 'Brass Urn (Matka)' },
+      { id: 3, type: 'WARDROBE', x: 32 * TILE_SIZE + 24, y: 4 * TILE_SIZE + 24, w: 42, h: 42, name: 'Carved Teak Almirah' },
+      { id: 4, type: 'CURTAIN',  x: 16 * TILE_SIZE + 24, y: 12 * TILE_SIZE + 24, w: 38, h: 38, name: 'Velvet Curtain' },
+      { id: 5, type: 'URN',      x: 21 * TILE_SIZE + 24, y: 12 * TILE_SIZE + 24, w: 36, h: 36, name: 'Brass Urn (Ganga-Jali)' },
+      { id: 6, type: 'WARDROBE', x: 4 * TILE_SIZE + 24, y: 22 * TILE_SIZE + 24, w: 42, h: 42, name: 'Old Bedchamber Almirah' },
+      { id: 7, type: 'CURTAIN',  x: 12 * TILE_SIZE + 24, y: 24 * TILE_SIZE + 24, w: 38, h: 38, name: 'Hanging Tapestry' },
+      { id: 8, type: 'WARDROBE', x: 30 * TILE_SIZE + 24, y: 22 * TILE_SIZE + 24, w: 42, h: 42, name: 'Antique Haveli Cabinet' },
+      { id: 9, type: 'URN',      x: 24 * TILE_SIZE + 24, y: 25 * TILE_SIZE + 24, w: 36, h: 36, name: 'Temple Water Urn' }
+    ];
+
+    // Hanging Brass Bells in Corridors (Ghanti)
+    const hangingBells = [
+      { id: 1, x: 7 * TILE_SIZE + 24, y: 10 * TILE_SIZE + 24, swing: 0, rungCooldown: 0 },
+      { id: 2, x: 27 * TILE_SIZE + 24, y: 10 * TILE_SIZE + 24, swing: 0, rungCooldown: 0 },
+      { id: 3, x: 18 * TILE_SIZE + 24, y: 15 * TILE_SIZE + 24, swing: 0, rungCooldown: 0 },
+      { id: 4, x: 6 * TILE_SIZE + 24, y: 18 * TILE_SIZE + 24, swing: 0, rungCooldown: 0 },
+      { id: 5, x: 28 * TILE_SIZE + 24, y: 18 * TILE_SIZE + 24, swing: 0, rungCooldown: 0 },
+      { id: 6, x: 18 * TILE_SIZE + 24, y: 5 * TILE_SIZE + 24, swing: 0, rungCooldown: 0 }
+    ];
+
+    // Diyas (Clay oil lamps scattered on map)
+    const diyas = [
+      { id: 1,  x: 18 * TILE_SIZE + 24, y: 21 * TILE_SIZE + 24, collected: false },
+      { id: 2,  x: 8 * TILE_SIZE + 24,  y: 22 * TILE_SIZE + 24, collected: false },
+      { id: 3,  x: 5 * TILE_SIZE + 24,  y: 14 * TILE_SIZE + 24, collected: false },
+      { id: 4,  x: 5 * TILE_SIZE + 24,  y: 6 * TILE_SIZE + 24,  collected: false },
+      { id: 5,  x: 10 * TILE_SIZE + 24, y: 4 * TILE_SIZE + 24,  collected: false },
+      { id: 6,  x: 14 * TILE_SIZE + 24, y: 13 * TILE_SIZE + 24, collected: false },
+      { id: 7,  x: 22 * TILE_SIZE + 24, y: 13 * TILE_SIZE + 24, collected: false },
+      { id: 8,  x: 28 * TILE_SIZE + 24, y: 5 * TILE_SIZE + 24,  collected: false },
+      { id: 9,  x: 31 * TILE_SIZE + 24, y: 8 * TILE_SIZE + 24,  collected: false },
+      { id: 10, x: 28 * TILE_SIZE + 24, y: 22 * TILE_SIZE + 24, collected: false },
+      { id: 11, x: 24 * TILE_SIZE + 24, y: 20 * TILE_SIZE + 24, collected: false },
+      { id: 12, x: 18 * TILE_SIZE + 24, y: 8 * TILE_SIZE + 24,  collected: false }
+    ];
+
+    // Key Quest Items
+    const questItems = {
+      key: {
+        name: 'Brass Key (Chavi)',
+        desc: 'Unlocks the Grand Courtyard Gate',
+        x: 4 * TILE_SIZE + 24,
+        y: 4 * TILE_SIZE + 24,
+        collected: false
+      },
+      ash: {
+        name: 'Holy Ash (Vibhuti)',
+        desc: 'Sacred ash blessed to stun the evil spirit',
+        x: 8 * TILE_SIZE + 24,
+        y: 25 * TILE_SIZE + 24,
+        collected: false
+      },
+      bell: {
+        name: 'Sacred Bell (Ghanti)',
+        desc: 'Enchanted bell required to open the Mahadwar escape gate',
+        x: 30 * TILE_SIZE + 24,
+        y: 5 * TILE_SIZE + 24,
+        collected: false
+      }
+    };
+
+    // Camera following player or scrying rooms
+    const camera = {
+      x: 0,
+      y: 0,
+      width: 800,
+      height: 600
+    };
+
+    // Noise Alerts on Map (for radar & AI)
+    const alertPings = [];
+    function triggerNoiseAlert(x, y, radius = 400) {
+      alertPings.push({ x, y, maxRadius: 60, currentRadius: 5, life: 40 });
+      // Alert Maya
+      if (Math.hypot(maya.x - x, maya.y - y) < radius) {
+        maya.state = 'INVESTIGATE';
+        maya.targetX = x;
+        maya.targetY = y;
+        maya.investigateTimer = 220;
+      }
+      // Alert The Hunter
+      if (Math.hypot(hunter.x - x, hunter.y - y) < radius + 100) {
+        hunter.state = 'INVESTIGATING';
+        hunter.targetX = x;
+        hunter.targetY = y;
+        hunter.investigateTimer = 240;
+        hunter.shoutTimer = 90;
+        hunter.shoutText = 'वहाँ कौन है!';
+        audio.playHunterCall();
+      }
+    }
+
+    // Particles system (Holy ash smoke, Diya sparks, Bell sound rings)
+    const particles = [];
+    function addParticle(x, y, vx, vy, color, size, life) {
+      particles.push({ x, y, vx, vy, color, size, maxLife: life, life });
+    }
+
+    // Input Handling
+    const keys = {};
     window.addEventListener('keydown', (e) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
-        e.preventDefault();
+      keys[e.key.toLowerCase()] = true;
+      keys[e.code] = true;
+
+      // Handle interaction key
+      if (e.key === 'e' || e.key === 'E' || e.code === 'Space') {
+        handleInteraction();
       }
 
-      if (currentState === STATE.START) {
-        if (e.code === 'Space' || e.code === 'Enter') startRace();
-        return;
+      // Handle Holy Vibhuti stun key
+      if (e.key === 'f' || e.key === 'F' || e.key === 'k' || e.key === 'K') {
+        useHolyVibhuti();
       }
 
-      if (currentState === STATE.GAME_OVER) {
-        if (e.code === 'Space' || e.code === 'Enter') startRace();
-        return;
+      // Handle Scrying Camera switch
+      if (e.key === 'c' || e.key === 'C') {
+        cycleCamera(1);
       }
 
-      if (e.code === 'KeyP') {
-        togglePause();
-        return;
+      // Handle Map & Tasks toggle
+      if (e.key === 'm' || e.key === 'M') {
+        toggleMapModal();
       }
-
-      if (currentState === STATE.PAUSED) {
-        if (e.code === 'Space' || e.code === 'Enter') togglePause();
-        return;
-      }
-
-      if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
-      if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
-      if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = true;
-      if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = true;
-      if (e.code === 'Space') keys.boost = true;
     });
 
     window.addEventListener('keyup', (e) => {
-      if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
-      if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
-      if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = false;
-      if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = false;
-      if (e.code === 'Space') keys.boost = false;
+      keys[e.key.toLowerCase()] = false;
+      keys[e.code] = false;
     });
 
-    // Touch Button bindings with smooth visual feedback
-    startBtn.addEventListener('click', startRace);
-    restartBtn.addEventListener('click', startRace);
-    resumeBtn.addEventListener('click', togglePause);
-
-    const btnLeft = document.getElementById('btn-left');
-    const btnRight = document.getElementById('btn-right');
-    const btnGas = document.getElementById('btn-gas');
-    const btnBrake = document.getElementById('btn-brake');
-    const btnNitro = document.getElementById('btn-nitro');
-
-    btnLeft.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.left = true; btnLeft.classList.add('active'); });
-    btnLeft.addEventListener('pointerup', () => { keys.left = false; btnLeft.classList.remove('active'); });
-    btnLeft.addEventListener('pointerleave', () => { keys.left = false; btnLeft.classList.remove('active'); });
-
-    btnRight.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.right = true; btnRight.classList.add('active'); });
-    btnRight.addEventListener('pointerup', () => { keys.right = false; btnRight.classList.remove('active'); });
-    btnRight.addEventListener('pointerleave', () => { keys.right = false; btnRight.classList.remove('active'); });
-
-    btnGas.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.up = true; btnGas.classList.add('active'); });
-    btnGas.addEventListener('pointerup', () => { keys.up = false; btnGas.classList.remove('active'); });
-    btnGas.addEventListener('pointerleave', () => { keys.up = false; btnGas.classList.remove('active'); });
-
-    btnBrake.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.down = true; btnBrake.classList.add('active'); });
-    btnBrake.addEventListener('pointerup', () => { keys.down = false; btnBrake.classList.remove('active'); });
-    btnBrake.addEventListener('pointerleave', () => { keys.down = false; btnBrake.classList.remove('active'); });
-
-    btnNitro.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.boost = true; btnNitro.classList.add('active'); });
-    btnNitro.addEventListener('pointerup', () => { keys.boost = false; btnNitro.classList.remove('active'); });
-    btnNitro.addEventListener('pointerleave', () => { keys.boost = false; btnNitro.classList.remove('active'); });
-
-    soundBtn.addEventListener('click', () => {
-      const active = sound.toggle();
-      soundIcon.textContent = active ? '🔊' : '🔇';
-      soundText.textContent = active ? 'SOUND ON' : 'MUTED';
-    });
-
-    // --- GRAPHICS RENDERING HELPERS ---
-
-    // Draw Parallax Synthwave Background with Banked Horizon Tilt
-    function drawBackground(curveAmount) {
-      ctx.save();
-      // Subtle camera banking roll in sharp corners
-      ctx.translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT * 0.35);
-      ctx.rotate(cameraBankAngle);
-      ctx.translate(-CANVAS_WIDTH / 2, -CANVAS_HEIGHT * 0.35);
-
-      // 1. Neon Sunset Sky Gradient
-      const skyGrad = ctx.createLinearGradient(0, -50, 0, CANVAS_HEIGHT * 0.55);
-      skyGrad.addColorStop(0, '#0f051d');
-      skyGrad.addColorStop(0.4, '#2e1065');
-      skyGrad.addColorStop(0.75, '#831843');
-      skyGrad.addColorStop(1, '#ea580c');
-      ctx.fillStyle = skyGrad;
-      ctx.fillRect(-100, -100, CANVAS_WIDTH + 200, CANVAS_HEIGHT * 0.65);
-
-      // 2. Giant Retro Sun
-      const sunY = CANVAS_HEIGHT * 0.32;
-      const sunX = CANVAS_WIDTH * 0.5 + (curveAmount * -40);
-      const sunGrad = ctx.createLinearGradient(0, sunY - 60, 0, sunY + 60);
-      sunGrad.addColorStop(0, '#fef08a');
-      sunGrad.addColorStop(0.5, '#f43f5e');
-      sunGrad.addColorStop(1, '#9333ea');
-      ctx.fillStyle = sunGrad;
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 65, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Sun horizontal blind lines
-      ctx.fillStyle = '#0f051d';
-      for (let y = sunY - 15; y < sunY + 65; y += 8) {
-        ctx.fillRect(sunX - 70, y, 140, 3);
-      }
-
-      // 3. Distant Mountains (Parallax Layer 1)
-      ctx.fillStyle = '#1c0c38';
-      ctx.beginPath();
-      ctx.moveTo(-50, CANVAS_HEIGHT * 0.52);
-      for (let x = -50; x <= CANVAS_WIDTH + 50; x += 40) {
-        const peak = Math.sin((x + mountainOffset) * 0.008) * 45 + Math.cos((x + mountainOffset) * 0.02) * 20;
-        ctx.lineTo(x, CANVAS_HEIGHT * 0.48 - peak);
-      }
-      ctx.lineTo(CANVAS_WIDTH + 50, CANVAS_HEIGHT * 0.55);
-      ctx.lineTo(-50, CANVAS_HEIGHT * 0.55);
-      ctx.fill();
-
-      // 4. City Skyline (Parallax Layer 2)
-      ctx.fillStyle = '#0a0518';
-      for (let x = -60; x <= CANVAS_WIDTH + 60; x += 28) {
-        const bx = ((x - cityOffset) % (CANVAS_WIDTH + 120)) - 30;
-        const bh = 30 + ((Math.abs(Math.sin(x * 123.45)) * 50) | 0);
-        ctx.fillRect(bx, CANVAS_HEIGHT * 0.52 - bh, 24, bh);
-        ctx.fillStyle = '#fef08a';
-        if ((x / 28) % 2 === 0) {
-          ctx.fillRect(bx + 4, CANVAS_HEIGHT * 0.52 - bh + 6, 4, 4);
-          ctx.fillRect(bx + 14, CANVAS_HEIGHT * 0.52 - bh + 14, 4, 4);
-        }
-        ctx.fillStyle = '#0a0518';
-      }
-
-      ctx.restore();
+    // Touch button handlers
+    function setupTouchButton(btnId, keyName) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys[keyName] = true;
+        btn.classList.add('active');
+      });
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys[keyName] = false;
+        btn.classList.remove('active');
+      });
     }
 
-    function drawPolygon(x1, y1, x2, y2, x3, y3, x4, y4, color) {
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.lineTo(x3, y3);
-      ctx.lineTo(x4, y4);
-      ctx.closePath();
-      ctx.fill();
+    setupTouchButton('m-up', 'arrowup');
+    setupTouchButton('m-down', 'arrowdown');
+    setupTouchButton('m-left', 'arrowleft');
+    setupTouchButton('m-right', 'arrowright');
+
+    document.getElementById('m-act').addEventListener('click', handleInteraction);
+    document.getElementById('m-stun').addEventListener('click', useHolyVibhuti);
+    document.getElementById('m-cam').addEventListener('click', () => cycleCamera(1));
+    document.getElementById('m-map').addEventListener('click', toggleMapModal);
+
+    // Camera Navigation Buttons
+    document.getElementById('btn-toggle-cam').addEventListener('click', () => cycleCamera(1));
+    document.getElementById('btn-toggle-map').addEventListener('click', toggleMapModal);
+    document.getElementById('close-map-btn').addEventListener('click', toggleMapModal);
+
+    document.getElementById('cam-prev-btn').addEventListener('click', () => cycleCamera(-1));
+    document.getElementById('cam-next-btn').addEventListener('click', () => cycleCamera(1));
+    document.getElementById('cam-exit-btn').addEventListener('click', () => setCameraMode(0));
+
+    function toggleMapModal() {
+      mapModal.classList.toggle('hidden');
     }
 
-    function drawRoadsideSprite(type, x, y, scale) {
-      ctx.save();
-      ctx.translate(x, y);
-
-      switch (type) {
-        case 'PALM_TREE': {
-          const w = 90 * scale;
-          const h = 180 * scale;
-          ctx.fillStyle = '#78350f';
-          ctx.beginPath();
-          ctx.moveTo(-6 * scale, 0);
-          ctx.quadraticCurveTo(12 * scale, -h * 0.5, 4 * scale, -h);
-          ctx.lineTo(-4 * scale, -h);
-          ctx.quadraticCurveTo(4 * scale, -h * 0.5, -12 * scale, 0);
-          ctx.fill();
-
-          ctx.fillStyle = '#059669';
-          for (let a = -2.2; a <= 0.6; a += 0.5) {
-            ctx.beginPath();
-            ctx.ellipse(4 * scale + Math.cos(a) * w * 0.45, -h + Math.sin(a) * h * 0.15, w * 0.35, 12 * scale, a, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          break;
-        }
-
-        case 'BILLBOARD': {
-          const w = 150 * scale;
-          const h = 100 * scale;
-          ctx.fillStyle = '#475569';
-          ctx.fillRect(-w * 0.35, -h * 0.5, 8 * scale, h * 0.5);
-          ctx.fillRect(w * 0.35, -h * 0.5, 8 * scale, h * 0.5);
-
-          ctx.fillStyle = '#0f172a';
-          ctx.fillRect(-w / 2, -h, w, h * 0.6);
-          ctx.strokeStyle = '#ec4899';
-          ctx.lineWidth = 3 * scale;
-          ctx.strokeRect(-w / 2, -h, w, h * 0.6);
-
-          ctx.fillStyle = '#38bdf8';
-          ctx.font = `${Math.max(6, 14 * scale)}px "Press Start 2P"`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('OUTRUN', 0, -h + h * 0.3);
-          break;
-        }
-
-        case 'STREETLIGHT': {
-          const h = 160 * scale;
-          ctx.strokeStyle = '#94a3b8';
-          ctx.lineWidth = 4 * scale;
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.lineTo(0, -h);
-          ctx.quadraticCurveTo(0, -h - 15 * scale, 24 * scale, -h - 15 * scale);
-          ctx.stroke();
-
-          ctx.fillStyle = '#fef08a';
-          ctx.beginPath();
-          ctx.arc(24 * scale, -h - 15 * scale, 6 * scale, 0, Math.PI * 2);
-          ctx.fill();
-          break;
-        }
-
-        case 'CHEVRON': {
-          const w = 40 * scale;
-          const h = 50 * scale;
-          ctx.fillStyle = '#facc15';
-          ctx.fillRect(-w / 2, -h, w, h);
-          ctx.fillStyle = '#000000';
-          ctx.beginPath();
-          ctx.moveTo(-w * 0.3, -h * 0.2);
-          ctx.lineTo(w * 0.3, -h * 0.5);
-          ctx.lineTo(-w * 0.3, -h * 0.8);
-          ctx.lineTo(-w * 0.1, -h * 0.5);
-          ctx.closePath();
-          ctx.fill();
-          break;
-        }
-
-        case 'ARCHWAY': {
-          const archW = 420 * scale;
-          const archH = 170 * scale;
-
-          ctx.fillStyle = '#1e293b';
-          ctx.fillRect(-archW / 2 - 16 * scale, -archH, 20 * scale, archH);
-          ctx.fillRect(archW / 2 - 4 * scale, -archH, 20 * scale, archH);
-
-          ctx.fillStyle = '#0284c7';
-          ctx.fillRect(-archW / 2 - 20 * scale, -archH - 24 * scale, archW + 40 * scale, 28 * scale);
-
-          ctx.fillStyle = '#ffffff';
-          for (let bx = -archW / 2; bx < archW / 2; bx += 20 * scale) {
-            ctx.fillRect(bx, -archH - 22 * scale, 10 * scale, 24 * scale);
-          }
-
-          ctx.fillStyle = '#22c55e';
-          ctx.font = `${Math.max(7, 16 * scale)}px "Press Start 2P"`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('CHECKPOINT', 0, -archH - 10 * scale);
-          break;
-        }
-      }
-
-      ctx.restore();
-    }
-
-    // Draw Traffic Car / Truck OR Rival Superbike
-    function drawEntity(entity, x, y, scale) {
-      ctx.save();
-      ctx.translate(x, y);
-
-      if (entity.isRival) {
-        // Draw Rival Superbike with Rider & Nametag!
-        const w = 70 * scale;
-        const h = 80 * scale;
-
-        // Nametag floating above rival
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-        ctx.fillRect(-w * 0.7, -h * 1.5, w * 1.4, 16 * scale);
-        ctx.strokeStyle = entity.color;
-        ctx.lineWidth = 1.5 * scale;
-        ctx.strokeRect(-w * 0.7, -h * 1.5, w * 1.4, 16 * scale);
-
-        ctx.fillStyle = entity.color;
-        ctx.font = `${Math.max(5, 8 * scale)}px "Press Start 2P"`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(entity.name, 0, -h * 1.5 + 8 * scale);
-
-        // Rival Bike Chassis
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.roundRect(-10 * scale, -20 * scale, 20 * scale, 30 * scale, 4 * scale);
-        ctx.fill();
-
-        ctx.fillStyle = entity.color;
-        ctx.beginPath();
-        ctx.roundRect(-18 * scale, -32 * scale, 36 * scale, 22 * scale, 4 * scale);
-        ctx.fill();
-
-        // Taillight
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(-10 * scale, -32 * scale, 20 * scale, 4 * scale);
-
-        // Rider
-        ctx.fillStyle = entity.jacket;
-        ctx.beginPath();
-        ctx.roundRect(-14 * scale, -55 * scale, 28 * scale, 24 * scale, 5 * scale);
-        ctx.fill();
-
-        // Helmet
-        ctx.fillStyle = '#020617';
-        ctx.beginPath();
-        ctx.arc(0, -64 * scale, 12 * scale, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Visor
-        ctx.fillStyle = entity.visor;
-        ctx.beginPath();
-        ctx.roundRect(-8 * scale, -66 * scale, 16 * scale, 6 * scale, 2 * scale);
-        ctx.fill();
-      } else if (entity.type === 'TRUCK') {
-        const w = 120 * scale;
-        const h = 70 * scale;
-
-        ctx.fillStyle = entity.color;
-        ctx.beginPath();
-        ctx.roundRect(-w * 0.6, -h * 1.3, w * 1.2, h * 1.3, 4 * scale);
-        ctx.fill();
-
-        ctx.strokeStyle = '#0f172a';
-        ctx.lineWidth = 2 * scale;
-        ctx.strokeRect(-w * 0.55, -h * 1.25, w * 1.1, h * 1.2);
-
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(-w * 0.5, -12 * scale, 16 * scale, 8 * scale);
-        ctx.fillRect(w * 0.5 - 16 * scale, -12 * scale, 16 * scale, 8 * scale);
-
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(-w * 0.55, -4 * scale, 18 * scale, 6 * scale);
-        ctx.fillRect(w * 0.55 - 18 * scale, -4 * scale, 18 * scale, 6 * scale);
+    function setCameraMode(idx) {
+      currentCamIndex = idx;
+      if (currentCamIndex === 0) {
+        cameraHud.classList.add('hidden');
       } else {
-        const w = 120 * scale;
-        const h = 70 * scale;
-
-        ctx.fillStyle = entity.color;
-        ctx.beginPath();
-        ctx.roundRect(-w / 2, -h * 0.7, w, h * 0.7, 6 * scale);
-        ctx.fill();
-
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.roundRect(-w * 0.35, -h * 1.15, w * 0.7, h * 0.5, 4 * scale);
-        ctx.fill();
-
-        ctx.fillStyle = '#38bdf8';
-        ctx.beginPath();
-        ctx.roundRect(-w * 0.28, -h * 1.05, w * 0.56, h * 0.35, 3 * scale);
-        ctx.fill();
-
-        ctx.fillStyle = '#ef4444';
-        ctx.shadowColor = '#ef4444';
-        ctx.shadowBlur = 8 * scale;
-        ctx.fillRect(-w * 0.42, -h * 0.45, 20 * scale, 9 * scale);
-        ctx.fillRect(w * 0.42 - 20 * scale, -h * 0.45, 20 * scale, 9 * scale);
-        ctx.shadowBlur = 0;
-
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(-w * 0.48, -6 * scale, 16 * scale, 8 * scale);
-        ctx.fillRect(w * 0.48 - 16 * scale, -6 * scale, 16 * scale, 8 * scale);
+        cameraHud.classList.remove('hidden');
+        camName.textContent = haveliCameras[currentCamIndex].name;
+        audio.playCameraClick();
       }
-
-      ctx.restore();
     }
 
-    // Draw Player Motorcycle & Rider (Customized to Selected Player)
-    function drawPlayerBike() {
-      const racer = RACERS[selectedRacerIndex];
-      ctx.save();
-      const cx = CANVAS_WIDTH / 2;
-      const cy = CANVAS_HEIGHT - 25 + suspensionDip;
+    function cycleCamera(dir) {
+      currentCamIndex = (currentCamIndex + dir + haveliCameras.length) % haveliCameras.length;
+      setCameraMode(currentCamIndex);
+    }
 
-      if (isCrashing) {
-        ctx.translate(cx, cy - 20);
-        const crashAngle = (75 - crashTimer) * 0.2;
-        ctx.rotate(crashAngle);
+    // Audio Mute Toggle Button
+    soundToggleBtn.addEventListener('click', () => {
+      audio.init();
+      const unmuted = audio.toggleMute();
+      soundIcon.textContent = unmuted ? '🔊' : '🔇';
+      soundText.textContent = unmuted ? 'SOUND ON' : 'MUTED';
+    });
 
-        ctx.fillStyle = racer.accentColor;
-        ctx.fillRect(-25, -15, 50, 20);
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.arc(-20, 10, 12, 0, Math.PI * 2);
-        ctx.arc(20, 10, 12, 0, Math.PI * 2);
-        ctx.fill();
+    // Start / Restart Buttons
+    document.getElementById('start-game-btn').addEventListener('click', () => {
+      audio.init();
+      startScreen.classList.add('hidden');
+      resetGame();
+      gameState = 'PLAYING';
+    });
 
-        ctx.fillStyle = '#fef08a';
-        for (let i = 0; i < 6; i++) {
-          const sx = (Math.random() - 0.5) * 60;
-          const sy = (Math.random() - 0.5) * 40;
-          ctx.fillRect(sx, sy, 4, 4);
+    document.getElementById('restart-game-btn').addEventListener('click', () => {
+      gameoverScreen.classList.add('hidden');
+      resetGame();
+      gameState = 'PLAYING';
+    });
+
+    document.getElementById('play-again-btn').addEventListener('click', () => {
+      winScreen.classList.add('hidden');
+      resetGame();
+      gameState = 'PLAYING';
+    });
+
+    function resetGame() {
+      gameTime = 0;
+      diyasCollected = 0;
+      gateUnlocked = false;
+      chainsCut = false;
+      altarPurified = false;
+      setCameraMode(0);
+
+      player.x = 18 * TILE_SIZE + 24;
+      player.y = 24 * TILE_SIZE + 24;
+      player.oil = 100;
+      player.hidden = false;
+      player.hidingSpotId = null;
+      player.isTrapped = false;
+      player.trapStruggle = 0;
+      trappedBanner.style.display = 'none';
+
+      player.items.pliers = false;
+      player.items.gangajal = false;
+      player.items.key = false;
+      player.items.ash = false;
+      player.items.bell = false;
+      player.hasVibhutiCharge = false;
+
+      puzzleItems.pliers.collected = false;
+      puzzleItems.gangajal.collected = false;
+
+      maya.x = 6 * TILE_SIZE + 24;
+      maya.y = 6 * TILE_SIZE + 24;
+      maya.state = 'PATROL';
+      maya.speed = maya.baseSpeed;
+      maya.patrolTimer = 0;
+      maya.investigateTimer = 0;
+      maya.stunnedTimer = 0;
+
+      hunter.x = 28 * TILE_SIZE + 24;
+      hunter.y = 22 * TILE_SIZE + 24;
+      hunter.state = 'HUNTING';
+      hunter.speed = hunter.baseSpeed;
+      hunter.patrolTimer = 0;
+      hunter.investigateTimer = 0;
+      hunter.shoutTimer = 0;
+
+      diyas.forEach(d => d.collected = false);
+      questItems.key.collected = false;
+      questItems.ash.collected = false;
+      questItems.bell.collected = false;
+
+      bearTraps.forEach(t => t.active = true);
+      fragileVases.forEach(v => v.shattered = false);
+
+      // Reset locked gates and chains
+      map[16][17] = T_GATE;
+      map[16][18] = T_GATE;
+      map[16][19] = T_GATE;
+      map[10][7] = T_CHAINED_DOOR;
+      map[13][18] = T_ALTAR;
+
+      updateHUD();
+    }
+
+    // --- GAMEPLAY INTERACTIONS ---
+    function handleInteraction() {
+      if (gameState !== 'PLAYING') return;
+
+      // 1. If caught in Hunter's Bone Bear Trap -> Struggle to escape!
+      if (player.isTrapped) {
+        player.trapStruggle--;
+        trapCountSpan.textContent = player.trapStruggle;
+        audio.playTrapSnap();
+        if (player.trapStruggle <= 0) {
+          player.isTrapped = false;
+          trappedBanner.style.display = 'none';
         }
-        ctx.restore();
         return;
       }
 
-      const isOffRoad = Math.abs(playerX) > 1.0;
-      const rumble = isOffRoad ? (Math.random() - 0.5) * 6 : (speed > 10 ? (Math.random() - 0.5) * 1.5 : 0);
-
-      ctx.translate(cx, cy + rumble);
-      ctx.rotate(currentLean);
-
-      // Nitro Plasma Exhaust Flames
-      if (isBoosting && speed > 40) {
-        ctx.save();
-        const flameLength = (racer.id === 'viper' ? 36 : 26) + Math.random() * 22;
-        const grad = ctx.createLinearGradient(0, 0, 0, flameLength);
-        grad.addColorStop(0, '#ffffff');
-        grad.addColorStop(0.3, racer.secondaryColor);
-        grad.addColorStop(0.7, racer.accentColor);
-        grad.addColorStop(1, 'transparent');
-        ctx.fillStyle = grad;
-
-        // Left flame
-        ctx.beginPath();
-        ctx.moveTo(-14, 0);
-        ctx.lineTo(-10, flameLength);
-        ctx.lineTo(-6, 0);
-        ctx.fill();
-
-        // Right flame
-        ctx.beginPath();
-        ctx.moveTo(6, 0);
-        ctx.lineTo(10, flameLength);
-        ctx.lineTo(14, 0);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Rear Slick Racing Tire
-      ctx.fillStyle = '#090a0f';
-      ctx.beginPath();
-      ctx.roundRect(-10, -22, 20, 32, 6);
-      ctx.fill();
-
-      // Colored rim stripe
-      ctx.fillStyle = racer.accentColor;
-      ctx.fillRect(-3, -16, 6, 20);
-
-      // Dual Chrome Exhaust Pipes
-      ctx.fillStyle = '#64748b';
-      ctx.fillRect(-16, -14, 5, 20);
-      ctx.fillRect(11, -14, 5, 20);
-
-      // Superbike Fairing (Selected Player Color)
-      ctx.fillStyle = racer.accentColor;
-      ctx.beginPath();
-      ctx.moveTo(-22, -32);
-      ctx.lineTo(22, -32);
-      ctx.lineTo(16, -10);
-      ctx.lineTo(-16, -10);
-      ctx.closePath();
-      ctx.fill();
-
-      // Cyberpunk Secondary Accent Trim
-      ctx.fillStyle = racer.secondaryColor;
-      ctx.fillRect(-18, -30, 36, 4);
-
-      // LED Taillight
-      ctx.fillStyle = '#ef4444';
-      ctx.shadowColor = '#ef4444';
-      ctx.shadowBlur = 10;
-      ctx.fillRect(-10, -32, 20, 5);
-      ctx.shadowBlur = 0;
-
-      // Rider Torso (Leathers with Counter-Lean Effect)
-      ctx.save();
-      // Counter-lean upper body into the apex
-      ctx.translate(0, -40);
-      ctx.rotate(currentLean * 0.45);
-
-      ctx.fillStyle = racer.jacketColor;
-      ctx.beginPath();
-      ctx.roundRect(-16, -18, 32, 26, 6);
-      ctx.fill();
-
-      // Racing Stripes on Jacket
-      ctx.fillStyle = racer.accentColor;
-      ctx.fillRect(-14, -14, 4, 20);
-      ctx.fillRect(10, -14, 4, 20);
-
-      // Helmet
-      ctx.fillStyle = '#0f172a';
-      ctx.beginPath();
-      ctx.arc(0, -28, 14, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Helmet Visor
-      ctx.fillStyle = racer.visorColor;
-      ctx.beginPath();
-      ctx.roundRect(-9, -30, 18, 7, 2);
-      ctx.fill();
-
-      // Helmet Accent Stripe
-      ctx.fillStyle = racer.accentColor;
-      ctx.fillRect(-4, -39, 8, 3);
-
-      ctx.restore(); // Restore upper body counter-lean
-      ctx.restore(); // Restore bike
-    }
-
-    // --- MAIN GAME LOOP ---
-    let lastTime = 0;
-
-    function gameLoop(timestamp) {
-      if (!lastTime) lastTime = timestamp;
-      const dt = Math.min(0.05, (timestamp - lastTime) / 1000);
-      lastTime = timestamp;
-
-      if (currentState === STATE.PLAYING) {
-        updateGame(dt);
-      }
-
-      render();
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    // --- PHYSICS & LOGIC UPDATE ---
-    function updateGame(dt) {
-      const racer = RACERS[selectedRacerIndex];
-
-      // 1. Time countdown
-      timeRemaining -= dt;
-      if (timeRemaining <= 0) {
-        timeRemaining = 0;
-        triggerGameOver();
-        return;
-      }
-
-      // 2. Banner Timers
-      if (bannerCheckpointTimer > 0) {
-        bannerCheckpointTimer--;
-        if (bannerCheckpointTimer <= 0) checkpointBanner.classList.remove('visible');
-      }
-      if (bannerNearMissTimer > 0) {
-        bannerNearMissTimer--;
-        if (bannerNearMissTimer <= 0) nearmissBanner.classList.remove('visible');
-      }
-      if (bannerOvertakeTimer > 0) {
-        bannerOvertakeTimer--;
-        if (bannerOvertakeTimer <= 0) overtakeBanner.classList.remove('visible');
-      }
-
-      // 3. Screen shake decay
-      if (screenShake > 0) screenShake *= 0.9;
-
-      // 4. Crash Handling
-      if (isCrashing) {
-        crashTimer--;
-        if (crashTimer <= 0) {
-          isCrashing = false;
-          speed = 0;
-          steerVelocity = 0;
-          playerX = 0;
-        }
+      // 2. If currently hidden, exit hiding spot
+      if (player.hidden) {
+        player.hidden = false;
+        player.hidingSpotId = null;
+        audio.playWoodCreak();
         updateHUD();
         return;
       }
 
-      // 5. Nitro Boost Logic
-      if (keys.boost && nitroStamina > 0.05 && speed > 20) {
-        isBoosting = true;
-        nitroStamina = Math.max(0, nitroStamina - dt * racer.nitroRate);
-        nitroFlash.classList.add('active');
-      } else {
-        isBoosting = false;
-        nitroStamina = Math.min(1.0, nitroStamina + dt * 0.12);
-        nitroFlash.classList.remove('active');
+      // 3. Check for nearby hiding spot
+      for (const spot of hidingSpots) {
+        const dist = Math.hypot(player.x - spot.x, player.y - spot.y);
+        if (dist < 46) {
+          player.hidden = true;
+          player.hidingSpotId = spot.id;
+          player.x = spot.x;
+          player.y = spot.y;
+          audio.playWoodCreak();
+          updateHUD();
+          return;
+        }
       }
 
-      // 6. Acceleration & Top Speed with Suspension Dip
-      const isOffRoad = Math.abs(playerX) > 1.0;
-      let targetMaxSpeed = isBoosting ? racer.boostSpeedMod : racer.topSpeedMod;
-      if (isOffRoad) targetMaxSpeed = OFF_ROAD_MAX_SPEED;
-
-      if (keys.up) {
-        const accelRate = isBoosting ? ACCEL_BASE * 1.85 : ACCEL_BASE;
-        speed = Math.min(targetMaxSpeed, speed + accelRate * dt);
-        // Suspension squats back slightly
-        suspensionDip += (isBoosting ? 3 : 1 - suspensionDip) * 0.1;
-      } else if (keys.down) {
-        speed = Math.max(0, speed + BRAKING_BASE * dt);
-        // Front fork dips forward on hard braking
-        suspensionDip += (-4 - suspensionDip) * 0.2;
-      } else {
-        speed = Math.max(0, speed + DECEL_BASE * dt);
-        suspensionDip += (0 - suspensionDip) * 0.1;
+      // 4. Check for Iron Pliers (Chheni) in Zenana
+      if (!puzzleItems.pliers.collected) {
+        if (Math.hypot(player.x - puzzleItems.pliers.x, player.y - puzzleItems.pliers.y) < 32) {
+          puzzleItems.pliers.collected = true;
+          player.items.pliers = true;
+          tasks.pliers = true;
+          audio.playTempleBell();
+          updateHUD();
+          return;
+        }
       }
 
-      if (speed > targetMaxSpeed) {
-        speed = Math.max(targetMaxSpeed, speed - 90 * dt);
+      // 5. Check for Sacred Gangajal Flask in Royal Hall
+      if (!puzzleItems.gangajal.collected) {
+        if (Math.hypot(player.x - puzzleItems.gangajal.x, player.y - puzzleItems.gangajal.y) < 32) {
+          puzzleItems.gangajal.collected = true;
+          player.items.gangajal = true;
+          audio.playDiyaChime();
+          updateHUD();
+          return;
+        }
       }
 
-      // 7. ULTRA-SMOOTH STEERING INERTIA & CENTRIFUGAL PHYSICS
-      const speedRatio = speed / racer.topSpeedMod;
-      const currentSegment = findSegment(playerPositionZ);
-
-      // Target steering direction (-1 left, +1 right, 0 neutral)
-      let targetSteerInput = 0;
-      if (keys.left) targetSteerInput -= 1.0;
-      if (keys.right) targetSteerInput += 1.0;
-
-      // Smooth acceleration of steer velocity with response curve
-      const steerAgility = 2.4 * racer.handlingMod;
-      const steerDamping = 0.88; // Smooth deceleration when releasing key
-
-      if (targetSteerInput !== 0) {
-        steerVelocity += (targetSteerInput * steerAgility - steerVelocity) * Math.min(1.0, 14 * dt);
-      } else {
-        steerVelocity *= Math.pow(steerDamping, dt * 60);
+      // 6. Check for Chained Treasury Door (needs Pliers)
+      const distToChains = Math.hypot(player.x - (7 * TILE_SIZE + 24), player.y - (10 * TILE_SIZE + 24));
+      if (!chainsCut && distToChains < 55) {
+        if (player.items.pliers) {
+          chainsCut = true;
+          map[10][7] = T_FLOOR;
+          tasks.chains = true;
+          audio.playVaseCrash();
+          triggerNoiseAlert(7 * TILE_SIZE + 24, 10 * TILE_SIZE + 24, 350);
+          for (let i = 0; i < 20; i++) {
+            addParticle(7 * TILE_SIZE + 24, 10 * TILE_SIZE + 24, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#94a3b8', 4, 30);
+          }
+          updateHUD();
+        }
+        return;
       }
 
-      // Centrifugal drift from road curvature pulls the bike outward smoothly
-      const curvePull = (currentSegment.curve * speedRatio * speedRatio * 1.7) * dt;
-      playerX -= curvePull;
-
-      // Apply smoothed steer velocity to road position
-      playerX += (steerVelocity * speedRatio) * dt;
-      playerX = Math.max(-2.2, Math.min(2.2, playerX));
-
-      // Smooth Lean Angle Interpolation (MotoGP lean feel)
-      const targetLean = (steerVelocity / steerAgility) * 0.28 + (currentSegment.curve * speedRatio * 0.08);
-      currentLean += (targetLean - currentLean) * Math.min(1.0, 15 * dt);
-
-      // Subtle camera banking horizon roll
-      const targetBank = (currentSegment.curve * speedRatio * -0.015);
-      cameraBankAngle += (targetBank - cameraBankAngle) * 0.1;
-
-      // 8. Distance & World Progression
-      const stepDistance = speed * 15 * dt;
-      playerPositionZ = (playerPositionZ + stepDistance) % trackLength;
-      distanceCovered += (speed * dt) / 3600 * 1.60934;
-      score += Math.round(speed * 0.15);
-
-      // 9. Parallax Background updates
-      mountainOffset += currentSegment.curve * speedRatio * 35 * dt;
-      cityOffset += currentSegment.curve * speedRatio * 75 * dt;
-
-      // 10. Sound pitch update
-      sound.updateEngine(speedRatio, isBoosting);
-
-      // 11. Checkpoint crossing check
-      const currentSegmentIndex = Math.floor(playerPositionZ / SEGMENT_LENGTH);
-      if (currentSegment.isCheckpoint && Math.abs(currentSegmentIndex - nextCheckpointIndex) < 5) {
-        triggerCheckpoint();
-        if (nextCheckpointIndex === 400) nextCheckpointIndex = 860;
-        else if (nextCheckpointIndex === 860) nextCheckpointIndex = 1300;
-        else nextCheckpointIndex = 400;
+      // 7. Check for Courtyard Tulsi Altar (purify with Gangajal)
+      const distToAltar = Math.hypot(player.x - (18 * TILE_SIZE + 24), player.y - (13 * TILE_SIZE + 24));
+      if (!altarPurified && distToAltar < 55) {
+        if (player.items.gangajal) {
+          altarPurified = true;
+          tasks.altar = true;
+          audio.playVibhutiBlast();
+          // Purifying altar emits sacred blast that stuns Maya if nearby
+          if (Math.hypot(maya.x - (18 * TILE_SIZE + 24), maya.y - (13 * TILE_SIZE + 24)) < 400) {
+            maya.state = 'STUNNED';
+            maya.stunnedTimer = 350;
+            audio.playScreech();
+          }
+          for (let i = 0; i < 35; i++) {
+            addParticle(18 * TILE_SIZE + 24, 13 * TILE_SIZE + 24, (Math.random() - 0.5) * 5, (Math.random() - 0.5) * 5, '#fbbf24', 5, 40);
+          }
+          updateHUD();
+        }
+        return;
       }
 
-      // 12. Update Traffic & Rival Racers
-      updateTrafficAndRivals(dt, racer);
+      // 8. Check for Courtyard Gate (needs Brass Key)
+      if (!gateUnlocked && Math.hypot(player.x - (18 * TILE_SIZE + 24), player.y - (16 * TILE_SIZE + 24)) < 60) {
+        if (player.items.key) {
+          gateUnlocked = true;
+          map[16][17] = T_FLOOR;
+          map[16][18] = T_FLOOR;
+          map[16][19] = T_FLOOR;
+          audio.playTempleBell();
+          for (let i = 0; i < 20; i++) {
+            addParticle(18 * TILE_SIZE + 24, 16 * TILE_SIZE + 24, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#fbbf24', 4, 30);
+          }
+        }
+        return;
+      }
 
-      // 13. Update HUD
-      updateHUD();
+      // 9. Check for Exit Door (Mahadwar)
+      const exitDist = Math.hypot(player.x - (18 * TILE_SIZE + 24), player.y - (1 * TILE_SIZE + 20));
+      if (exitDist < 65) {
+        if (player.items.key && player.items.ash && player.items.bell) {
+          tasks.escape = true;
+          triggerVictory();
+        }
+      }
     }
 
-    // Update Traffic Vehicles and AI Rivals
-    function updateTrafficAndRivals(dt, racer) {
-      // 1. Update Standard Traffic
-      traffic.forEach(vehicle => {
-        const vehicleDist = vehicle.speed * 15 * dt;
-        vehicle.z = (vehicle.z + vehicleDist) % trackLength;
+    function useHolyVibhuti() {
+      if (gameState !== 'PLAYING') return;
+      if (!player.items.ash || !player.hasVibhutiCharge) return;
 
-        let relZ = vehicle.z - playerPositionZ;
-        if (relZ < -trackLength / 2) relZ += trackLength;
-        if (relZ > trackLength / 2) relZ -= trackLength;
+      // Cast holy vibhuti blast around player!
+      audio.playVibhutiBlast();
+      player.hasVibhutiCharge = false;
+      updateHUD();
 
-        if (relZ > -30 && relZ < 100) {
-          const latDist = Math.abs(playerX - vehicle.x);
+      // Blast divine smoke particles
+      for (let i = 0; i < 45; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = 2 + Math.random() * 5;
+        addParticle(player.x, player.y, Math.cos(ang) * spd, Math.sin(ang) * spd, '#ffffff', 5, 40);
+      }
 
-          if (latDist < 0.24 && relZ > -10 && relZ < 80) {
-            triggerCrash();
-          } else if (latDist >= 0.24 && latDist < 0.48 && !vehicle.nearMissed && speed > 80) {
-            vehicle.nearMissed = true;
-            triggerNearMiss();
-          }
+      // Stuns Maya (The Pisachini) if within 260px
+      if (Math.hypot(player.x - maya.x, player.y - maya.y) < 260) {
+        maya.state = 'STUNNED';
+        maya.stunnedTimer = 300;
+        audio.playScreech();
+      }
 
-          // Slipstream drafting bonus (Inferno gets +40% suction)
-          if (latDist < 0.18 && relZ > 10 && relZ < 100) {
-            score += (racer.id === 'inferno' ? 3 : 2);
-            if (speed < racer.topSpeedMod + 16) {
-              speed += (racer.id === 'inferno' ? 18 : 12) * dt;
+      // Also briefly blinds/stuns The Hunter if within 220px
+      if (Math.hypot(player.x - hunter.x, player.y - hunter.y) < 220) {
+        hunter.state = 'INVESTIGATING';
+        hunter.investigateTimer = 180;
+        hunter.shoutText = 'मेरी आँखें!';
+      }
+
+      // Recharges holy ash slowly after 15 seconds
+      setTimeout(() => {
+        if (player.items.ash && gameState === 'PLAYING') {
+          player.hasVibhutiCharge = true;
+          updateHUD();
+        }
+      }, 15000);
+    }
+
+    function triggerGameOver(cause = 'Maya') {
+      gameState = 'GAMEOVER';
+      horrorFlash.classList.add('active');
+      audio.playScreech();
+      renderJumpscarePortrait(cause);
+
+      setTimeout(() => {
+        horrorFlash.classList.remove('active');
+        const mins = Math.floor(gameTime / 60);
+        const secs = Math.floor(gameTime % 60).toString().padStart(2, '0');
+        const relicCount = (player.items.key ? 1 : 0) + (player.items.ash ? 1 : 0) + (player.items.bell ? 1 : 0);
+        const killer = cause === 'Hunter' ? 'The Shikari (Hunter) caught you in his hunting path.' : 'Maya (The Pisachini) tore through the shadows.';
+        deathStats.innerHTML = `${killer}<br>Relics Secured: ${relicCount}/3 · Diyas Gathered: ${diyasCollected} · Survived: ${mins}:${secs}`;
+        gameoverScreen.classList.remove('hidden');
+      }, 250);
+    }
+
+    function triggerVictory() {
+      gameState = 'WON';
+      audio.playTempleBell();
+      const mins = Math.floor(gameTime / 60);
+      const secs = Math.floor(gameTime % 60).toString().padStart(2, '0');
+      winStats.innerHTML = `You rang the Sacred Ghanti at the Mahadwar, cleansed the haveli, and escaped both Maya and the Hunter!<br>Time Taken: ${mins}:${secs} · Diyas Gathered: ${diyasCollected} · True Escape Master`;
+      winScreen.classList.remove('hidden');
+    }
+
+    // --- COLLISION DETECTION ---
+    function isTileSolid(col, row) {
+      if (col < 0 || col >= COLS || row < 0 || row >= ROWS) return true;
+      const t = map[row][col];
+      return t === T_WALL || t === T_PILLAR || t === T_GATE || t === T_CHAINED_DOOR || t === T_ALTAR;
+    }
+
+    function checkCircleWallCollision(x, y, radius) {
+      const minCol = Math.floor((x - radius) / TILE_SIZE);
+      const maxCol = Math.floor((x + radius) / TILE_SIZE);
+      const minRow = Math.floor((y - radius) / TILE_SIZE);
+      const maxRow = Math.floor((y + radius) / TILE_SIZE);
+
+      for (let r = minRow; r <= maxRow; r++) {
+        for (let c = minCol; c <= maxCol; c++) {
+          if (isTileSolid(c, r)) {
+            // Find closest point on tile AABB
+            const tileLeft = c * TILE_SIZE;
+            const tileTop = r * TILE_SIZE;
+            const closestX = Math.max(tileLeft, Math.min(x, tileLeft + TILE_SIZE));
+            const closestY = Math.max(tileTop, Math.min(y, tileTop + TILE_SIZE));
+            const distX = x - closestX;
+            const distY = y - closestY;
+            if (distX * distX + distY * distY < radius * radius) {
+              return true;
             }
           }
-        } else if (relZ > 200 || relZ < -200) {
-          vehicle.nearMissed = false;
         }
-      });
-
-      // 2. Update AI Rival Racers
-      let aheadRivalsCount = 0;
-
-      rivals.forEach(rival => {
-        // AI speed and reactive weaving
-        const rivalDist = rival.speed * 15 * dt;
-        rival.z = (rival.z + rivalDist) % trackLength;
-
-        // Curve adaptation
-        const rivalSeg = findSegment(rival.z);
-        rival.targetX = rival.x - (rivalSeg.curve * 0.05);
-        rival.targetX = Math.max(-0.65, Math.min(0.65, rival.targetX));
-        rival.x += (rival.targetX - rival.x) * 0.05;
-
-        // Check race position relative to player
-        let relZ = rival.z - playerPositionZ;
-        if (relZ < -trackLength / 2) relZ += trackLength;
-        if (relZ > trackLength / 2) relZ -= trackLength;
-
-        if (relZ > 0) {
-          aheadRivalsCount++;
-        }
-
-        // Overtaking trigger: when player passes rival from behind!
-        if (relZ < -10 && relZ > -60 && !rival.overtaken && speed > rival.speed) {
-          rival.overtaken = true;
-          triggerOvertake(rival.name);
-        } else if (relZ > 150) {
-          rival.overtaken = false; // Reset if rival retakes the lead!
-        }
-
-        // Collision with rival bike
-        if (relZ > -25 && relZ < 80) {
-          const latDist = Math.abs(playerX - rival.x);
-          if (latDist < 0.22 && relZ > -10 && relZ < 65) {
-            triggerCrash();
-          }
-        }
-      });
-
-      // Update player position (1st, 2nd, 3rd, 4th)
-      currentRacePosition = aheadRivalsCount + 1;
+      }
+      return false;
     }
 
-    // --- RENDER PIPELINE ---
-    function render() {
-      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    // Line of sight check between two points (Raymarching tiles)
+    function hasLineOfSight(x1, y1, x2, y2) {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const dist = Math.hypot(dx, dy);
+      const steps = Math.ceil(dist / 14);
+      for (let i = 1; i < steps; i++) {
+        const px = x1 + (dx / steps) * i;
+        const py = y1 + (dy / steps) * i;
+        const c = Math.floor(px / TILE_SIZE);
+        const r = Math.floor(py / TILE_SIZE);
+        if (isTileSolid(c, r)) return false;
+      }
+      return true;
+    }
 
-      ctx.save();
-      if (screenShake > 0.5) {
-        const sx = (Math.random() - 0.5) * screenShake;
-        const sy = (Math.random() - 0.5) * screenShake;
-        ctx.translate(sx, sy);
+    // --- GAME LOOP & UPDATES ---
+    function update() {
+      if (gameState !== 'PLAYING') return;
+
+      gameTime += 1 / 60;
+
+      // 1. Drain Player Lantern Oil
+      player.oil = Math.max(0, player.oil - 0.05); // ~33 seconds per 100%, extended by collecting diyas
+      updateHUD();
+
+      // 2. Player Movement
+      let moveX = 0;
+      let moveY = 0;
+      if (!player.hidden && !player.isTrapped) {
+        if (keys['w'] || keys['arrowup']) moveY -= 1;
+        if (keys['s'] || keys['arrowdown']) moveY += 1;
+        if (keys['a'] || keys['arrowleft']) moveX -= 1;
+        if (keys['d'] || keys['arrowright']) moveX += 1;
       }
 
-      const baseSegment = findSegment(playerPositionZ);
-      const basePercent = (playerPositionZ % SEGMENT_LENGTH) / SEGMENT_LENGTH;
+      player.isMoving = moveX !== 0 || moveY !== 0;
 
-      // 1. Draw Parallax Background
-      drawBackground(baseSegment.curve);
+      if (player.isMoving) {
+        const len = Math.hypot(moveX, moveY);
+        moveX = (moveX / len) * player.speed;
+        moveY = (moveY / len) * player.speed;
+        player.angle = Math.atan2(moveY, moveX);
+        player.animFrame += 0.2;
 
-      // 2. Project Road Segments from Horizon to Player
-      let maxY = CANVAS_HEIGHT;
-      let x = 0;
-      let dx = -(baseSegment.curve * basePercent);
-
-      for (let n = 0; n < DRAW_DISTANCE; n++) {
-        const segment = segments[(baseSegment.index + n) % totalSegments];
-        segment.looped = segment.index < baseSegment.index;
-        const cameraZ = playerPositionZ - (segment.looped ? trackLength : 0);
-
-        project(segment.p1, playerX * ROAD_WIDTH - x, CAMERA_HEIGHT, cameraZ, CAMERA_DEPTH, CANVAS_WIDTH, CANVAS_HEIGHT, ROAD_WIDTH);
-        project(segment.p2, playerX * ROAD_WIDTH - x - dx, CAMERA_HEIGHT, cameraZ, CAMERA_DEPTH, CANVAS_WIDTH, CANVAS_HEIGHT, ROAD_WIDTH);
-
-        x += dx;
-        dx += segment.curve;
-
-        if (segment.p1.camera.z <= CAMERA_DEPTH || segment.p2.screen.y >= maxY) {
-          continue;
+        // Try movement with horizontal and vertical axis sliding
+        if (!checkCircleWallCollision(player.x + moveX, player.y, player.radius)) {
+          player.x += moveX;
+        }
+        if (!checkCircleWallCollision(player.x, player.y + moveY, player.radius)) {
+          player.y += moveY;
         }
 
-        renderSegment(segment);
-        maxY = segment.p1.screen.y;
-      }
+        // Check stepping on Fragile Vases (Surahi)
+        fragileVases.forEach(vase => {
+          if (!vase.shattered && Math.hypot(player.x - vase.x, player.y - vase.y) < 22) {
+            vase.shattered = true;
+            audio.playVaseCrash();
+            triggerNoiseAlert(vase.x, vase.y, 450);
+            for (let i = 0; i < 16; i++) {
+              addParticle(vase.x, vase.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#b45309', 3, 30);
+            }
+          }
+        });
 
-      // 3. Draw Roadside Sprites, Traffic & Rival Racers (Back to Front)
-      const allEntities = [...traffic, ...rivals];
-
-      for (let n = DRAW_DISTANCE - 1; n > 0; n--) {
-        const segment = segments[(baseSegment.index + n) % totalSegments];
-
-        // Roadside Sprites
-        for (let s = 0; s < segment.sprites.length; s++) {
-          const sprite = segment.sprites[s];
-          const spriteScale = segment.p1.screen.scale;
-          const spriteX = segment.p1.screen.x + (spriteScale * sprite.offset * ROAD_WIDTH * CANVAS_WIDTH / 2);
-          const spriteY = segment.p1.screen.y;
-          drawRoadsideSprite(sprite.type, spriteX, spriteY, spriteScale);
-        }
-
-        // Cars and Rival Bikes on this segment
-        allEntities.forEach(entity => {
-          const vSegIndex = Math.floor(entity.z / SEGMENT_LENGTH) % totalSegments;
-          if (vSegIndex === segment.index) {
-            const vScale = segment.p1.screen.scale;
-            const vx = segment.p1.screen.x + (vScale * entity.x * ROAD_WIDTH * CANVAS_WIDTH / 2);
-            const vy = segment.p1.screen.y;
-            drawEntity(entity, vx, vy, vScale);
+        // Check stepping into Hunter's Bone Bear Traps (Phanda)
+        bearTraps.forEach(trap => {
+          if (trap.active && !player.hidden && Math.hypot(player.x - trap.x, player.y - trap.y) < 22) {
+            trap.active = false;
+            player.isTrapped = true;
+            player.trapStruggle = 3;
+            trappedBanner.style.display = 'block';
+            trapCountSpan.textContent = '3';
+            audio.playTrapSnap();
+            triggerNoiseAlert(trap.x, trap.y, 500);
+            tasks.trapsEvaded = false;
           }
         });
       }
 
-      // 4. Draw Player Superbike
-      drawPlayerBike();
+      // 3. Check Hanging Bells (Ghanti) Collision & Noise
+      hangingBells.forEach(bell => {
+        if (bell.rungCooldown > 0) bell.rungCooldown--;
+        bell.swing *= 0.95;
+
+        const dist = Math.hypot(player.x - bell.x, player.y - bell.y);
+        if (dist < 26 && bell.rungCooldown === 0 && player.isMoving) {
+          bell.swing = 1.0;
+          bell.rungCooldown = 90; // cooldown 1.5s
+          audio.playTempleBell();
+          triggerNoiseAlert(bell.x, bell.y, 450);
+
+          // Sound wave ripple particles
+          for (let i = 0; i < 15; i++) {
+            addParticle(bell.x, bell.y, (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3, '#f59e0b', 3, 25);
+          }
+        }
+      });
+
+      // 4. Collect Diyas
+      diyas.forEach(diya => {
+        if (!diya.collected) {
+          const dist = Math.hypot(player.x - diya.x, player.y - diya.y);
+          if (dist < 28) {
+            diya.collected = true;
+            diyasCollected++;
+            player.oil = Math.min(100, player.oil + 35);
+            audio.playDiyaChime();
+            for (let i = 0; i < 20; i++) {
+              addParticle(diya.x, diya.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#fbbf24', 4, 30);
+            }
+            updateHUD();
+          }
+        }
+      });
+
+      // 5. Collect Quest Items
+      if (!questItems.key.collected && Math.hypot(player.x - questItems.key.x, player.y - questItems.key.y) < 28) {
+        questItems.key.collected = true;
+        player.items.key = true;
+        audio.playTempleBell();
+        for (let i = 0; i < 25; i++) {
+          addParticle(questItems.key.x, questItems.key.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#eab308', 4, 35);
+        }
+        updateHUD();
+      }
+
+      if (!questItems.ash.collected && Math.hypot(player.x - questItems.ash.x, player.y - questItems.ash.y) < 28) {
+        questItems.ash.collected = true;
+        player.items.ash = true;
+        player.hasVibhutiCharge = true;
+        audio.playVibhutiBlast();
+        for (let i = 0; i < 25; i++) {
+          addParticle(questItems.ash.x, questItems.ash.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#e2e8f0', 4, 35);
+        }
+        updateHUD();
+      }
+
+      if (!questItems.bell.collected && Math.hypot(player.x - questItems.bell.x, player.y - questItems.bell.y) < 28) {
+        questItems.bell.collected = true;
+        player.items.bell = true;
+        audio.playTempleBell();
+        for (let i = 0; i < 25; i++) {
+          addParticle(questItems.bell.x, questItems.bell.y, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, '#fbbf24', 4, 35);
+        }
+        updateHUD();
+      }
+
+      // Check Relics task
+      tasks.relics = player.items.key && player.items.ash && player.items.bell;
+
+      // 6. Update AI: Maya (The Pisachini) & The Hunter (Shikari)
+      updateMaya();
+      updateHunter();
+
+      // 7. Update Particles & Noise Alert Rings
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+
+      for (let i = alertPings.length - 1; i >= 0; i--) {
+        const a = alertPings[i];
+        a.currentRadius += (a.maxRadius - a.currentRadius) * 0.08;
+        a.life--;
+        if (a.life <= 0) alertPings.splice(i, 1);
+      }
+
+      // 8. Update Camera: Follow Player or Scrying Mirror
+      if (currentCamIndex === 0) {
+        camera.x = Math.max(0, Math.min(WORLD_WIDTH - camera.width, player.x - camera.width / 2));
+        camera.y = Math.max(0, Math.min(WORLD_HEIGHT - camera.height, player.y - camera.height / 2));
+      } else {
+        const cam = haveliCameras[currentCamIndex];
+        camera.x = Math.max(0, Math.min(WORLD_WIDTH - camera.width, cam.x - camera.width / 2));
+        camera.y = Math.max(0, Math.min(WORLD_HEIGHT - camera.height, cam.y - camera.height / 2));
+      }
+
+      // 9. Check Interaction Prompts
+      updatePrompt();
+    }
+
+    function updateMaya() {
+      maya.floatOffset = Math.sin(gameTime * 3) * 4;
+      const distToPlayer = Math.hypot(player.x - maya.x, player.y - maya.y);
+
+      // Audio cues: Play ghungroo sound & accelerated heartbeat when nearby
+      if (distToPlayer < 400) {
+        const proximity = 1 - (distToPlayer / 400);
+        if (gameTime - maya.lastGhungrooTime > Math.max(0.6, 2.2 - proximity * 1.6)) {
+          audio.playGhungroo(proximity);
+          audio.playHeartbeat(proximity);
+          maya.lastGhungrooTime = gameTime;
+        }
+      }
+
+      // Stunned State
+      if (maya.state === 'STUNNED') {
+        maya.stunnedTimer--;
+        if (maya.stunnedTimer <= 0) {
+          maya.state = 'PATROL';
+        }
+        return;
+      }
+
+      // Maya Teleportation when unobserved
+      maya.teleportTimer++;
+      if (maya.teleportTimer > 700 && maya.state === 'PATROL' && distToPlayer > 300) {
+        maya.teleportTimer = 0;
+        // Teleport to a room closer to player
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 240 + Math.random() * 120;
+        const tx = player.x + Math.cos(angle) * dist;
+        const ty = player.y + Math.sin(angle) * dist;
+        if (!checkCircleWallCollision(tx, ty, maya.radius)) {
+          maya.x = tx;
+          maya.y = ty;
+          for (let i = 0; i < 20; i++) {
+            addParticle(tx, ty, (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3, '#e2e8f0', 3, 30);
+          }
+        }
+      }
+
+      // Vision check: Can Maya see player?
+      let canSeePlayer = false;
+      if (!player.hidden) {
+        const visionRange = maya.state === 'CHASE' ? 320 : 220;
+        if (distToPlayer < visionRange) {
+          if (hasLineOfSight(maya.x, maya.y, player.x, player.y)) {
+            canSeePlayer = true;
+          }
+        }
+      }
+
+      // State Transitions
+      if (canSeePlayer) {
+        if (maya.state !== 'CHASE') {
+          audio.playScreech();
+          maya.state = 'CHASE';
+        }
+        maya.targetX = player.x;
+        maya.targetY = player.y;
+        maya.speed = maya.chaseSpeed;
+      } else if (maya.state === 'CHASE') {
+        maya.state = 'INVESTIGATE';
+        maya.investigateTimer = 180;
+        maya.speed = maya.baseSpeed * 1.3;
+      }
+
+      // Move Maya
+      if (maya.state === 'CHASE' || maya.state === 'INVESTIGATE') {
+        moveEntityTowards(maya, maya.targetX, maya.targetY);
+        if (maya.state === 'INVESTIGATE') {
+          maya.investigateTimer--;
+          if (maya.investigateTimer <= 0 || Math.hypot(maya.x - maya.targetX, maya.y - maya.targetY) < 20) {
+            maya.state = 'PATROL';
+          }
+        }
+      } else {
+        // Patrol
+        maya.speed = maya.baseSpeed;
+        maya.patrolTimer--;
+        if (maya.patrolTimer <= 0 || Math.hypot(maya.x - maya.targetX, maya.y - maya.targetY) < 25) {
+          maya.patrolTimer = 140 + Math.floor(Math.random() * 180);
+          const rx = (2 + Math.floor(Math.random() * (COLS - 4))) * TILE_SIZE + 24;
+          const ry = (2 + Math.floor(Math.random() * (ROWS - 4))) * TILE_SIZE + 24;
+          if (!checkCircleWallCollision(rx, ry, maya.radius)) {
+            maya.targetX = rx;
+            maya.targetY = ry;
+          }
+        }
+        moveEntityTowards(maya, maya.targetX, maya.targetY);
+      }
+
+      // Collision with player -> Jumpscare game over!
+      if (!player.hidden && distToPlayer < (player.radius + maya.radius - 4)) {
+        triggerGameOver('Maya');
+      }
+    }
+
+    function updateHunter() {
+      // Hunter sweeps his torch cone back and forth
+      hunter.torchAngle = hunter.angle + Math.sin(gameTime * 3.5) * 0.45;
+      const distToPlayer = Math.hypot(player.x - hunter.x, player.y - hunter.y);
+
+      if (hunter.shoutTimer > 0) hunter.shoutTimer--;
+
+      // Lays down Bone Bear-Traps periodically
+      hunter.trapPlaceCooldown--;
+      if (hunter.trapPlaceCooldown <= 0 && hunter.state === 'HUNTING') {
+        hunter.trapPlaceCooldown = 600; // every 10 seconds
+        if (bearTraps.length < 7) {
+          bearTraps.push({ id: Date.now(), x: hunter.x, y: hunter.y, active: true });
+        }
+      }
+
+      // Torch searchlight vision check:
+      let seesPlayer = false;
+      if (!player.hidden && distToPlayer < 270) {
+        const angleToPlayer = Math.atan2(player.y - hunter.y, player.x - hunter.x);
+        let diff = Math.abs(angleToPlayer - hunter.torchAngle);
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        if (Math.abs(diff) < 0.55 && hasLineOfSight(hunter.x, hunter.y, player.x, player.y)) {
+          seesPlayer = true;
+        }
+      }
+
+      if (seesPlayer) {
+        if (hunter.state !== 'PURSUING') {
+          hunter.state = 'PURSUING';
+          hunter.shoutTimer = 90;
+          hunter.shoutText = 'शिकार मिल गया!';
+          audio.playHunterCall();
+        }
+        hunter.targetX = player.x;
+        hunter.targetY = player.y;
+        hunter.speed = hunter.chaseSpeed;
+      } else if (hunter.state === 'PURSUING') {
+        hunter.state = 'INVESTIGATING';
+        hunter.investigateTimer = 180;
+        hunter.speed = hunter.baseSpeed * 1.2;
+      }
+
+      // Move Hunter
+      if (hunter.state === 'PURSUING' || hunter.state === 'INVESTIGATING') {
+        moveEntityTowards(hunter, hunter.targetX, hunter.targetY);
+        if (hunter.state === 'INVESTIGATING') {
+          hunter.investigateTimer--;
+          if (hunter.investigateTimer <= 0 || Math.hypot(hunter.x - hunter.targetX, hunter.y - hunter.targetY) < 20) {
+            hunter.state = 'HUNTING';
+          }
+        }
+      } else {
+        // Routine Hunting Patrol
+        hunter.speed = hunter.baseSpeed;
+        hunter.patrolTimer--;
+        if (hunter.patrolTimer <= 0 || Math.hypot(hunter.x - hunter.targetX, hunter.y - hunter.targetY) < 25) {
+          hunter.patrolTimer = 160 + Math.floor(Math.random() * 200);
+          const rx = (3 + Math.floor(Math.random() * (COLS - 6))) * TILE_SIZE + 24;
+          const ry = (3 + Math.floor(Math.random() * (ROWS - 6))) * TILE_SIZE + 24;
+          if (!checkCircleWallCollision(rx, ry, hunter.radius)) {
+            hunter.targetX = rx;
+            hunter.targetY = ry;
+          }
+        }
+        moveEntityTowards(hunter, hunter.targetX, hunter.targetY);
+      }
+
+      // Collision with player -> Hunter attacks!
+      if (!player.hidden && distToPlayer < (player.radius + hunter.radius - 4)) {
+        triggerGameOver('Hunter');
+      }
+    }
+
+    function moveEntityTowards(entity, tx, ty) {
+      const dx = tx - entity.x;
+      const dy = ty - entity.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 4) return;
+
+      const vx = (dx / dist) * entity.speed;
+      const vy = (dy / dist) * entity.speed;
+      entity.angle = Math.atan2(dy, dx);
+
+      // Slide movement around obstacles
+      if (!checkCircleWallCollision(entity.x + vx, entity.y, entity.radius)) {
+        entity.x += vx;
+      }
+      if (!checkCircleWallCollision(entity.x, entity.y + vy, entity.radius)) {
+        entity.y += vy;
+      }
+    }
+
+    // --- PROMPT BUBBLE UPDATE ---
+    function updatePrompt() {
+      let promptText = '';
+
+      if (player.hidden) {
+        promptText = '[E] or [SPACE] TO EXIT HIDING';
+      } else {
+        // Check hiding spot proximity
+        for (const spot of hidingSpots) {
+          if (Math.hypot(player.x - spot.x, player.y - spot.y) < 46) {
+            promptText = `[E] or [SPACE] HIDE IN ${spot.name.toUpperCase()}`;
+            break;
+          }
+        }
+
+        // Check Courtyard Gate
+        if (!promptText && !gateUnlocked && Math.hypot(player.x - (18 * TILE_SIZE + 24), player.y - (16 * TILE_SIZE + 24)) < 60) {
+          promptText = player.items.key ? '[E] UNLOCK COURTYARD GATE WITH CHAVI' : 'LOCKED GATE: NEEDS BRASS KEY (CHAVI)';
+        }
+
+        // Check Exit Door
+        if (!promptText && Math.hypot(player.x - (18 * TILE_SIZE + 24), player.y - (1 * TILE_SIZE + 20)) < 65) {
+          if (player.items.key && player.items.ash && player.items.bell) {
+            promptText = '[E] RING SACRED GHANTI & ESCAPE HAVELI!';
+          } else {
+            promptText = 'MAHADWAR SEALED: FIND ALL 3 RELICS';
+          }
+        }
+      }
+
+      if (promptText) {
+        promptBubble.textContent = promptText;
+        promptBubble.classList.add('show');
+      } else {
+        promptBubble.classList.remove('show');
+      }
+    }
+
+    // --- HUD UPDATES ---
+    function updateHUD() {
+      // Diya oil percentage
+      const pct = Math.round(player.oil);
+      diyaPercent.textContent = `${pct}%`;
+      diyaMeterFill.style.width = `${pct}%`;
+      if (pct < 20) {
+        diyaMeterFill.classList.add('critical');
+      } else {
+        diyaMeterFill.classList.remove('critical');
+      }
+
+      // Relic Badges
+      if (player.items.key) badgeKey.classList.add('collected');
+      else badgeKey.classList.remove('collected');
+
+      if (player.items.ash) badgeAsh.classList.add('collected');
+      else badgeAsh.classList.remove('collected');
+
+      if (player.items.bell) badgeBell.classList.add('collected');
+      else badgeBell.classList.remove('collected');
+
+      // Update Granny Task Checklist Checkboxes
+      function updateTaskDOM(id, chkId, isDone) {
+        const el = document.getElementById(id);
+        const chk = document.getElementById(chkId);
+        if (!el || !chk) return;
+        if (isDone) {
+          el.classList.add('done');
+          chk.textContent = '✓';
+        } else {
+          el.classList.remove('done');
+          chk.textContent = '';
+        }
+      }
+      updateTaskDOM('task-pliers', 'chk-pliers', player.items.pliers);
+      updateTaskDOM('task-chains', 'chk-chains', chainsCut);
+      updateTaskDOM('task-relics', 'chk-relics', tasks.relics);
+      updateTaskDOM('task-altar', 'chk-altar', altarPurified);
+      updateTaskDOM('task-traps', 'chk-traps', tasks.trapsEvaded);
+      updateTaskDOM('task-escape', 'chk-escape', tasks.escape);
+
+      // Status Pill
+      statusPill.className = 'status-pill';
+      if (player.isTrapped) {
+        statusPill.textContent = 'TRAPPED!';
+        statusPill.classList.add('spotted-state');
+      } else if (player.hidden) {
+        statusPill.textContent = 'Hidden (Safe)';
+        statusPill.classList.add('hidden-state');
+      } else if (maya.state === 'CHASE' || hunter.state === 'PURSUING') {
+        statusPill.textContent = 'HUNTED / CHASE!';
+        statusPill.classList.add('spotted-state');
+      } else if (maya.state === 'INVESTIGATE' || hunter.state === 'INVESTIGATING') {
+        statusPill.textContent = 'Alert / Noise';
+        statusPill.classList.add('noise-state');
+      } else {
+        statusPill.textContent = 'Normal';
+      }
+    }
+
+    // --- RENDERING PIPELINE ---
+    function render() {
+      // 1. Clear Screen
+      ctx.fillStyle = '#060408';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      // Apply Camera Translation
+      ctx.translate(-camera.x, -camera.y);
+
+      // 2. Draw Haveli Map (Floors, Walls, Doors)
+      renderHaveliTiles();
+
+      // 3. Draw Hanging Bells & Hiding Props
+      renderProps();
+
+      // 4. Draw Diyas & Quest Items
+      renderItems();
+
+      // 5. Draw Particles
+      renderParticles();
+
+      // 6. Draw Player (if not hidden)
+      if (!player.hidden) {
+        renderPlayer();
+      }
+
+      // 7. Draw Maya (The Pisachini)
+      renderMaya();
+
+      // 8. Draw The Hunter (Shikari)
+      renderHunter();
+
+      ctx.restore();
+
+      // 9. Apply Dynamic Darkness & Field-of-View Fog of War
+      renderDarknessMask();
+
+      // 10. Draw Scrying Mirror CCTV Overlay (if in camera mode)
+      if (currentCamIndex > 0) {
+        renderScryingCCTVOverlay();
+      }
+
+      // 11. Draw Haveli Blueprint Minimap HUD
+      renderMinimapHUD();
+    }
+
+    // Render Haveli Architecture
+    function renderHaveliTiles() {
+      const startCol = Math.floor(camera.x / TILE_SIZE);
+      const endCol = Math.min(COLS - 1, Math.ceil((camera.x + camera.width) / TILE_SIZE));
+      const startRow = Math.floor(camera.y / TILE_SIZE);
+      const endRow = Math.min(ROWS - 1, Math.ceil((camera.y + camera.height) / TILE_SIZE));
+
+      for (let r = startRow; r <= endRow; r++) {
+        for (let c = startCol; c <= endCol; c++) {
+          const type = map[r][c];
+          const px = c * TILE_SIZE;
+          const py = r * TILE_SIZE;
+
+          if (type === T_WALL) {
+            // Ancient Carved Haveli Sandstone Wall
+            ctx.fillStyle = '#1c151b';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            // Stone bevel & cracks
+            ctx.strokeStyle = '#2d222b';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(px + 1, py + 1, TILE_SIZE - 2, TILE_SIZE - 2);
+            // Carved arch motif inside wall
+            ctx.fillStyle = '#140f13';
+            ctx.beginPath();
+            ctx.arc(px + 24, py + 24, 12, Math.PI, 0);
+            ctx.lineTo(px + 36, py + 40);
+            ctx.lineTo(px + 12, py + 40);
+            ctx.closePath();
+            ctx.fill();
+          } else if (type === T_PILLAR) {
+            // Ornate stone pillar
+            ctx.fillStyle = '#261b17';
+            ctx.fillRect(px + 6, py + 6, TILE_SIZE - 12, TILE_SIZE - 12);
+            ctx.strokeStyle = '#4a3627';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(px + 6, py + 6, TILE_SIZE - 12, TILE_SIZE - 12);
+            // Brass ring on pillar
+            ctx.fillStyle = '#b45309';
+            ctx.beginPath();
+            ctx.arc(px + 24, py + 24, 8, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (type === T_CHAINED_DOOR) {
+            // Treasury Door with heavy crisscrossing iron chains
+            ctx.fillStyle = '#26150d';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            ctx.strokeStyle = '#451a03';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+
+            // Heavy diagonal iron chains
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(px + 4, py + 4);
+            ctx.lineTo(px + TILE_SIZE - 4, py + TILE_SIZE - 4);
+            ctx.moveTo(px + TILE_SIZE - 4, py + 4);
+            ctx.lineTo(px + 4, py + TILE_SIZE - 4);
+            ctx.stroke();
+
+            // Big padlock in center
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillRect(px + 20, py + 20, 8, 8);
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(px + 24, py + 24, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+          } else if (type === T_ALTAR) {
+            // Sacred Tulsi Altar in Courtyard
+            ctx.fillStyle = '#3b2518';
+            ctx.fillRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+            ctx.strokeStyle = altarPurified ? '#fbbf24' : '#6b4629';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+
+            // Tulsi holy plant
+            ctx.fillStyle = altarPurified ? '#4ade80' : '#15803d';
+            ctx.beginPath();
+            ctx.arc(px + 24, py + 20, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (altarPurified) {
+              // Divine golden holy aura
+              ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+              ctx.beginPath();
+              ctx.arc(px + 24, py + 24, 16 + Math.sin(gameTime * 6) * 3, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+
+          } else if (type === T_GATE) {
+            // Locked Courtyard Gate with iron bars and brass lock
+            ctx.fillStyle = '#0f0a0d';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            // Iron bars
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 3;
+            for (let b = 8; b < TILE_SIZE; b += 10) {
+              ctx.beginPath();
+              ctx.moveTo(px + b, py);
+              ctx.lineTo(px + b, py + TILE_SIZE);
+              ctx.stroke();
+            }
+            // Brass lock in center
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(px + 24, py + 24, 7, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (type === T_EXIT) {
+            // Grand Escape Mahadwar
+            ctx.fillStyle = '#382212';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            // Auspicious glowing gateway symbols
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = '16px serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('🔱', px + 24, py + 30);
+          } else if (type === T_CARPET) {
+            // Ornate Mughal/Rajput floral red carpet
+            ctx.fillStyle = '#3b1218';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            ctx.strokeStyle = '#611b24';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+            // Gold border fringe
+            ctx.strokeStyle = '#854d0e';
+            ctx.strokeRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+          } else {
+            // Standard Ancient Stone Tile Floor
+            ctx.fillStyle = '#100c14';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            ctx.strokeStyle = '#18121d';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(px, py, TILE_SIZE, TILE_SIZE);
+
+            // Occasional floral rangoli / mandala engraving on select tiles
+            if ((r + c) % 8 === 0) {
+              ctx.strokeStyle = 'rgba(217, 119, 6, 0.12)';
+              ctx.beginPath();
+              ctx.arc(px + 24, py + 24, 14, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+    }
+
+    // Render Hiding Spots & Hanging Bells
+    function renderProps() {
+      // 1. Hiding Spots
+      hidingSpots.forEach(spot => {
+        ctx.save();
+        ctx.translate(spot.x, spot.y);
+
+        if (spot.type === 'WARDROBE') {
+          // Carved Sheesham Almirah (Wardrobe)
+          ctx.fillStyle = '#382013';
+          ctx.fillRect(-spot.w / 2, -spot.h / 2, spot.w, spot.h);
+          ctx.strokeStyle = '#63391f';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(-spot.w / 2, -spot.h / 2, spot.w, spot.h);
+          // Double doors divider & brass handles
+          ctx.beginPath();
+          ctx.moveTo(0, -spot.h / 2);
+          ctx.lineTo(0, spot.h / 2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.arc(-4, 0, 2.5, 0, Math.PI * 2);
+          ctx.arc(4, 0, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+
+        } else if (spot.type === 'URN') {
+          // Giant Hammered Brass Urn (Matka / Ganga-Jali)
+          ctx.fillStyle = '#854d0e';
+          ctx.beginPath();
+          ctx.arc(0, 0, spot.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          // Urn mouth rim
+          ctx.fillStyle = '#b45309';
+          ctx.beginPath();
+          ctx.arc(0, 0, spot.w / 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#fde68a';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+        } else if (spot.type === 'CURTAIN') {
+          // Deep crimson velvet curtain fold
+          ctx.fillStyle = '#5c101b';
+          ctx.fillRect(-spot.w / 2, -spot.h / 2, spot.w, spot.h);
+          ctx.strokeStyle = '#851a28';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(-spot.w / 2, -spot.h / 2, spot.w, spot.h);
+          // Gold tassels
+          ctx.fillStyle = '#eab308';
+          for (let tx = -spot.w / 2 + 6; tx < spot.w / 2; tx += 8) {
+            ctx.fillRect(tx, spot.h / 2 - 4, 3, 5);
+          }
+        }
+
+        ctx.restore();
+      });
+
+      // 2. Hanging Brass Bells (Ghanti)
+      hangingBells.forEach(bell => {
+        ctx.save();
+        ctx.translate(bell.x, bell.y);
+        ctx.rotate(bell.swing * Math.sin(gameTime * 15) * 0.4);
+
+        // Ceiling chain
+        ctx.strokeStyle = '#78350f';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, -18);
+        ctx.lineTo(0, -6);
+        ctx.stroke();
+
+        // Bell Body
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(0, 0, 8, Math.PI, 0);
+        ctx.lineTo(9, 6);
+        ctx.lineTo(-9, 6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Clapper
+        ctx.fillStyle = '#78350f';
+        ctx.beginPath();
+        ctx.arc(0, 8, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
+
+      // 3. Fragile Ceramic Vases (Surahi) on Stands
+      fragileVases.forEach(vase => {
+        ctx.save();
+        ctx.translate(vase.x, vase.y);
+
+        if (!vase.shattered) {
+          // Wooden pedestal
+          ctx.fillStyle = '#451a03';
+          ctx.fillRect(-8, 6, 16, 4);
+
+          // Terracotta painted vase body
+          ctx.fillStyle = '#b45309';
+          ctx.beginPath();
+          ctx.arc(0, 0, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          // Slim vase neck & rim
+          ctx.fillRect(-3, -10, 6, 6);
+          ctx.strokeRect(-4, -12, 8, 3);
+        } else {
+          // Shattered clay shards
+          ctx.fillStyle = '#92400e';
+          ctx.beginPath();
+          ctx.arc(-5, 2, 2.5, 0, Math.PI * 2);
+          ctx.arc(4, -3, 3, 0, Math.PI * 2);
+          ctx.arc(6, 4, 2, 0, Math.PI * 2);
+          ctx.arc(-2, -5, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      });
+
+      // 4. Hunter's Bone Bear Traps (Phanda)
+      bearTraps.forEach(trap => {
+        ctx.save();
+        ctx.translate(trap.x, trap.y);
+
+        if (trap.active) {
+          // Open jaw trap with sharp bone teeth
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, 11, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Center pressure plate
+          ctx.fillStyle = '#7f1d1d';
+          ctx.beginPath();
+          ctx.arc(0, 0, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Spikes
+          ctx.fillStyle = '#f8fafc';
+          for (let ang = 0; ang < Math.PI * 2; ang += Math.PI / 3) {
+            const sx = Math.cos(ang) * 9;
+            const sy = Math.sin(ang) * 9;
+            ctx.fillRect(sx - 1, sy - 1, 2, 2);
+          }
+        } else {
+          // Snapped closed trap
+          ctx.strokeStyle = '#64748b';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(-9, 0);
+          ctx.lineTo(9, 0);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      });
+    }
+
+    // Render Diyas & Relic Items
+    function renderItems() {
+      // 1. Diyas
+      diyas.forEach(diya => {
+        if (diya.collected) return;
+
+        ctx.save();
+        ctx.translate(diya.x, diya.y);
+
+        // Terracotta diya base
+        ctx.fillStyle = '#9a3412';
+        ctx.beginPath();
+        ctx.ellipse(0, 3, 10, 6, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#c2410c';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Spout tip
+        ctx.beginPath();
+        ctx.moveTo(0, -1);
+        ctx.lineTo(8, -2);
+        ctx.lineTo(0, 5);
+        ctx.fill();
+
+        // Flickering golden flame
+        const flameFlicker = Math.sin(gameTime * 10 + diya.id) * 2;
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.ellipse(4, -3 + flameFlicker * 0.5, 3.5, 6 + flameFlicker, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ea580c';
+        ctx.beginPath();
+        ctx.ellipse(4, -1, 2, 3, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
+
+      // 2. Brass Key (Chavi)
+      if (!questItems.key.collected) {
+        ctx.save();
+        ctx.translate(questItems.key.x, questItems.key.y);
+        const floatY = Math.sin(gameTime * 4) * 3;
+        ctx.translate(0, floatY);
+
+        // Aura glow
+        ctx.fillStyle = 'rgba(234, 179, 8, 0.25)';
+        ctx.beginPath();
+        ctx.arc(0, 0, 16, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Key shape
+        ctx.strokeStyle = '#fef08a';
+        ctx.fillStyle = '#eab308';
+        ctx.lineWidth = 2;
+        // Key head loop
+        ctx.beginPath();
+        ctx.arc(-4, 0, 6, 0, Math.PI * 2);
+        ctx.stroke();
+        // Key shaft
+        ctx.fillRect(-4, -1.5, 16, 3);
+        // Key teeth
+        ctx.fillRect(8, 0, 3, 5);
+        ctx.fillRect(4, 0, 3, 4);
+
+        ctx.restore();
+      }
+
+      // 3. Holy Ash (Vibhuti)
+      if (!questItems.ash.collected) {
+        ctx.save();
+        ctx.translate(questItems.ash.x, questItems.ash.y);
+        const floatY = Math.sin(gameTime * 4 + 1) * 3;
+        ctx.translate(0, floatY);
+
+        // Sacred silver bowl
+        ctx.fillStyle = '#64748b';
+        ctx.beginPath();
+        ctx.ellipse(0, 3, 10, 5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.stroke();
+
+        // Glowing white sacred ash heap
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath();
+        ctx.arc(0, 0, 7, Math.PI, 0);
+        ctx.fill();
+
+        // Sacred smoke wisp
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, -6);
+        ctx.quadraticCurveTo(Math.sin(gameTime * 5) * 5, -14, 0, -20);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // 4. Sacred Bell (Ghanti)
+      if (!questItems.bell.collected) {
+        ctx.save();
+        ctx.translate(questItems.bell.x, questItems.bell.y);
+        const floatY = Math.sin(gameTime * 4 + 2) * 3;
+        ctx.translate(0, floatY);
+
+        // Divine golden glow
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.3)';
+        ctx.beginPath();
+        ctx.arc(0, 0, 18, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Sacred handle finial (Garuda/Trishul top)
+        ctx.strokeStyle = '#fbbf24';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -8);
+        ctx.lineTo(0, -18);
+        ctx.stroke();
+
+        // Bell Body
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(0, -2, 9, Math.PI, 0);
+        ctx.lineTo(10, 6);
+        ctx.lineTo(-10, 6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      // 5. Iron Pliers (Chheni) in Zenana wing
+      if (!puzzleItems.pliers.collected) {
+        ctx.save();
+        ctx.translate(puzzleItems.pliers.x, puzzleItems.pliers.y);
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2.5;
+        // Crossed pliers handles
+        ctx.beginPath();
+        ctx.moveTo(-6, -6); ctx.lineTo(6, 6);
+        ctx.moveTo(6, -6); ctx.lineTo(-6, 6);
+        ctx.stroke();
+        // Plier jaws
+        ctx.fillStyle = '#e2e8f0';
+        ctx.beginPath();
+        ctx.arc(0, 0, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // 6. Sacred Gangajal Flask in Royal Hall
+      if (!puzzleItems.gangajal.collected) {
+        ctx.save();
+        ctx.translate(puzzleItems.gangajal.x, puzzleItems.gangajal.y);
+        // Copper / Silver Kalash Flask
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(0, 2, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        // Flask mouth
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(-3, -6, 6, 3);
+        ctx.restore();
+      }
+    }
+
+    // Render Player Character
+    function renderPlayer() {
+      ctx.save();
+      ctx.translate(player.x, player.y);
+      ctx.rotate(player.angle);
+
+      // Footstep walk animation
+      const walkOffset = player.isMoving ? Math.sin(player.animFrame) * 4 : 0;
+
+      // Dhoti Legs
+      ctx.fillStyle = '#e2d8ce';
+      ctx.beginPath();
+      ctx.ellipse(-5, 6 + walkOffset, 4, 6, 0, 0, Math.PI * 2);
+      ctx.ellipse(-5, -6 - walkOffset, 4, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Kurta Torso
+      ctx.fillStyle = '#b45309';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 10, 12, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#92400e';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Head / Turban
+      ctx.fillStyle = '#c2410c'; // Saffron Pagri/Turban
+      ctx.beginPath();
+      ctx.arc(2, 0, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fde68a';
+      ctx.fillRect(4, -3, 3, 6);
+
+      // Kerosene Lantern (Laltain) in outstretched hand
+      ctx.save();
+      ctx.translate(14, 8);
+      // Brass lantern cage
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(-3, -5, 6, 10);
+      // Glowing glass chimney with flame
+      ctx.fillStyle = player.oil > 0 ? '#fef08a' : '#475569';
+      ctx.fillRect(-2, -3, 4, 6);
+      if (player.oil > 0) {
+        ctx.fillStyle = '#f97316';
+        ctx.fillRect(-1, -1, 2, 3);
+      }
+      ctx.restore();
 
       ctx.restore();
     }
 
-    function renderSegment(segment) {
-      const p1 = segment.p1.screen;
-      const p2 = segment.p2.screen;
-      const c = segment.color;
+    // Render Maya (The Pisachini)
+    function renderMaya() {
+      ctx.save();
+      ctx.translate(maya.x, maya.y + maya.floatOffset);
+      ctx.rotate(maya.angle);
 
-      // Grass
-      ctx.fillStyle = c.grass;
-      ctx.fillRect(0, p2.y, CANVAS_WIDTH, p1.y - p2.y);
+      // Spectral Eerie Mist under her
+      const mistGradient = ctx.createRadialGradient(0, 0, 4, 0, 0, 24);
+      mistGradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
+      mistGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = mistGradient;
+      ctx.beginPath();
+      ctx.arc(0, 0, 24, 0, Math.PI * 2);
+      ctx.fill();
 
-      // Rumble Strips
-      const r1 = p1.w / 6;
-      const r2 = p2.w / 6;
-      drawPolygon(p1.x - p1.w - r1, p1.y, p1.x - p1.w, p1.y, p2.x - p2.w, p2.y, p2.x - p2.w - r2, p2.y, c.rumble);
-      drawPolygon(p1.x + p1.w + r1, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x + p2.w + r2, p2.y, c.rumble);
+      // Flowing Tattered White Saree
+      ctx.fillStyle = '#f8fafc';
+      ctx.beginPath();
+      ctx.moveTo(-16, -10);
+      ctx.lineTo(10, -8);
+      ctx.lineTo(8, 8);
+      ctx.lineTo(-16, 10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
 
-      // Road Surface
-      drawPolygon(p1.x - p1.w, p1.y, p1.x + p1.w, p1.y, p2.x + p2.w, p2.y, p2.x - p2.w, p2.y, c.road);
+      // Blood stains on white saree hem
+      ctx.fillStyle = '#991b1b';
+      ctx.beginPath();
+      ctx.arc(-14, -4, 3, 0, Math.PI * 2);
+      ctx.arc(-13, 5, 4, 0, Math.PI * 2);
+      ctx.fill();
 
-      // Lane Divider Dashes
-      if (c.lane !== c.road) {
-        const laneW1 = p1.w / 32;
-        const laneW2 = p2.w / 32;
+      // Pale Ghostly Face
+      ctx.fillStyle = '#e2e8f0';
+      ctx.beginPath();
+      ctx.arc(2, 0, 9, 0, Math.PI * 2);
+      ctx.fill();
 
-        drawPolygon(p1.x - p1.w / 2 - laneW1, p1.y, p1.x - p1.w / 2 + laneW1, p1.y, p2.x - p2.w / 2 + laneW2, p2.y, p2.x - p2.w / 2 - laneW2, p2.y, c.lane);
-        drawPolygon(p1.x + p1.w / 2 - laneW1, p1.y, p1.x + p1.w / 2 + laneW1, p1.y, p2.x + p2.w / 2 + laneW2, p2.y, p2.x + p2.w / 2 - laneW2, p2.y, c.lane);
+      // Wild Tangled Jet Black Hair Billowing Outward
+      ctx.fillStyle = '#050406';
+      ctx.beginPath();
+      ctx.arc(-2, 0, 11, Math.PI * 0.4, Math.PI * 1.6);
+      ctx.lineTo(-18, Math.sin(gameTime * 8) * 4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Glowing Crimson Eyes Piercing the Darkness
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(5, -3, 2, 0, Math.PI * 2);
+      ctx.arc(5, 3, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Red demonic eye glare
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.35)';
+      ctx.beginPath();
+      ctx.arc(5, -3, 4, 0, Math.PI * 2);
+      ctx.arc(5, 3, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Inverted Backward Feet (Iconic Pisachini Folklore Feature)
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillRect(-18, -6, 5, 3);
+      ctx.fillRect(-18, 4, 5, 3);
+
+      // Stunned Visual Effect (Holy smoke vortex)
+      if (maya.state === 'STUNNED') {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, 22 + Math.sin(gameTime * 20) * 4, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    // Render The Hunter (Shikari / Tantrik)
+    function renderHunter() {
+      ctx.save();
+      ctx.translate(hunter.x, hunter.y);
+      ctx.rotate(hunter.angle);
+
+      // Robust Shikari Cloak & Torso
+      ctx.fillStyle = '#3f2e1e';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 11, 13, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#78350f';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Hunter turban/hood
+      ctx.fillStyle = '#713f12';
+      ctx.beginPath();
+      ctx.arc(2, 0, 9, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sinister hunter mask / glowing amber eyes
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(6, -3, 2, 0, Math.PI * 2);
+      ctx.arc(6, 3, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Trishul / Hunting Spear in right hand
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(8, -12); ctx.lineTo(24, -12);
+      ctx.stroke();
+      // Trident prongs
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillRect(24, -15, 6, 6);
+
+      // Hunting Lantern / Torch in left hand
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(10, 8, 8, 8);
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(14, 12, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+
+      // Hunter Shout speech bubble if shouting
+      if (hunter.shoutTimer > 0) {
+        ctx.save();
+        ctx.translate(hunter.x, hunter.y - 30);
+        ctx.fillStyle = 'rgba(127, 29, 29, 0.9)';
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(-45, -14, 90, 20);
+        ctx.strokeRect(-45, -14, 90, 20);
+        ctx.fillStyle = '#fef2f2';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(hunter.shoutText, 0, 0);
+        ctx.restore();
       }
     }
 
-    // --- INITIALIZATION ---
-    renderRiderSelection();
-    buildTrack();
-    initRacersAndTraffic();
-    updateHUD();
-    requestAnimationFrame(gameLoop);
+    // Render Particles
+    function renderParticles() {
+      particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life / p.maxLife;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      });
+
+      // Render Noise Alerts Ripple Rings
+      alertPings.forEach(a => {
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = a.life / 40;
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, a.currentRadius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+      });
+    }
+
+    // Dynamic Field-of-View Darkness Mask
+    function renderDarknessMask() {
+      // Clear offscreen darkness canvas to pitch black
+      darkCtx.fillStyle = '#030206';
+      darkCtx.fillRect(0, 0, 800, 600);
+
+      // Cut out light pools using 'destination-out'
+      darkCtx.globalCompositeOperation = 'destination-out';
+
+      // 1. Player's Lantern (Laltain)
+      if (!player.hidden) {
+        const screenPx = player.x - camera.x;
+        const screenPy = player.y - camera.y;
+
+        const flicker = (Math.sin(gameTime * 12) + Math.cos(gameTime * 7)) * 3;
+        const baseRadius = player.oil > 25 ? 160 : (player.oil > 0 ? 95 : 45);
+        const radius = Math.max(35, baseRadius + flicker);
+
+        const lightGrad = darkCtx.createRadialGradient(
+          screenPx, screenPy, 10,
+          screenPx, screenPy, radius
+        );
+        lightGrad.addColorStop(0, 'rgba(0, 0, 0, 1.0)');
+        lightGrad.addColorStop(0.7, 'rgba(0, 0, 0, 0.7)');
+        lightGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        darkCtx.fillStyle = lightGrad;
+        darkCtx.beginPath();
+        darkCtx.arc(screenPx, screenPy, radius, 0, Math.PI * 2);
+        darkCtx.fill();
+      } else {
+        // While hidden in wardrobe/urn, tiny peephole vision
+        const screenPx = player.x - camera.x;
+        const screenPy = player.y - camera.y;
+        const hideGrad = darkCtx.createRadialGradient(screenPx, screenPy, 5, screenPx, screenPy, 55);
+        hideGrad.addColorStop(0, 'rgba(0, 0, 0, 0.9)');
+        hideGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        darkCtx.fillStyle = hideGrad;
+        darkCtx.beginPath();
+        darkCtx.arc(screenPx, screenPy, 55, 0, Math.PI * 2);
+        darkCtx.fill();
+      }
+
+      // 2. Hunter's Torchlight Searchlight Cone (sweeping through corridors)
+      const hx = hunter.x - camera.x;
+      const hy = hunter.y - camera.y;
+      if (hx > -100 && hx < 900 && hy > -100 && hy < 700) {
+        const torchGrad = darkCtx.createRadialGradient(hx, hy, 10, hx, hy, 270);
+        torchGrad.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
+        torchGrad.addColorStop(0.8, 'rgba(0, 0, 0, 0.6)');
+        torchGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        darkCtx.fillStyle = torchGrad;
+        darkCtx.beginPath();
+        darkCtx.moveTo(hx, hy);
+        darkCtx.arc(hx, hy, 270, hunter.torchAngle - 0.45, hunter.torchAngle + 0.45);
+        darkCtx.closePath();
+        darkCtx.fill();
+      }
+
+      // 3. Faint ambient light from Lit Diyas
+      diyas.forEach(diya => {
+        if (diya.collected) return;
+        const sx = diya.x - camera.x;
+        const sy = diya.y - camera.y;
+        if (sx > -60 && sx < 860 && sy > -60 && sy < 660) {
+          const diyaGrad = darkCtx.createRadialGradient(sx, sy, 4, sx, sy, 70);
+          diyaGrad.addColorStop(0, 'rgba(0, 0, 0, 0.85)');
+          diyaGrad.addColorStop(0.6, 'rgba(0, 0, 0, 0.45)');
+          diyaGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          darkCtx.fillStyle = diyaGrad;
+          darkCtx.beginPath();
+          darkCtx.arc(sx, sy, 70, 0, Math.PI * 2);
+          darkCtx.fill();
+        }
+      });
+
+      // 4. Purified Courtyard Altar Divine Glow
+      if (altarPurified) {
+        const ax = (18 * TILE_SIZE + 24) - camera.x;
+        const ay = (13 * TILE_SIZE + 24) - camera.y;
+        const altarGrad = darkCtx.createRadialGradient(ax, ay, 10, ax, ay, 180);
+        altarGrad.addColorStop(0, 'rgba(0, 0, 0, 0.9)');
+        altarGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        darkCtx.fillStyle = altarGrad;
+        darkCtx.beginPath();
+        darkCtx.arc(ax, ay, 180, 0, Math.PI * 2);
+        darkCtx.fill();
+      }
+
+      // 5. Maya's Glowing Eyes slightly piercing darkness
+      const cx = maya.x - camera.x;
+      const cy = maya.y - camera.y;
+      if (cx > -50 && cx < 850 && cy > -50 && cy < 650) {
+        const eyeGrad = darkCtx.createRadialGradient(cx, cy, 2, cx, cy, 35);
+        eyeGrad.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
+        eyeGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        darkCtx.fillStyle = eyeGrad;
+        darkCtx.beginPath();
+        darkCtx.arc(cx, cy, 35, 0, Math.PI * 2);
+        darkCtx.fill();
+      }
+
+      // Reset composite operation
+      darkCtx.globalCompositeOperation = 'source-over';
+
+      // Draw the darkness layer over main game canvas
+      ctx.drawImage(darkCanvas, 0, 0);
+
+      // Warm Amber Lantern Ambient Tint on top
+      if (!player.hidden && player.oil > 0) {
+        const screenPx = player.x - camera.x;
+        const screenPy = player.y - camera.y;
+        const warmGrad = ctx.createRadialGradient(screenPx, screenPy, 10, screenPx, screenPy, 140);
+        warmGrad.addColorStop(0, 'rgba(245, 158, 11, 0.12)');
+        warmGrad.addColorStop(0.8, 'rgba(180, 83, 9, 0.04)');
+        warmGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = warmGrad;
+        ctx.beginPath();
+        ctx.arc(screenPx, screenPy, 140, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // CCTV Scrying Mirror Overlay when in Camera View
+    function renderScryingCCTVOverlay() {
+      ctx.save();
+      // Scanlines effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      for (let y = 0; y < canvas.height; y += 4) {
+        ctx.fillRect(0, y, canvas.width, 1.5);
+      }
+
+      // Vignette camera frame
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(16, 16, canvas.width - 32, canvas.height - 32);
+
+      // Timestamp
+      ctx.fillStyle = '#6ee7b7';
+      ctx.font = '12px monospace';
+      ctx.fillText(`CCTV_MIRROR_FEED // ${Math.floor(gameTime)}s // SIGNAL: STABLE`, 30, 40);
+      ctx.fillText(`PRESS [C] TO SWITCH // [ESC/C] RETURN TO PLAYER`, 30, canvas.height - 30);
+
+      ctx.restore();
+    }
+
+    // Parchment Minimap HUD in corner of screen
+    function renderMinimapHUD() {
+      const mw = 140;
+      const mh = 110;
+      const mx = canvas.width - mw - 14;
+      const my = canvas.height - mh - 14;
+
+      ctx.save();
+      // Parchment Map Frame
+      ctx.fillStyle = 'rgba(17, 12, 19, 0.88)';
+      ctx.fillRect(mx, my, mw, mh);
+      ctx.strokeStyle = '#b45309';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(mx, my, mw, mh);
+
+      // Mini Haveli Layout Scale
+      const scaleX = mw / WORLD_WIDTH;
+      const scaleY = mh / WORLD_HEIGHT;
+
+      // Draw key room walls
+      ctx.fillStyle = '#453224';
+      ctx.fillRect(mx + (1 * TILE_SIZE * scaleX), my + (10 * TILE_SIZE * scaleY), 13 * TILE_SIZE * scaleX, 1 * TILE_SIZE * scaleY);
+      ctx.fillRect(mx + (22 * TILE_SIZE * scaleX), my + (10 * TILE_SIZE * scaleY), 13 * TILE_SIZE * scaleX, 1 * TILE_SIZE * scaleY);
+      ctx.fillRect(mx + (10 * TILE_SIZE * scaleX), my + (16 * TILE_SIZE * scaleY), 16 * TILE_SIZE * scaleX, 1 * TILE_SIZE * scaleY);
+
+      // Draw Mahadwar Exit Door
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillRect(mx + (17 * TILE_SIZE * scaleX), my, 3 * TILE_SIZE * scaleX, 3);
+
+      // Draw Tulsi Altar
+      ctx.fillStyle = altarPurified ? '#4ade80' : '#854d0e';
+      ctx.beginPath();
+      ctx.arc(mx + (18 * TILE_SIZE + 24) * scaleX, my + (13 * TILE_SIZE + 24) * scaleY, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Draw Alert Pings on map
+      alertPings.forEach(a => {
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(mx + a.x * scaleX, my + a.y * scaleY, 4, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      // Draw Player Dot
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(mx + player.x * scaleX, my + player.y * scaleY, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // If Scrying in camera view, show Camera Target Dot
+      if (currentCamIndex > 0) {
+        const cam = haveliCameras[currentCamIndex];
+        ctx.fillStyle = '#10b981';
+        ctx.beginPath();
+        ctx.arc(mx + cam.x * scaleX, my + cam.y * scaleY, 4, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Map Label
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '8px monospace';
+      ctx.fillText('MAP [M]', mx + 6, my + 12);
+
+      ctx.restore();
+    }
+
+    // Render Jumpscare Portrait in Game Over screen
+    function renderJumpscarePortrait(cause = 'Maya') {
+      const scareCanvas = document.getElementById('scare-canvas');
+      if (!scareCanvas) return;
+      const sctx = scareCanvas.getContext('2d');
+      sctx.fillStyle = '#080101';
+      sctx.fillRect(0, 0, 140, 140);
+
+      if (cause === 'Hunter') {
+        // Terrifying Shikari (Hunter) Jumpscare Portrait
+        sctx.fillStyle = 'rgba(180, 83, 9, 0.4)';
+        sctx.beginPath();
+        sctx.arc(70, 70, 60, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Dark Hunter Hood
+        sctx.fillStyle = '#261b14';
+        sctx.beginPath();
+        sctx.arc(70, 65, 46, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Sinister scarred hunter face
+        sctx.fillStyle = '#78350f';
+        sctx.beginPath();
+        sctx.ellipse(70, 72, 28, 34, 0, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Piercing Amber Hunter Eyes
+        sctx.fillStyle = '#fbbf24';
+        sctx.beginPath();
+        sctx.arc(58, 65, 6, 0, Math.PI * 2);
+        sctx.arc(82, 65, 6, 0, Math.PI * 2);
+        sctx.fill();
+        sctx.fillStyle = '#000';
+        sctx.fillRect(56, 64, 4, 2);
+        sctx.fillRect(80, 64, 4, 2);
+
+        // Trident Blade thrusting forward
+        sctx.strokeStyle = '#e2e8f0';
+        sctx.lineWidth = 3;
+        sctx.beginPath();
+        sctx.moveTo(70, 140); sctx.lineTo(70, 95);
+        sctx.moveTo(56, 110); sctx.lineTo(56, 95); sctx.lineTo(84, 95); sctx.lineTo(84, 110);
+        sctx.stroke();
+
+      } else {
+        // Demonic Maya (Pisachini) Jumpscare Portrait
+        sctx.fillStyle = 'rgba(220, 38, 38, 0.3)';
+        sctx.beginPath();
+        sctx.arc(70, 70, 60, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Tangled black hair
+        sctx.fillStyle = '#020202';
+        sctx.beginPath();
+        sctx.arc(70, 70, 48, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Pale corpse face
+        sctx.fillStyle = '#d1d5db';
+        sctx.beginPath();
+        sctx.ellipse(70, 72, 28, 36, 0, 0, Math.PI * 2);
+        sctx.fill();
+
+        // Screeching gaping mouth
+        sctx.fillStyle = '#180404';
+        sctx.beginPath();
+        sctx.ellipse(70, 92, 14, 18, 0, 0, Math.PI * 2);
+        sctx.fill();
+        // Sharp fangs
+        sctx.fillStyle = '#fef2f2';
+        sctx.beginPath();
+        sctx.moveTo(60, 80); sctx.lineTo(63, 88); sctx.lineTo(66, 80);
+        sctx.moveTo(74, 80); sctx.lineTo(77, 88); sctx.lineTo(80, 80);
+        sctx.fill();
+
+        // Piercing Blood Red Eyes
+        sctx.fillStyle = '#ef4444';
+        sctx.beginPath();
+        sctx.arc(58, 62, 5, 0, Math.PI * 2);
+        sctx.arc(82, 62, 5, 0, Math.PI * 2);
+        sctx.fill();
+        sctx.fillStyle = '#fef2f2';
+        sctx.beginPath();
+        sctx.arc(58, 62, 1.5, 0, Math.PI * 2);
+        sctx.arc(82, 62, 1.5, 0, Math.PI * 2);
+        sctx.fill();
+      }
+    }
+
+    // --- MAIN ENGINE TICK ---
+    function tick() {
+      update();
+      render();
+      requestAnimationFrame(tick);
+    }
+
+    // Start Animation Loop
+    requestAnimationFrame(tick);
   </script>
 </body>
 </html>
